@@ -67,6 +67,9 @@ You can check [this](https://github.com/rogerwang/node-webkit/wiki/How-to-run-ap
 
 #### How to use
 
+<div align="center"><img src="./img/screen1.png" alt="Screen 1"></div>
+<div align="center"><img src="./img/screen2.png" alt="Screen 2"></div>
+
 Editor is not really difficult to use.
 On the top left you can see a palette of available objects.
 On the right you can see a list of already placed objects, above you can find a button that allows you to switch between map and script editor.
