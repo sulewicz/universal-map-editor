@@ -119,7 +119,8 @@ select {
   width: 100%;
   height: 50%;
   text-align: center;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   border-bottom: 1px solid #1e1e1e;
 }
 
@@ -142,7 +143,8 @@ select {
 #properties_box {
   width: 100%;
   height: 50%;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #properties_box .property {
@@ -169,7 +171,8 @@ select {
   width: 100%;
   height: 100%;
   text-align: center;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .object_list_box_item {
