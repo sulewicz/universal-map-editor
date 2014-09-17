@@ -3,8 +3,9 @@
 window.me = window.me || {};
 
 me.ZoomToolkit = (function() {
-	var STEP = 10;
-	var MIN_ZOOM = 30;
+	var CLICK_STEP = 20;
+    var SCROLL_STEP = 10;
+	var MIN_ZOOM = 20;
 	var MAX_ZOOM = 400;
 
 	var clazz = function(mapView) {
@@ -16,25 +17,30 @@ me.ZoomToolkit = (function() {
 		var updateLabel = function() {
 			zoomFactorLabel.innerText = toolkit.scale + '%';
 		}
+        
+        var setZoom = function(zoom) {
+            if (zoom < MIN_ZOOM) {
+				zoom = MIN_ZOOM;
+			} else if (zoom > MAX_ZOOM) {
+				zoom = MAX_ZOOM;
+			}
+            zoomFactorLabel.innerText = zoom + '%';
+            toolkit.scale = zoom;
+        }
 
 		zoomOutBtn.addEventListener('click', function() {
-			toolkit.scale -= STEP;
-			if (toolkit.scale < MIN_ZOOM) {
-				toolkit.scale = MIN_ZOOM;
-			}
-			updateLabel();
+			setZoom(toolkit.scale - CLICK_STEP);
 		});
 
 		zoomInBtn.addEventListener('click', function() {
-			toolkit.scale += STEP;
-			if (toolkit.scale > MAX_ZOOM) {
-				toolkit.scale = MAX_ZOOM;
-			}
-			updateLabel();
+            setZoom(toolkit.scale + CLICK_STEP);
 		});
-
-		this.scale = 100;
-		updateLabel();
+        
+        mapView.node.addEventListener('mousewheel', function(e) {
+            setZoom(toolkit.scale + (e.wheelDelta >= 0 ? SCROLL_STEP : -SCROLL_STEP));
+        });
+        
+        setZoom(100);
 	}
 
 	return clazz;
