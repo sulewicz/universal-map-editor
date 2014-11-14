@@ -2,10 +2,10 @@ window.me = window.me || {};
 
 me.MapShapes = (function() {
 	return {
-		Polyline: function(spec) {
+		Polyline: function(spec, properties) {
 			var NODE_SIZE = 5;
 			var ret = {
-				properties: { "close": { type: "bool", default: false }},
+				properties: me.utils.mixin({ "close": { type: "bool", default: false }}, properties || {}),
 				init: function(x, y) {
 					this.mouse_position = null;
 					this.points = [{x: x, y: y}];
@@ -25,7 +25,11 @@ me.MapShapes = (function() {
                 
                 getNodeSize: function() {
                     return NODE_SIZE / this.scale;
-                },  
+                },
+                
+                getLineWidth: function() {
+                    return 1;
+                },
 
 				render: function(ctx, selected, scale) {
                     this.scale = scale;
@@ -36,7 +40,7 @@ me.MapShapes = (function() {
                         var nodeStrokeColor = selected ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0.5)';
                         var selectedNodeStrokeColor = selected ? 'rgba(255,0,0,1)' : nodeStrokeColor;
                         var nodeFillColor = selected ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.5)';
-                        var polyLineWidth = 1;
+                        var polyLineWidth = this.getLineWidth();
                         var strokeWidth = 1 / scale;
                         
 						ctx.strokeStyle = lineColor;
