@@ -148,15 +148,21 @@ me.MapShapes = (function() {
 				},
 
 				pack: function() {
-					return {
+					var ret = {
 						id: this.id,
-						points: this.points,
-						close: this.close
+						points: this.points
 					};
+                    for (var prop in this.properties) {
+                        ret[prop] = this[prop];
+                    }
+                    return ret;
 				},
 
 				unpack: function(data) {
-					var props = ['id', 'points', 'close'];
+					var props = ['id', 'points'];
+                    for (var prop in this.properties) {
+                        props.push(prop);
+                    }
 					for (var i = 0; i < props.length; ++i) {
 						if (data.hasOwnProperty(props[i])) {
 							this[props[i]] = data[props[i]];
@@ -166,7 +172,11 @@ me.MapShapes = (function() {
 
 				compile: function(output) {
 					output.polylines = output.polylines || [];
-					output.polylines.push({ points: this.points, close: this.close });
+                    var ret = { points: this.points };
+                    for (var prop in this.properties) {
+                        ret[prop] = this[prop];
+                    }
+					output.polylines.push(ret);
 				}
 			};
 			return me.utils.mixin(ret, spec || {});
