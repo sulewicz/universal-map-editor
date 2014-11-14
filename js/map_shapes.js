@@ -147,7 +147,7 @@ me.MapShapes = (function() {
 						return false;
 					} else {
                         this.points.splice(this.selected_point, 1);
-						this.selected_point = this.selected_point - 1;
+						this.selected_point = Math.max(0, this.selected_point - 1);
 						return true;
 					}
 				},
