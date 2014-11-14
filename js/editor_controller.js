@@ -70,30 +70,32 @@ me.EditorController = (function() {
 				var objs = this.findObjectsAt(pos.x, pos.y);
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
-						var obj = objs[0];
-						this.selectObject(obj == this.selected_object ? null : obj, pos.x, pos.y);
+                        if (objs[0] != this.selected_object) {
+				            this.selectObject(objs[0], pos.x, pos.y);
+                            return;
+                        }
 					} else {
 						var objIdx = objs.indexOf(this.selected_object);
 						var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
 						this.selectObject(cycledObject, pos.x, pos.y);
-					}
-				} else {
-					if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
-						var selectedType = editor.tool_box.getSelectedItem();
-						if (selectedType !== null) {
-							var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
-							if (this.selected_object && this.selected_object.type == object.type) {
-								for (var prop in object.properties) {
-									if (object.properties.hasOwnProperty(prop)) {
-										object[prop] = this.selected_object[prop];
-									}
-								}
-							}
-							editor.map.addObject(object);
-							this.selectObject(object);
-						}
+                        return;
 					}
 				}
+                if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
+                    var selectedType = editor.tool_box.getSelectedItem();
+                    if (selectedType !== null) {
+                        var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
+                        if (this.selected_object && this.selected_object.type == object.type) {
+                            for (var prop in object.properties) {
+                                if (object.properties.hasOwnProperty(prop)) {
+                                    object[prop] = this.selected_object[prop];
+                                }
+                            }
+                        }
+                        editor.map.addObject(object);
+                        this.selectObject(object);
+                    }
+                }
 			}.bind(this));
 
 			emitter.on(me.MapView.MAP_MOUSE_DRAGGED, function(startPos, delta) {
