@@ -71,7 +71,9 @@ me.EditorController = (function() {
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
 						var obj = objs[0];
-						this.selectObject(obj == this.selected_object ? null : obj, pos.x, pos.y);
+                        if (obj != this.selected_object) {
+						  this.selectObject(obj, pos.x, pos.y);
+                        }
 					} else {
 						var objIdx = objs.indexOf(this.selected_object);
 						var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
