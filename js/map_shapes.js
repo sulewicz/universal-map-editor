@@ -132,6 +132,11 @@ me.MapShapes = (function() {
 					startPos.node.x = startPos.origin.x + delta.x;
 					startPos.node.y = startPos.origin.y + delta.y;
 				},
+                
+                onSelected: function(x, y) {
+                    var i = this.findNode(x, y);
+                    this.selected_point = i >= 0 ? i : this.points.length - 1;
+                },
 
 				onUnselected: function() {
 					this.mouse_position = null;
