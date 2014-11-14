@@ -161,7 +161,7 @@ me.MapView = (function() {
 			var objects = this.map.objects;
 			for (var idx = 0; idx < objects.length; ++idx) {
 				var object = objects[idx];
-				object.render(ctx, this.selected_object == object);
+				object.render(ctx, this.selected_object == object, scale);
 			}
 
 			ctx.restore();
