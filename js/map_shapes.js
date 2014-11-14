@@ -9,6 +9,7 @@ me.MapShapes = (function() {
 				init: function(x, y) {
 					this.mouse_position = null;
 					this.points = [{x: x, y: y}];
+                    this.selected_point = 0;
 				}, 
 
 				findNode: function(x, y) {
@@ -33,6 +34,7 @@ me.MapShapes = (function() {
                         var lineColor = selected ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.5)';
                         var previewLineColor = 'rgba(255,255,255,0.5)';
                         var nodeStrokeColor = selected ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0.5)';
+                        var selectedNodeStrokeColor = selected ? 'rgba(255,0,0,1)' : nodeStrokeColor;
                         var nodeFillColor = selected ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.5)';
                         var polyLineWidth = 1;
                         var strokeWidth = 1 / scale;
@@ -46,41 +48,49 @@ me.MapShapes = (function() {
 							point = this.points[i];
 							ctx.lineTo(point.x, point.y);
 						}
-
 						ctx.stroke();
 
 						if (this.mouse_position) {
-                            ctx.lineWidth = strokeWidth;
-							ctx.strokeStyle = nodeStrokeColor;
-                            ctx.fillStyle = nodeFillColor;
-							var lastPoint = this.points[this.points.length - 1];
-							point = this.mouse_position;
-							ctx.fillRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2);
-                            ctx.strokeRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2);
+							var currentPoint = this.points[this.selected_point];
+                            var mousePoint = this.mouse_position;
+                            var nextPoint = this.points[this.selected_point + 1];
+                            if (!nextPoint && this.close && this.points.length >= 2) {
+                                nextPoint = this.points[0];
+                            }
+
                             ctx.strokeStyle = previewLineColor;
                             ctx.lineWidth = polyLineWidth;
 							ctx.beginPath();
-							ctx.moveTo(lastPoint.x, lastPoint.y);
-							ctx.lineTo(point.x, point.y);
+							ctx.moveTo(currentPoint.x, currentPoint.y);
+							ctx.lineTo(mousePoint.x, mousePoint.y);
+                            if (nextPoint) {
+                                ctx.lineTo(nextPoint.x, nextPoint.y);
+                            }
 							ctx.stroke();
+                            
+                            ctx.lineWidth = strokeWidth;
+							ctx.strokeStyle = nodeStrokeColor;
+                            ctx.fillStyle = nodeFillColor;
+                            ctx.fillRect(mousePoint.x - nodeSize, mousePoint.y - nodeSize, nodeSize * 2, nodeSize * 2);
+                            ctx.strokeRect(mousePoint.x - nodeSize, mousePoint.y - nodeSize, nodeSize * 2, nodeSize * 2);
 						}
 
 						if (this.close && this.points.length >= 3) {
-							ctx.strokeStyle = this.mouse_position ? previewLineColor : lineColor;
                             ctx.lineWidth = polyLineWidth;
-							var lastPoint = this.mouse_position || this.points[this.points.length - 1];
-							point = this.points[0];
+							ctx.strokeStyle = lineColor;
+							var lastPoint = this.points[this.points.length - 1];
+							var firstPoint = this.points[0];
 							ctx.beginPath();
-							ctx.moveTo(point.x, point.y);
+							ctx.moveTo(firstPoint.x, firstPoint.y);
 							ctx.lineTo(lastPoint.x, lastPoint.y);
 							ctx.stroke();	
 						}
 
-                        ctx.strokeStyle = nodeStrokeColor;
 						ctx.fillStyle = nodeFillColor;
                         ctx.lineWidth = strokeWidth;
 						for (var i = 0; i < this.points.length; ++i) {
 							point = this.points[i];
+                            ctx.strokeStyle = (i === this.selected_point) ? selectedNodeStrokeColor : nodeStrokeColor;
 							ctx.fillRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2);
                             ctx.strokeRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2);
 						}
@@ -93,8 +103,14 @@ me.MapShapes = (function() {
 				},
 
 				onMouseClick: function(pos) {
-					this.points.push(pos);
-					return true;
+                    var i = this.findNode(pos.x, pos.y);
+                    if (i >= 0) {
+                        this.selected_point = i;
+                    } else {
+                        this.points.splice(this.selected_point + 1, 0, pos);
+                        this.selected_point = this.selected_point + 1;
+                    }
+				    return true;
 				},
 
 				onMouseMove: function(pos) {
@@ -103,7 +119,9 @@ me.MapShapes = (function() {
 
 				onMouseDrag: function(startPos, delta) {
 					if (!startPos.hasOwnProperty('node')) {
-						var node = this.points[this.findNode(startPos.x, startPos.y)];
+                        var i = this.findNode(startPos.x, startPos.y);
+						var node = this.points[i];
+                        this.selected_point = i;
 						startPos.node = node;
 						startPos.origin = { x: node.x, y: node.y };
 					}
@@ -119,7 +137,8 @@ me.MapShapes = (function() {
 					if (this.points.length == 1) {
 						return false;
 					} else {
-						this.points.length = this.points.length - 1;
+                        this.points.splice(this.selected_point, 1);
+						this.selected_point = this.selected_point - 1;
 						return true;
 					}
 				},
