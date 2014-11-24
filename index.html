@@ -17,6 +17,7 @@
     <script type="text/javascript" src="./js/properties_box.js"></script>
     <script type="text/javascript" src="./js/tool_box.js"></script>
     <script type="text/javascript" src="./js/map_pane.js"></script>
+    <script type="text/javascript" src="./js/map_tools_pane.js"></script>
     <script type="text/javascript" src="./js/map_exporter.js"></script>
     <script type="text/javascript" src="./js/map_io.js"></script>
     <script type="text/javascript" src="./js/menu_bar.js"></script>
@@ -47,11 +48,20 @@
         </div>
         <div class="center_pane">
             <div id="map_pane">
-                <canvas id="map_canvas"></canvas>
-                <div id="zoom_toolkit">
-                    <span id="zoom_out_btn" class="button">-</span>
-                    <span id="zoom_factor">100%</span>
-                    <span id="zoom_in_btn" class="button">+</span>
+                <div id="map_view">
+                    <canvas id="map_canvas"></canvas>
+                    <div id="zoom_toolkit">
+                        <span id="zoom_out_btn" class="button">-</span>
+                        <span id="zoom_factor">100%</span>
+                        <span id="zoom_in_btn" class="button">+</span>
+                    </div>
+                </div>
+                <div id="map_tools_pane" style="display: none;">
+                    <div id="map_grid_tool_pane" style="display: none;">
+                    </div>
+                </div>
+                <div id="map_tools_bar">
+                    <span id="map_grid_tool_btn" class="button">Grid</span>
                 </div>
             </div>
             <div id="script_editor_pane">
