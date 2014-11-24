@@ -26,36 +26,15 @@ me.MenuBar = (function() {
 				self.save(this.value);
 			}
 		});
-
-		self.save_file_btn = document.getElementById('save_file_btn');
-		self.save_file_btn.addEventListener('click', function(e) {
-			if (self.map_path) {
-				self.save(self.map_path);
-			} else {
-				me.utils.triggerEvent(self.save_file, 'click');
-			}
-		});
-
-		self.save_file_as_btn = document.getElementById('save_file_as_btn');
-		self.save_file_as_btn.addEventListener('click', function(e) {
-			self.save_file.value = null;
-			me.utils.triggerEvent(self.save_file, 'click');
-		});
-
-		self.open_file = document.getElementById('open_file');
+        
+        self.open_file = document.getElementById('open_file');
 		self.open_file.addEventListener('change', function() {
 			if (this.value) {
 				self.open(this.value);
 			}
 		});
-
-		self.open_file_btn = document.getElementById('open_file_btn');
-		self.open_file_btn.addEventListener('click', function(e) {
-			self.open_file.value = null;
-			me.utils.triggerEvent(self.open_file, 'click');
-		});
-
-		self.export_file = document.getElementById('export_file');
+        
+        self.export_file = document.getElementById('export_file');
 		self.export_file.addEventListener('change', function() {
 			if (this.value) {
 				self.map_io.map.export_path = this.value;
@@ -63,9 +42,32 @@ me.MenuBar = (function() {
 				self.export(this.value);
 			}
 		});
+        
+        var addButton = function(id, callback) {
+            var button = document.getElementById(id);
+            button.addEventListener('click', callback);
+            return button;
+        };
 
-		self.export_file_btn = document.getElementById('export_file_btn');
-		self.export_file_btn.addEventListener('click', function(e) {
+		self.save_file_btn = addButton('save_file_btn', function(e) {
+			if (self.map_path) {
+				self.save(self.map_path);
+			} else {
+				me.utils.triggerEvent(self.save_file, 'click');
+			}
+		});
+
+		self.save_file_as_btn = addButton('save_file_as_btn', function(e) {
+			self.save_file.value = null;
+			me.utils.triggerEvent(self.save_file, 'click');
+		});
+
+		self.open_file_btn = addButton('open_file_btn', function(e) {
+			self.open_file.value = null;
+			me.utils.triggerEvent(self.open_file, 'click');
+		});
+
+		self.export_file_btn = addButton('export_file_btn', function(e) {
 			if (self.export_path || (self.export_path = self.map_io.map.export_path)) {
 				self.save(self.map_path);
 				self.export(self.export_path);
@@ -74,14 +76,12 @@ me.MenuBar = (function() {
 			}
 		});
 
-		self.export_file_as_btn = document.getElementById('export_file_as_btn');
-		self.export_file_as_btn.addEventListener('click', function(e) {
+		self.export_file_as_btn = addButton('export_file_as_btn', function(e) {
 			self.export_file.value = null;
 			me.utils.triggerEvent(self.export_file, 'click');
 		});
 
-		self.toogle_script_editor_btn = document.getElementById('map_script_toggle_btn');
-		self.toogle_script_editor_btn.addEventListener('click', function(e) {
+		self.toogle_script_editor_btn = addButton('map_script_toggle_btn', function(e) {
 			self.emitter.emit(TOGGLE_SCRIPT_EDITOR);
 		});
 	};
