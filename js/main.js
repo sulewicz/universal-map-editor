@@ -7,7 +7,7 @@ window.onload = function() {
 	var editorNode = document.getElementById('editor');
   	var errorNode = document.getElementById('error');
   	if (me.Metadata) {
-  		editorNode.style.display = 'block';
+  		editorNode.style.display = 'grid';
 		var editor = new me.Editor();
   		var controller = new me.EditorController(editor);
   	} else {

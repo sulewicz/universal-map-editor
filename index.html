@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Generic Map Editor</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="./css/main.css" type="text/css" charset="utf-8">
@@ -23,45 +24,45 @@
     <script type="text/javascript" src="./js/editor_controller.js"></script>
     <script type="text/javascript" src="./js/script_editor.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
-  </head>
-  <body>
+</head>
+
+<body>
     <span id="error">
     </span>
+    <input style="display:none;" id="open_file" type="file" />
+    <input style="display:none;" id="save_file" type="file" nwsaveas />
+    <input style="display:none;" id="export_file" type="file" nwsaveas />
     <div id="editor">
-      <input style="display:none;" id="open_file" type="file" />
-      <input style="display:none;" id="save_file" type="file" nwsaveas />
-      <input style="display:none;" id="export_file" type="file" nwsaveas />
-      <div id="menu_bar" class="horizontal_bar">
-        <span id="map_script_toggle_btn" style="float: right;" class="button">Map/Script</span>
-        <span id="open_file_btn" class="button">Open</span>
-        <span id="save_file_btn" class="button">Save</span>
-        <span id="save_file_as_btn" class="button">Save As</span>
-        <span id="export_file_btn" class="button" style="display: none;">Export</span>
-        <span id="export_file_as_btn" class="button" style="display: none;">Export As</span>
-      </div>
-      <div class="editor_content">
+        <div id="menu_bar">
+            <span id="map_script_toggle_btn" style="float: right;" class="button">Map/Script</span>
+            <span id="open_file_btn" class="button">Open</span>
+            <span id="save_file_btn" class="button">Save</span>
+            <span id="save_file_as_btn" class="button">Save As</span>
+            <span id="export_file_btn" class="button" style="display: none;">Export</span>
+            <span id="export_file_as_btn" class="button" style="display: none;">Export As</span>
+        </div>
         <div class="left_pane">
-          <div id="tool_box" class="list"></div>
-          <div id="properties_box" class="list"></div>
+            <div id="tool_box" class="list"></div>
+            <div id="properties_box" class="list"></div>
         </div>
         <div class="center_pane">
-          <div id="map_view">
-            <canvas id="map_canvas"></canvas>
-            <div id="zoom_toolkit">
-              <span id="zoom_out_btn" class="button">-</span>
-              <span id="zoom_factor">100%</span>
-              <span id="zoom_in_btn" class="button">+</span>
+            <div id="map_view">
+                <canvas id="map_canvas"></canvas>
+                <div id="zoom_toolkit">
+                    <span id="zoom_out_btn" class="button">-</span>
+                    <span id="zoom_factor">100%</span>
+                    <span id="zoom_in_btn" class="button">+</span>
+                </div>
             </div>
-          </div>
-          <div id="script_editor_view">
-            <div id="script_text_area"></div>
-          </div>
+            <div id="script_editor_view">
+                <div id="script_text_area"></div>
+            </div>
         </div>
         <div class="right_pane">
-          <div id="object_list_box" class="list"></div>
+            <div id="object_list_box" class="list"></div>
         </div>
-      </div>
-      <div id="status_bar" class="horizontal_bar"></div>
-    </div id="editor">
-  </body>
+        <div id="status_bar"></div>
+    </div>
+</body>
+
 </html>
