@@ -8,7 +8,7 @@ me.ZoomToolkit = (function() {
 	var MIN_ZOOM = 20;
 	var MAX_ZOOM = 400;
 
-	var clazz = function(mapView) {
+	var clazz = function(mapPane) {
 		var toolkit = this;
 		var zoomFactorLabel = document.getElementById('zoom_factor');
 		var zoomOutBtn = document.getElementById('zoom_out_btn');
@@ -36,7 +36,7 @@ me.ZoomToolkit = (function() {
             setZoom(toolkit.scale + CLICK_STEP);
 		});
         
-        mapView.node.addEventListener('mousewheel', function(e) {
+        mapPane.node.addEventListener('mousewheel', function(e) {
             setZoom(toolkit.scale + (e.wheelDelta >= 0 ? SCROLL_STEP : -SCROLL_STEP));
         });
         
@@ -46,7 +46,7 @@ me.ZoomToolkit = (function() {
 	return clazz;
 })();
 
-me.MapView = (function() {
+me.MapPane = (function() {
 	var MAP_MOUSE_MOVED = "map_mouse_moved";
 	var MAP_MOUSE_CLICKED = "map_mouse_clicked";
 	var MAP_MOUSE_DRAGGED = "map_mouse_dragged";

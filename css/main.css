@@ -160,7 +160,7 @@ select {
     color: white;
     border-bottom: 1px solid white;
 }
-#script_editor_view {
+#script_editor_pane {
     display: none;
     background-color: white;
     overflow-y: scroll;
@@ -171,7 +171,7 @@ select {
     bottom: 0;
     margin: 1px;
 }
-#map_view {
+#map_pane {
     position: absolute;
     left: 0;
     right: 0;
