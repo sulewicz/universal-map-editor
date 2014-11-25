@@ -10,7 +10,7 @@ me.ScriptEditor = (function() {
         var self = this;
 		var visible = false;
         this.map = map;
-		this.node = document.getElementById('script_editor_view');
+		this.node = document.getElementById('script_editor_pane');
 		var codemirror = CodeMirror(document.getElementById('script_text_area'), { 
             lineNumbers: true, 
             autofocus: true,

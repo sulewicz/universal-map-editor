@@ -8,7 +8,7 @@ me.Editor = (function() {
 	var clazz = function() {
 		this.map = new me.Map();
 		this.map_objects = new me.MapObjects();
-		this.map_view = new me.MapView(this.map);
+		this.map_view = new me.MapPane(this.map);
 		this.tool_box = new me.ToolBox();
 		this.object_list_box = new me.ObjectListBox(this.map);
 		this.properties_box = new me.PropertiesBox();
@@ -17,6 +17,7 @@ me.Editor = (function() {
 		this.map_exporter = new me.MapExporter(this.map);
 		this.menu_bar = new me.MenuBar(this.map_io, this.map_exporter);
 		this.script_editor = new me.ScriptEditor(this.map);
+        this.map_tools_pane = new me.MapToolsPane(this.map_view);
 
 		this.init();
 	};

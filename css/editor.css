@@ -1,0 +1,11 @@
+#script_editor_pane {
+    display: none;
+    background-color: white;
+    overflow-y: scroll;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 1px;
+}
