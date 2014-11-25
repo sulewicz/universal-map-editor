@@ -44,6 +44,13 @@ select {
     margin-right: 20%;
     margin-top: 20%;
 }
+.label {
+    color: #cccccc;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: 'Tahoma';
+}
 .button {
     display: inline-block;
     padding: 1px 3px 1px 3px;

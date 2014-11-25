@@ -232,7 +232,28 @@ me.MapPane = (function() {
 
 		getSelectedObject: function() {
 			return this.selected_object;
-		}
+		},
+        
+        setGridVisible: function(visible) {
+        },
+        
+        isGridVisibile: function() {
+            return true;
+        },
+        
+        setGridHorizontalSpacing: function(spacing) {    
+        },
+        
+        getGridHorizontalSpacing: function() {
+            return 10;
+        },
+        
+        setGridVerticalSpacing: function(spacing) {    
+        },
+        
+        getGridVerticalSpacing: function() {
+            return 10;
+        }
 	};
 
 	clazz.MAP_MOUSE_MOVED = MAP_MOUSE_MOVED;
