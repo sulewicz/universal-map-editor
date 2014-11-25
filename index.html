@@ -73,9 +73,18 @@
                             <span class="map_tools_pane_label">Vertical spacing:</span>
                             <input id="map_grid_vertical_spacing" type="number" />
                         </div>
+                        <div id="map_scaling_tool_pane" style="display: none;">
+                            <span class="map_tools_pane_label">Scaling factor [%]:</span>
+                            <input id="map_scaling_factor" type="number" value="100" /></br>
+                            <span class="map_tools_pane_label">Scale:</span>
+                            <span id="map_scale_positions_btn" class="button">Positions</span>|
+                            <span id="map_scale_all_btn" class="button">Positions and size</span>|
+                            <span id="map_scale_selected_object_btn" class="button">Selected object size</span>
+                        </div>
                     </div>
                     <div id="map_tools_bar">
                         <span id="map_grid_tool_btn" class="button">Grid</span>
+                    <span id="map_scaling_tool_btn" class="button">Scaling</span>
                     </div>
                 </div>
                 <div id="script_editor_pane">
