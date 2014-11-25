@@ -183,6 +183,12 @@ me.MapShapes = (function () {
                         return true;
                     }
                 },
+                
+                scalePosition: function(factor) {
+                },
+                
+                scaleSize: function(factor) {
+                },
 
                 pack: function () {
                     var ret = {

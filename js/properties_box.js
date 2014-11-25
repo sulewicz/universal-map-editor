@@ -3,7 +3,7 @@
 window.me = window.me || {};
 
 me.PropertiesBox = (function() {
-	var PROPERTIES_OBJECT_MODIFIED = "proprties_object_modified";
+	var PROPERTIES_OBJECT_MODIFIED = "properties_object_modified";
 
 	var fieldsFactory = {};
 	fieldsFactory[me.MapObjects.TYPE_INT] = function(obj, name, prop) {

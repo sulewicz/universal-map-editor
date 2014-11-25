@@ -54,10 +54,16 @@ me.MapToolsPane = (function () {
             });
 
             var map_scale_positions_btn = addButton('map_scale_positions_btn', function(e) {
+                map_pane.map.scalePositions(scaling_factor.value | 0);
             });
             var map_scale_all_btn = addButton('map_scale_all_btn', function(e) {
+                map_pane.map.scaleAll(scaling_factor.value | 0);
             });
             var map_scale_selected_object_btn = addButton('map_scale_selected_object_btn', function(e) {
+                var object = map_pane.getSelectedObject();
+                if (object) {
+                    object.scaleSize(scaling_factor.value | 0);
+                }
             });
 
         };

@@ -118,6 +118,12 @@ me.MapObjects = (function() {
 			this.x = x;
 			this.y = y;
 		},
+        scalePosition: function(factor) {
+            this.x = this.x * factor / 100;
+            this.y = this.y * factor / 100;
+        },
+        scaleSize: function(factor) {
+        },
 		render: function(ctx, selectedObject) {
 			ctx.fillStyle = selectedObject ? "#ff0000" : "#00ff00";
 			ctx.fillRect(this.x - OBJECT_RADIUS, this.y - OBJECT_RADIUS, OBJECT_RADIUS_2, OBJECT_RADIUS_2);

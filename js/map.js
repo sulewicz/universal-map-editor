@@ -52,6 +52,21 @@ me.Map = (function() {
 				}
 			}
 		},
+        
+        scalePositions: function(factor) {
+            for (var i = 0; i < this.objects.length; ++i) {
+                var object = this.objects[i];
+                object.scalePosition(factor);
+            }
+        },
+        
+        scaleAll: function(factor) {
+            for (var i = 0; i < this.objects.length; ++i) {
+                var object = this.objects[i];
+                object.scalePosition(factor);
+                object.scaleSize(factor);
+            }
+        },
 
 		reset: function() {
 			for (var i = 0; i < this.objects.length; ++i) {
