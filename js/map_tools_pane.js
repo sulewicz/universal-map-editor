@@ -15,19 +15,21 @@ me.MapToolsPane = (function () {
             var horizontal_spacing = document.getElementById('map_grid_horizontal_spacing');
             horizontal_spacing.value = map_pane.getGridHorizontalSpacing();
             horizontal_spacing.addEventListener('change', function(e) {
-                if (this.value < 1) {
-                    this.value = 1;
+                var value = this.value | 0;
+                if (value < 1) {
+                    this.value = value = 1;
                 }
-                map_pane.setGridHorizontalSpacing(this.value);
+                map_pane.setGridHorizontalSpacing(value);
             });
             
             var vertical_spacing = document.getElementById('map_grid_vertical_spacing');
             vertical_spacing.value = map_pane.getGridVerticalSpacing();
             vertical_spacing.addEventListener('change', function(e) {
-                if (this.value < 1) {
-                    this.value = 1;
+                var value = this.value | 0;
+                if (value < 1) {
+                    this.value = value = 1;
                 }
-                map_pane.setGridVerticalSpacing(this.value);
+                map_pane.setGridVerticalSpacing(value);
             });
         }
         return clazz;
