@@ -6,7 +6,7 @@ me.ZoomToolkit = (function () {
     var CLICK_STEP = 20;
     var SCROLL_STEP = 10;
     var MIN_ZOOM = 20;
-    var MAX_ZOOM = 400;
+    var MAX_ZOOM = 800;
 
     var clazz = function (mapPane) {
         var toolkit = this;
