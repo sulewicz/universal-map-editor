@@ -71,10 +71,7 @@ me.MapPane = (function () {
         this.__render = this.render.bind(this, this.node.getContext("2d"));
         this.initMouseHandlers();
         window.addEventListener('resize', function () {
-            node.height = node.parentNode.offsetHeight;
-            node.width = node.parentNode.offsetWidth;
-            this.display_width = node.width;
-            this.display_height = node.height;
+            this.updateMetrics();
         }.bind(this), false);
     };
 
@@ -296,6 +293,14 @@ me.MapPane = (function () {
 
         getGridVerticalSpacing: function () {
             return this.vertical_spacing;
+        },
+        
+        updateMetrics: function() {
+            var node = this.node;
+            node.height = node.parentNode.offsetHeight;
+            node.width = node.parentNode.offsetWidth;
+            this.display_width = node.width;
+            this.display_height = node.height;
         }
     };
 

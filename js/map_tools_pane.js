@@ -67,8 +67,10 @@ me.MapToolsPane = (function () {
                 this.map_tools_pane.style.display = 'block';
                 this.visibile_pane = pane;
                 this.visibile_pane.node.style.display = 'block';
+                this.map_pane.updateMetrics();
             } else {
                 this.map_tools_pane.style.display = 'none';
+                this.map_pane.updateMetrics();
             }
         }
     };
