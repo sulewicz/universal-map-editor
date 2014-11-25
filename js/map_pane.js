@@ -102,7 +102,7 @@ me.MapPane = (function () {
 
             node.addEventListener('mouseup', function (event) {
                 if (mouseDown && !dragging) { // No drag occurred.
-                    this.emitter.emit(MAP_MOUSE_CLICKED, mouseDown.map);
+                    this.emitter.emit(MAP_MOUSE_CLICKED, mouseDown.map, event);
                 }
                 mouseDown = null;
                 dragging = false;
@@ -110,7 +110,7 @@ me.MapPane = (function () {
 
             node.addEventListener('mousemove', function (event) {
                 var pos = domToMapPosition(event.layerX, event.layerY);
-                this.emitter.emit(MAP_MOUSE_MOVED, pos);
+                this.emitter.emit(MAP_MOUSE_MOVED, pos, event);
                 if (mouseDown) {
                     dragging = true;
                     var scale = this.getScale();
@@ -118,7 +118,7 @@ me.MapPane = (function () {
                         x: (event.layerX - mouseDown.layer.x) / scale,
                         y: (event.layerY - mouseDown.layer.y) / scale
                     };
-                    this.emitter.emit(MAP_MOUSE_DRAGGED, mouseDown.map, delta);
+                    this.emitter.emit(MAP_MOUSE_DRAGGED, mouseDown.map, delta, event);
                 }
             }.bind(this));
 
