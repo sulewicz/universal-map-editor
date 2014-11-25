@@ -58,7 +58,7 @@ me.EditorController = (function() {
 				}
 			}.bind(this), true);
 
-			emitter.on(me.MapPane.MAP_MOUSE_MOVED, function(pos) {
+			emitter.on(me.MapPane.MAP_MOUSE_MOVED, function(pos, e) {
 				if (this.selected_object) {
 					this.selected_object.onMouseMove.apply(this.selected_object, arguments);
 				}
@@ -66,7 +66,7 @@ me.EditorController = (function() {
 					+ "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")");
 			}.bind(this));
 
-			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function(pos) {
+			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function(pos, e) {
 				var objs = this.findObjectsAt(pos.x, pos.y);
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
@@ -98,7 +98,7 @@ me.EditorController = (function() {
                 }
 			}.bind(this));
 
-			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function(startPos, delta) {
+			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function(startPos, delta, e) {
 				if (!startPos.hasOwnProperty('object')) {
 					var objs = this.findObjectsAt(startPos.x, startPos.y);
 					if (objs.indexOf(this.selected_object) >= 0) {
