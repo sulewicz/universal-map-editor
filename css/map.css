@@ -9,6 +9,7 @@
     grid-definition-rows: minmax(min-content, 1fr) auto auto;
 }
 #map_view {
+    border-top: 1px solid #1e1e1e;
     position: relative;
     height: 100%;
     width: 100%;
