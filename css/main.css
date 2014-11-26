@@ -74,14 +74,14 @@ select {
 }
 .left_pane {
     position: absolute;
-    width: 200px;
+    width: 230px;
     left: 0;
     top: 0;
     bottom: 0;
 }
 .right_pane {
     position: absolute;
-    width: 200px;
+    width: 230px;
     right: 0;
     top: 0;
     bottom: 0;
@@ -92,8 +92,8 @@ select {
     border-right: 1px solid #1e1e1e;
     top: 0;
     bottom: 0;
-    left: 200px;
-    right: 200px;
+    left: 230px;
+    right: 230px;
 }
 #menu_bar {
     position: fixed;
