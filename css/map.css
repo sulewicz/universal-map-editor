@@ -4,25 +4,21 @@
     right: 0;
     top: 0;
     bottom: 0;
-    display: grid;
-    grid-definition-columns: 1fr;
-    grid-definition-rows: minmax(min-content, 1fr) auto auto;
+    display: flex;
+    flex-direction: column;
 }
 #map_view {
     border-top: 1px solid #1e1e1e;
     position: relative;
-    height: 100%;
-    width: 100%;
-    grid-row: 1;
-    grid-column: 1
+    order: 1;
+    flex-grow: 1;
 }
 #map_tools_pane {
     border-top: 1px solid #1e1e1e;
     width: 100%;
-    grid-row: 2;
-    grid-column: 1;
     position: relative;
     overflow: auto;
+    order: 2;
 }
 .map_tools_pane_label {
     color: #cccccc;
@@ -39,10 +35,9 @@
     padding: 5px;
 }
 #map_tools_bar {
-    border-top: 1px solid #1e1e1e;
     height: 20px;
-    grid-row: 3;
-    grid-column: 1;
+    order: 3;
+    border-top: 1px solid #1e1e1e;
 }
 #map_canvas {
     width: 100%;
