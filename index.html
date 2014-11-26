@@ -47,40 +47,44 @@
             <span id="export_file_btn" class="button" style="display: none;">Export</span>
             <span id="export_file_as_btn" class="button" style="display: none;">Export As</span>
         </div>
-        <div class="left_pane">
-            <div id="tool_box" class="list"></div>
-            <div id="properties_box" class="list"></div>
-        </div>
-        <div class="center_pane">
-            <div id="map_pane">
-                <div id="map_view">
-                    <canvas id="map_canvas"></canvas>
-                    <div id="zoom_toolkit">
-                        <span id="zoom_out_btn" class="button">-</span>
-                        <span id="zoom_factor">100%</span>
-                        <span id="zoom_in_btn" class="button">+</span>
+        <div class="editor_content">
+            <div class="left_pane">
+                <div id="tool_box" class="list"></div>
+                <div id="properties_box" class="list"></div>
+            </div>
+            <div class="center_pane">
+                <div id="map_pane">
+                    <div id="map_view">
+                        <canvas id="map_canvas"></canvas>
+                        <div id="zoom_toolkit">
+                            <span id="zoom_out_btn" class="button">-</span>
+                            <span id="zoom_factor">100%</span>
+                            <span id="zoom_in_btn" class="button">+</span>
+                        </div>
+                    </div>
+                    <div id="map_tools_pane" style="display: none;">
+                        <div id="map_grid_tool_pane" style="display: none;">
+                            <span class="map_tools_pane_label">Display grid:</span>
+                            <input id="map_display_grid_checkbox" type="checkbox" />
+                            <br />
+                            <span class="map_tools_pane_label">Horizontal spacing:</span>
+                            <input id="map_grid_horizontal_spacing" type="number" />
+                            <br />
+                            <span class="map_tools_pane_label">Vertical spacing:</span>
+                            <input id="map_grid_vertical_spacing" type="number" />
+                        </div>
+                    </div>
+                    <div id="map_tools_bar">
+                        <span id="map_grid_tool_btn" class="button">Grid</span>
                     </div>
                 </div>
-                <div id="map_tools_pane" style="display: none;">
-                    <div id="map_grid_tool_pane" style="display: none;">
-                        <span class="map_tools_pane_label">Display grid:</span>
-                        <input id="map_display_grid_checkbox" type="checkbox" /><br />
-                        <span class="map_tools_pane_label">Horizontal spacing:</span>
-                        <input id="map_grid_horizontal_spacing" type="number" /><br />
-                        <span class="map_tools_pane_label">Vertical spacing:</span>
-                        <input id="map_grid_vertical_spacing" type="number" />
-                    </div>
-                </div>
-                <div id="map_tools_bar">
-                    <span id="map_grid_tool_btn" class="button">Grid</span>
+                <div id="script_editor_pane">
+                    <div id="script_text_area"></div>
                 </div>
             </div>
-            <div id="script_editor_pane">
-                <div id="script_text_area"></div>
+            <div class="right_pane">
+                <div id="object_list_box" class="list"></div>
             </div>
-        </div>
-        <div class="right_pane">
-            <div id="object_list_box" class="list"></div>
         </div>
         <div id="status_bar"></div>
     </div>

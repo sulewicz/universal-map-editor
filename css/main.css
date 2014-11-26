@@ -1,13 +1,14 @@
 * {
     -webkit-user-select: none;
 }
-body {
+html, body {
     background: #4b4b4b;
     color: #cccccc;
     margin: 0;
     padding: 0;
     font-family: 'Tahoma';
     min-height: 100%;
+    height: 100%;
     overflow: hidden;
 }
 input {
@@ -32,19 +33,6 @@ select {
     padding-bottom: 2px;
     -webkit-appearance: none;
 }
-#editor {
-    display: none;
-    grid-definition-columns: 200px 1fr 200px;
-    grid-definition-rows: 20px 1fr 20px;
-}
-#error {
-    display: none;
-    text-align: center;
-    font-size: 12px;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-top: 20%;
-}
 .label {
     color: #cccccc;
     margin: 0;
@@ -63,42 +51,68 @@ select {
 .button:hover {
     color: white;
 }
-.left_pane {
+#error {
+    display: none;
+    text-align: center;
+    font-size: 12px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20%;
+}
+#editor {
+    display: none;
     position: relative;
-    grid-row: 2;
-    grid-column: 1;
-    height: 100%;
     width: 100%;
+    height: 100%;
+}
+.editor_content {
+    position: absolute;
+    top: 21px;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+}
+.left_pane {
+    position: absolute;
+    width: 200px;
+    left: 0;
+    top: 0;
+    bottom: 0;
 }
 .right_pane {
-    position: relative;
-    grid-row: 2;
-    grid-column: 3;
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    width: 200px;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 .center_pane {
-    position: relative;
+    position: absolute;
     border-left: 1px solid #1e1e1e;
     border-right: 1px solid #1e1e1e;
-    grid-row: 2;
-    grid-column: 2;
-    height: 100%;
-    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 200px;
+    right: 200px;
 }
 #menu_bar {
+    position: fixed;
+    position: absolute;
     border-bottom: 1px solid #1e1e1e;
-    height: 100%;
-    grid-row: 1;
-    grid-column: 1 / span 3;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 #status_bar {
+    position: fixed;
     font-size: 14px;
     padding-left: 3px;
     padding-right: 3px;
     border-top: 1px solid #1e1e1e;
     background: #4b4b4b;
-    height: 100%;
-    grid-row: 3;
-    grid-column: 1 / span 3;
+    height: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
