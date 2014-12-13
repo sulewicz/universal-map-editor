@@ -42,8 +42,13 @@ me.Metadata = (function () {
 			me.MapShapes.Polyline({
 				type: 'shape_polyline',
 				label: 'Polyline',
-				zOrder: -100
-			}),
+				zOrder: -100,
+                getLineWidth: function() {
+                    return this.thickness;
+                }
+			}, { // Additional properties of the polyline
+                'thickness': { type: 'float', min: 0.1, default: 1 }
+            }),
 			// Enemy spawn point.
 			{
 				type: 'SPAWN_POINT',
@@ -110,7 +115,32 @@ me.Metadata = (function () {
 					output.startX = this.x;
 					output.startY = this.y;
 				}
-			}
+			},
+			// Simple round obstacle.
+			{
+				type: "OBSTACLE",
+				label: "Obstacle",
+				properties: me.utils.mixin({}, commonProperties, {
+					"radius": { type: "float", min: 1, default: 5 }
+				}),
+				render: function(ctx, selected) {
+					ctx.beginPath();
+					ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+					ctx.fillStyle = "rgba(85, 85, 85, 0.5)";
+					ctx.fill();
+					ctx.strokeStyle = selected ? "#ffffff" : ctx.fillStyle;
+        			ctx.lineWidth = 2;
+					ctx.stroke();
+				},
+				contains: function(x, y) {
+					return Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2) < Math.pow(this.radius, 2);
+				},
+				// This allows to specify how the object should be scaled
+				// Additionally scalePosition is also available
+                scaleSize: function(factor) {
+                    this.updateStaticProperty("radius", this.properties["radius"], factor * this.radius / 100);
+                }
+			},
 		]
 	};
 
