@@ -1,6 +1,24 @@
 window.me = window.me || {};
 
 me.MapShapes = (function () {
+    var calculateCenter = function(points) {
+        var x = 0;
+        var y = 0;
+        
+        for (var i = 0; i < points.length; ++i) {
+            var point = points[i];
+            x += point.x;
+            y += point.y;
+        }
+        
+        x = x / points.length;
+        y = y / points.length;
+        
+        return {
+            x: x,
+            y: y 
+        };
+    }
     return {
         Polyline: function (spec, properties) {
             var NODE_SIZE = 5;
@@ -185,9 +203,27 @@ me.MapShapes = (function () {
                 },
                 
                 scalePosition: function(factor) {
+                    var center = calculateCenter(this.points);
+                    var offset = {
+                        x: (center.x * factor / 100) - center.x,
+                        y: (center.y * factor / 100) - center.y
+                    };
+                    
+                    for (var i = 0; i < this.points.length; ++i) {
+                        var point = this.points[i];
+                        point.x += offset.x;
+                        point.y += offset.y;
+                    }
                 },
                 
                 scaleSize: function(factor) {
+					var center = calculateCenter(this.points);
+					
+                    for (var i = 0; i < this.points.length; ++i) {
+                        var point = this.points[i];
+                        point.x = (point.x - center.x) * factor / 100 + center.x;
+                        point.y = (point.y - center.y) * factor / 100 + center.y;
+                    }
                 },
 
                 pack: function () {
