@@ -3,6 +3,8 @@
 window.me = window.me || {};
 
 me.MapToolsPane = (function () {
+    var MAP_OBJECTS_MODIFIED = "map_objects_modified";
+    
     var addButton = function (id, callback) {
         var button = document.getElementById(id);
         button.addEventListener('click', callback);
@@ -42,7 +44,7 @@ me.MapToolsPane = (function () {
     })();
 
     var ScalingPane = (function () {
-        var clazz = function (map_pane) {
+        var clazz = function (map_pane, tools_pane) {
             this.node = document.getElementById('map_scaling_tool_pane');
 
             var scaling_factor = document.getElementById('map_scaling_factor');
@@ -52,18 +54,25 @@ me.MapToolsPane = (function () {
                     this.value = value = 1;
                 }
             });
+            
+            var emitEvent = function() {
+                tools_pane.emitter.emit(MAP_OBJECTS_MODIFIED);
+            }
 
             var map_scale_positions_btn = addButton('map_scale_positions_btn', function(e) {
                 map_pane.map.scalePositions(scaling_factor.value | 0);
+                emitEvent();
             });
             var map_scale_all_btn = addButton('map_scale_all_btn', function(e) {
                 map_pane.map.scaleAll(scaling_factor.value | 0);
+                emitEvent();
             });
             var map_scale_selected_object_btn = addButton('map_scale_selected_object_btn', function(e) {
                 var object = map_pane.getSelectedObject();
                 if (object) {
                     object.scaleSize(scaling_factor.value | 0);
                 }
+                emitEvent();
             });
 
         };
@@ -77,8 +86,8 @@ me.MapToolsPane = (function () {
 
         self.visibile_pane = null;
         self.map_tools_pane = document.getElementById('map_tools_pane');
-        self.map_grid_tool_pane = new GridPane(map_pane);
-        self.map_scaling_tool_pane = new ScalingPane(map_pane);
+        self.map_grid_tool_pane = new GridPane(map_pane, this);
+        self.map_scaling_tool_pane = new ScalingPane(map_pane, this);
 
         self.grid_btn = addButton('map_grid_tool_btn', function (e) {
             self.togglePane(self.map_grid_tool_pane);
@@ -108,6 +117,8 @@ me.MapToolsPane = (function () {
             }
         }
     };
-
+    
+    clazz.MAP_OBJECTS_MODIFIED = MAP_OBJECTS_MODIFIED;
+    
     return clazz;
 })();

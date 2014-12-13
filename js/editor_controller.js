@@ -23,6 +23,7 @@ me.EditorController = (function() {
 		editor.map_exporter.emitter = emitter;
 		editor.menu_bar.emitter = emitter;
 		editor.script_editor.emitter = emitter;
+        editor.map_tools_pane.emitter = emitter;
 		this.emitter = emitter;
 		this.forcePlacement = false;
 		this.selected_object = null;
@@ -169,6 +170,10 @@ me.EditorController = (function() {
 			emitter.on(me.MenuBar.TOGGLE_SCRIPT_EDITOR, function() {
 				editor.script_editor.toggle();
 			}.bind(this));
+            
+            emitter.on(me.MapToolsPane.MAP_OBJECTS_MODIFIED, function() {
+                editor.properties_box.rebuild();
+            });
 
 			if (me.Metadata.findObjectForToken) {
 				emitter.on(me.ScriptEditor.SCRIPT_TOKEN_FOCUSED, function(token) {
