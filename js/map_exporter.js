@@ -2,10 +2,10 @@
 
 window.me = window.me || {};
 
-me.MapExporter = (function() {
+me.MapExporter = (function () {
 	var MAP_FILE_EXPORTED = "map_file_exported";
 
-	var packObject = function(object, props) {
+	var packObject = function (object, props) {
 		var ret = {};
 
 		ret.x = object.x;
@@ -29,7 +29,7 @@ me.MapExporter = (function() {
 		return ret;
 	};
 
-	var exportMap = function(path, map) {
+	var exportMap = function (path, map) {
 		var self = this;
 		var objects = map.objects;
 		var output = {
@@ -49,7 +49,7 @@ me.MapExporter = (function() {
 			}
 		}
 
-		fs.writeFile(path, JSON.stringify(output), function(err) {
+		fs.writeFile(path, JSON.stringify(output), function (err) {
 			if (err) {
 				throw ('Could not write to file "' + filename + '": ' + err);
 			}
@@ -58,12 +58,12 @@ me.MapExporter = (function() {
 		});
 	};
 
-	var clazz = function(map) {
+	var clazz = function (map) {
 		this.map = map;
 	};
 
 	clazz.prototype = {
-		exportMap: function(path) {
+		exportMap: function (path) {
 			exportMap.call(this, path, this.map);
 		}
 	};

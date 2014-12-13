@@ -2,7 +2,7 @@
 
 window.me = window.me || {};
 
-me.MapObjects = (function() {
+me.MapObjects = (function () {
 	var TYPE_INT = 'int';
 	var TYPE_FLOAT = 'float';
 	var TYPE_DYNAMIC = 'dynamic';
@@ -13,7 +13,7 @@ me.MapObjects = (function() {
 	var OBJECT_RADIUS = 5;
 	var OBJECT_RADIUS_2 = OBJECT_RADIUS * 2;
 
-	var initProperties = function(obj, props) {
+	var initProperties = function (obj, props) {
 		props = props || {};
 		for (var name in props) {
 			if (props.hasOwnProperty(name)) {
@@ -33,7 +33,7 @@ me.MapObjects = (function() {
 		}
 	}
 
-	var initStaticProperty = function(prop) {
+	var initStaticProperty = function (prop) {
 		if (prop.type === TYPE_INT) {
 			if (!prop.hasOwnProperty('min')) prop.min = -Infinity;
 			if (!prop.hasOwnProperty('max')) prop.max = Infinity;
@@ -48,7 +48,7 @@ me.MapObjects = (function() {
 			return (prop.default = Math.min(Math.max(prop.min, prop.default), prop.max));
 		} else if (prop.type === TYPE_ENUM) {
 			if (!prop.hasOwnProperty('default')) prop.default = 0;
-			if (!prop.hasOwnProperty('values')) prop.values = [ null ];
+			if (!prop.hasOwnProperty('values')) prop.values = [null];
 
 			return prop.values[prop.default];
 		} else if (prop.type === TYPE_BOOL) {
@@ -64,7 +64,7 @@ me.MapObjects = (function() {
 		}
 	};
 
-	var initDynamicProperty = function(obj, name, prop) {
+	var initDynamicProperty = function (obj, name, prop) {
 		if (obj[name]) {
 			var props = obj[name];
 			for (var i = 0; i < props.length; ++i) {
@@ -81,12 +81,12 @@ me.MapObjects = (function() {
 		initProperties(obj, obj[name]);
 	};
 
-	var clazz = function() {
+	var clazz = function () {
 		this.classes = {};
 	};
 
 	var baseTemplate = {
-		updateStaticProperty: function(name, prop, value) {
+		updateStaticProperty: function (name, prop, value) {
 			var ret = false;
 			if (prop.type === TYPE_INT) {
 				value = Math.min(Math.max(prop.min, ~~value), prop.max);
@@ -111,59 +111,54 @@ me.MapObjects = (function() {
 			}
 			return ret;
 		},
-		getLabel: function() {
+		getLabel: function () {
 			return this.label + ' [' + this.id + ']';
 		},
-		init: function(x, y) {
+		init: function (x, y) {
 			this.x = x;
 			this.y = y;
 		},
-        scalePosition: function(factor) {
-            this.x = this.x * factor / 100;
-            this.y = this.y * factor / 100;
-        },
-        scaleSize: function(factor) {
-        },
-		render: function(ctx, selectedObject) {
+		scalePosition: function (factor) {
+			this.x = this.x * factor / 100;
+			this.y = this.y * factor / 100;
+		},
+		scaleSize: function (factor) {},
+		render: function (ctx, selectedObject) {
 			ctx.fillStyle = selectedObject ? "#ff0000" : "#00ff00";
 			ctx.fillRect(this.x - OBJECT_RADIUS, this.y - OBJECT_RADIUS, OBJECT_RADIUS_2, OBJECT_RADIUS_2);
 		},
-		contains: function(x, y) {
+		contains: function (x, y) {
 			return (x >= this.x - OBJECT_RADIUS_2 && x <= this.x + OBJECT_RADIUS_2 && y >= this.y - OBJECT_RADIUS_2 && y <= this.y + OBJECT_RADIUS_2);
 		},
-		onDelete: function() {
+		onDelete: function () {
 			return false;
 		},
-		onMouseClick: function(pos) {
+		onMouseClick: function (pos) {
 			return false;
 		},
-		onMouseMove: function(pos) {
-		},
-		onMouseDrag: function(startPos, delta) {
+		onMouseMove: function (pos) {},
+		onMouseDrag: function (startPos, delta) {
 			return false;
 		},
-		onSelected: function() {
-		},
-		onUnselected: function() {
-		},
-		pack: function() {
-		},
-		unpack: function(data) {
+		onSelected: function () {},
+		onUnselected: function () {},
+		pack: function () {},
+		unpack: function (data) {
 			return false;
 		}
 	}
 
 	clazz.prototype = {
-		createClasses: function(list) {
+		createClasses: function (list) {
 			// Adding objects from metadata:
 			for (var i = 0; i < list.length; ++i) {
 				this.createClass(list[i]);
 			}
 		},
 
-		createClass: function(template) {
+		createClass: function (template) {
 			var classes = this.classes;
-			classes[template.type] = function(id, x, y) {
+			classes[template.type] = function (id, x, y) {
 				initProperties(this, template.properties);
 				this.id = id;
 				this.zOrder = template.zOrder || 0;
@@ -174,16 +169,16 @@ me.MapObjects = (function() {
 			classes[template.type].label = template.label;
 		},
 
-		createInstance: function(type, id, x, y) {
+		createInstance: function (type, id, x, y) {
 			return new this.classes[type](id, x, y);
 		},
 
-		getAvailableTypes: function() {
+		getAvailableTypes: function () {
 			var classes = this.classes;
 			var ret = [];
 			for (var type in classes) {
 				if (classes.hasOwnProperty(type)) {
-					ret.push({ 
+					ret.push({
 						type: type,
 						label: classes[type].label
 					});

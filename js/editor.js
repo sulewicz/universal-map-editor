@@ -4,8 +4,8 @@ window.me = window.me || {};
 
 var fs = require('fs');
 
-me.Editor = (function() {
-	var clazz = function() {
+me.Editor = (function () {
+	var clazz = function () {
 		this.map = new me.Map();
 		this.map_objects = new me.MapObjects();
 		this.map_view = new me.MapPane(this.map);
@@ -17,20 +17,20 @@ me.Editor = (function() {
 		this.map_exporter = new me.MapExporter(this.map);
 		this.menu_bar = new me.MenuBar(this.map_io, this.map_exporter);
 		this.script_editor = new me.ScriptEditor(this.map);
-        this.map_tools_pane = new me.MapToolsPane(this.map_view);
+		this.map_tools_pane = new me.MapToolsPane(this.map_view);
 
 		this.init();
 	};
 
 	clazz.prototype = {
-		init: function() {
+		init: function () {
 			this.map_objects.createClasses(me.Metadata.objects);
 			this.initToolbox();
 
 			this.map_view.startRendering();
 		},
 
-		initToolbox: function() {
+		initToolbox: function () {
 			var objects = this.map_objects.getAvailableTypes();
 			for (var i = 0; i < objects.length; ++i) {
 				var object = objects[i];

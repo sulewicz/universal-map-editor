@@ -4,14 +4,14 @@ window.me = window.me || {};
 
 var EventEmitter = require('events').EventEmitter;
 
-me.EditorController = (function() {
+me.EditorController = (function () {
 	var TITLE = "Generic Map Editor";
 
-	var updateTitle = function(path) {
+	var updateTitle = function (path) {
 		document.title = TITLE + " [" + path + "]";
 	}
 
-	var clazz = function(editor) {
+	var clazz = function (editor) {
 		this.editor = editor;
 		var emitter = new EventEmitter();
 		editor.map.emitter = emitter;
@@ -23,7 +23,7 @@ me.EditorController = (function() {
 		editor.map_exporter.emitter = emitter;
 		editor.menu_bar.emitter = emitter;
 		editor.script_editor.emitter = emitter;
-        editor.map_tools_pane.emitter = emitter;
+		editor.map_tools_pane.emitter = emitter;
 		this.emitter = emitter;
 		this.forcePlacement = false;
 		this.selected_object = null;
@@ -31,10 +31,11 @@ me.EditorController = (function() {
 	};
 
 	clazz.prototype = {
-		init: function() {
-			var editor = this.editor, emitter = this.emitter;
+		init: function () {
+			var editor = this.editor,
+				emitter = this.emitter;
 
-			document.body.addEventListener('keydown', function(e) {
+			document.body.addEventListener('keydown', function (e) {
 				if (!editor.script_editor.isVisible()) {
 					if (e.which == 16) {
 						this.forcePlacement = true;
@@ -43,7 +44,7 @@ me.EditorController = (function() {
 				}
 			}.bind(this), true);
 
-			document.body.addEventListener('keyup', function(e) {
+			document.body.addEventListener('keyup', function (e) {
 				if (!editor.script_editor.isVisible()) {
 					if (e.which == 46) {
 						if (this.selected_object) {
@@ -59,47 +60,46 @@ me.EditorController = (function() {
 				}
 			}.bind(this), true);
 
-			emitter.on(me.MapPane.MAP_MOUSE_MOVED, function(pos, e) {
+			emitter.on(me.MapPane.MAP_MOUSE_MOVED, function (pos, e) {
 				if (this.selected_object) {
 					this.selected_object.onMouseMove.apply(this.selected_object, arguments);
 				}
-				editor.status_bar.update((this.forcePlacement && editor.tool_box.getSelectedItem() ? "Click to force create object at " : "") 
-					+ "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")");
+				editor.status_bar.update((this.forcePlacement && editor.tool_box.getSelectedItem() ? "Click to force create object at " : "") + "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")");
 			}.bind(this));
 
-			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function(pos, e) {
+			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function (pos, e) {
 				var objs = this.findObjectsAt(pos.x, pos.y);
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
-                        if (objs[0] != this.selected_object) {
-				            this.selectObject(objs[0], pos.x, pos.y);
-                            return;
-                        }
+						if (objs[0] != this.selected_object) {
+							this.selectObject(objs[0], pos.x, pos.y);
+							return;
+						}
 					} else {
 						var objIdx = objs.indexOf(this.selected_object);
 						var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
 						this.selectObject(cycledObject, pos.x, pos.y);
-                        return;
+						return;
 					}
 				}
-                if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
-                    var selectedType = editor.tool_box.getSelectedItem();
-                    if (selectedType !== null) {
-                        var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
-                        if (this.selected_object && this.selected_object.type == object.type) {
-                            for (var prop in object.properties) {
-                                if (object.properties.hasOwnProperty(prop)) {
-                                    object[prop] = this.selected_object[prop];
-                                }
-                            }
-                        }
-                        editor.map.addObject(object);
-                        this.selectObject(object);
-                    }
-                }
+				if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
+					var selectedType = editor.tool_box.getSelectedItem();
+					if (selectedType !== null) {
+						var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
+						if (this.selected_object && this.selected_object.type == object.type) {
+							for (var prop in object.properties) {
+								if (object.properties.hasOwnProperty(prop)) {
+									object[prop] = this.selected_object[prop];
+								}
+							}
+						}
+						editor.map.addObject(object);
+						this.selectObject(object);
+					}
+				}
 			}.bind(this));
 
-			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function(startPos, delta, e) {
+			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function (startPos, delta, e) {
 				if (!startPos.hasOwnProperty('object')) {
 					var objs = this.findObjectsAt(startPos.x, startPos.y);
 					if (objs.indexOf(this.selected_object) >= 0) {
@@ -111,7 +111,10 @@ me.EditorController = (function() {
 					}
 					if (startPos.object) {
 						this.selectObject(startPos.object, startPos.x, startPos.y)
-						startPos.origin = { x: startPos.object.x, y: startPos.object.y };
+						startPos.origin = {
+							x: startPos.object.x,
+							y: startPos.object.y
+						};
 					} else {
 						startPos.origin = editor.map_view.getViewportInMapUnits();
 					}
@@ -126,57 +129,57 @@ me.EditorController = (function() {
 				}
 			}.bind(this));
 
-			emitter.on(me.ObjectListBox.LIST_OBJECT_CLICKED, function(obj) {
+			emitter.on(me.ObjectListBox.LIST_OBJECT_CLICKED, function (obj) {
 				this.selectObject(obj == this.selected_object ? null : obj);
 			}.bind(this));
 
-			emitter.on(me.Map.MAP_OBJECT_ADDED, function(obj) {
+			emitter.on(me.Map.MAP_OBJECT_ADDED, function (obj) {
 				editor.object_list_box.addObject(obj);
 			}.bind(this));
 
-			emitter.on(me.PropertiesBox.PROPERTIES_OBJECT_MODIFIED, function(obj, prop, value) {
+			emitter.on(me.PropertiesBox.PROPERTIES_OBJECT_MODIFIED, function (obj, prop, value) {
 				editor.object_list_box.updateObject(obj);
 			}.bind(this));
 
-			emitter.on(me.Map.MAP_OBJECT_REMOVED, function(obj) {
+			emitter.on(me.Map.MAP_OBJECT_REMOVED, function (obj) {
 				if (this.selected_object == obj) {
 					this.selectObject(null);
 				}
 				editor.object_list_box.removeObject(obj);
 			}.bind(this));
 
-			emitter.on(me.ToolBox.TOOLBOX_TOOL_SELECTED, function(item) {
+			emitter.on(me.ToolBox.TOOLBOX_TOOL_SELECTED, function (item) {
 				if (this.selected_object && this.selected_object.type != item) {
 					this.selectObject(null);
 				}
 			}.bind(this));
 
-			emitter.on(me.MapIo.MAP_FILE_LOADED, function(path) {
+			emitter.on(me.MapIo.MAP_FILE_LOADED, function (path) {
 				updateTitle(path);
 				editor.status_bar.update("[" + (new Date().toLocaleTimeString()) + "] Loaded: " + path);
 				editor.script_editor.update();
 			}.bind(this));
 
-			emitter.on(me.MapIo.MAP_FILE_SAVED, function(path) {
+			emitter.on(me.MapIo.MAP_FILE_SAVED, function (path) {
 				updateTitle(path);
 				editor.status_bar.update("[" + (new Date().toLocaleTimeString()) + "] Saved: " + path);
 			}.bind(this));
 
-			emitter.on(me.MapExporter.MAP_FILE_EXPORTED, function(path) {
+			emitter.on(me.MapExporter.MAP_FILE_EXPORTED, function (path) {
 				updateTitle(path);
 				editor.status_bar.update("[" + (new Date().toLocaleTimeString()) + "] Exported: " + path);
 			}.bind(this));
 
-			emitter.on(me.MenuBar.TOGGLE_SCRIPT_EDITOR, function() {
+			emitter.on(me.MenuBar.TOGGLE_SCRIPT_EDITOR, function () {
 				editor.script_editor.toggle();
 			}.bind(this));
-            
-            emitter.on(me.MapToolsPane.MAP_OBJECTS_MODIFIED, function() {
-                editor.properties_box.rebuild();
-            });
+
+			emitter.on(me.MapToolsPane.MAP_OBJECTS_MODIFIED, function () {
+				editor.properties_box.rebuild();
+			});
 
 			if (me.Metadata.findObjectForToken) {
-				emitter.on(me.ScriptEditor.SCRIPT_TOKEN_FOCUSED, function(token) {
+				emitter.on(me.ScriptEditor.SCRIPT_TOKEN_FOCUSED, function (token) {
 					var object = me.Metadata.findObjectForToken(token, editor.map.objects);
 					if (object) {
 						this.selectObject(object);
@@ -185,7 +188,7 @@ me.EditorController = (function() {
 			}
 		},
 
-		selectObject: function(obj, x, y) {
+		selectObject: function (obj, x, y) {
 			if (this.selected_object) {
 				this.selected_object.onUnselected();
 			}
@@ -198,11 +201,11 @@ me.EditorController = (function() {
 			this.editor.properties_box.selectObject(obj);
 		},
 
-		getSelectedObject: function() {
+		getSelectedObject: function () {
 			return this.selected_object;
 		},
 
-		findObjectsAt: function(x, y) {
+		findObjectsAt: function (x, y) {
 			var objects = this.editor.map.objects;
 			var ret = [];
 			for (var idx = objects.length - 1; idx >= 0; --idx) {

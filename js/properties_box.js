@@ -2,17 +2,17 @@
 
 window.me = window.me || {};
 
-me.PropertiesBox = (function() {
+me.PropertiesBox = (function () {
 	var PROPERTIES_OBJECT_MODIFIED = "properties_object_modified";
 
 	var fieldsFactory = {};
-	fieldsFactory[me.MapObjects.TYPE_INT] = function(obj, name, prop) {
+	fieldsFactory[me.MapObjects.TYPE_INT] = function (obj, name, prop) {
 		var self = this;
 		var node = document.createElement('div');
 		node.className = 'property';
 		node.innerHTML = '<span class="property_name">' + name + ':</span><input class="property_value" type="number"></input>';
 		node.children[1].value = obj[name];
-		node.children[1].addEventListener('change', function(e) {
+		node.children[1].addEventListener('change', function (e) {
 			if (obj.updateStaticProperty(name, prop, this.value)) {
 				self.rebuild();
 			} else {
@@ -24,13 +24,13 @@ me.PropertiesBox = (function() {
 		this.nodes[name] = node;
 	};
 
-	fieldsFactory[me.MapObjects.TYPE_FLOAT] = function(obj, name, prop) {
+	fieldsFactory[me.MapObjects.TYPE_FLOAT] = function (obj, name, prop) {
 		var self = this;
 		var node = document.createElement('div');
 		node.className = 'property';
 		node.innerHTML = '<span class="property_name">' + name + ':</span><input class="property_value" type="number"></input>';
 		node.children[1].value = obj[name];
-		node.children[1].addEventListener('change', function(e) {
+		node.children[1].addEventListener('change', function (e) {
 			if (obj.updateStaticProperty(name, prop, this.value)) {
 				self.rebuild();
 			} else {
@@ -42,7 +42,7 @@ me.PropertiesBox = (function() {
 		this.nodes[name] = node;
 	};
 
-	fieldsFactory[me.MapObjects.TYPE_ENUM] = function(obj, name, prop) {
+	fieldsFactory[me.MapObjects.TYPE_ENUM] = function (obj, name, prop) {
 		var self = this;
 		var node = document.createElement('div');
 		node.className = 'property';
@@ -53,7 +53,7 @@ me.PropertiesBox = (function() {
 		}
 		node.innerHTML = '<span class="property_name">' + name + ':</span><select class="property_value">' + options.join('') + '</select>';
 		node.children[1].value = obj[name];
-		node.children[1].addEventListener('change', function(e) {
+		node.children[1].addEventListener('change', function (e) {
 			if (obj.updateStaticProperty(name, prop, this.value)) {
 				self.rebuild();
 			} else {
@@ -65,16 +65,13 @@ me.PropertiesBox = (function() {
 		this.nodes[name] = node;
 	};
 
-	fieldsFactory[me.MapObjects.TYPE_BOOL] = function(obj, name, prop) {
-				var self = this;
+	fieldsFactory[me.MapObjects.TYPE_BOOL] = function (obj, name, prop) {
+		var self = this;
 		var node = document.createElement('div');
 		node.className = 'property';
-		node.innerHTML = '<span class="property_name">' + name + ':</span><select class="property_value">'
-			+ '<option value="1">true</option>'
-			+ '<option value="0">false</option>'
-			+ '</select>';
+		node.innerHTML = '<span class="property_name">' + name + ':</span><select class="property_value">' + '<option value="1">true</option>' + '<option value="0">false</option>' + '</select>';
 		node.children[1].value = obj[name] ? '1' : '0';
-		node.children[1].addEventListener('change', function(e) {
+		node.children[1].addEventListener('change', function (e) {
 			if (obj.updateStaticProperty(name, prop, 0 | this.value)) {
 				self.rebuild();
 			} else {
@@ -86,20 +83,20 @@ me.PropertiesBox = (function() {
 		this.nodes[name] = node;
 	};
 
-	fieldsFactory[me.MapObjects.TYPE_DYNAMIC] = function(obj, name, prop) {
+	fieldsFactory[me.MapObjects.TYPE_DYNAMIC] = function (obj, name, prop) {
 		var props = obj[name];
 		if (props) {
 			initProperties.call(this, props);
 		}
 	};
 
-	fieldsFactory[me.MapObjects.TYPE_TEXT] = function(obj, name, prop) {
+	fieldsFactory[me.MapObjects.TYPE_TEXT] = function (obj, name, prop) {
 		var self = this;
 		var node = document.createElement('div');
 		node.className = 'property';
 		node.innerHTML = '<span class="property_name">' + name + ':</span><input class="property_value" type="text"></input>';
 		node.children[1].value = obj[name];
-		node.children[1].addEventListener('change', function(e) {
+		node.children[1].addEventListener('change', function (e) {
 			if (obj.updateStaticProperty(name, prop, this.value)) {
 				self.rebuild();
 			} else {
@@ -111,7 +108,7 @@ me.PropertiesBox = (function() {
 		this.nodes[name] = node;
 	};
 
-	var initProperties = function(props) {
+	var initProperties = function (props) {
 		props = props || {};
 		for (var name in props) {
 			if (props.hasOwnProperty(name)) {
@@ -121,22 +118,22 @@ me.PropertiesBox = (function() {
 		}
 	}
 
-	var objectModified = function(object, prop) {
+	var objectModified = function (object, prop) {
 		this.emitter.emit(PROPERTIES_OBJECT_MODIFIED, object, prop, object[prop]);
 	};
 
-	var clazz = function() {
+	var clazz = function () {
 		this.node = document.getElementById('properties_box');
 		this.nodes = {};
 	};
 
 	clazz.prototype = {
-		selectObject: function(obj) {
+		selectObject: function (obj) {
 			this.selected_object = obj;
 			this.rebuild();
 		},
 
-		rebuild: function() {
+		rebuild: function () {
 			this.node.innerHTML = '';
 			this.nodes = {};
 			if (this.selected_object) {
