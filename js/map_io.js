@@ -2,12 +2,12 @@
 
 window.me = window.me || {};
 
-me.MapIo = (function() {
+me.MapIo = (function () {
 	var MAP_FILE_LOADED = "map_file_loaded";
 	var MAP_FILE_SAVED = "map_file_saved";
 
 	var pathModule = require('path');
-	var packObject = function(object, props) {
+	var packObject = function (object, props) {
 		var ret = object.pack();
 		if (!ret) {
 			ret = {};
@@ -32,7 +32,7 @@ me.MapIo = (function() {
 		return ret;
 	};
 
-	var save = function(path, map) {
+	var save = function (path, map) {
 		var self = this;
 		var objects = map.objects;
 		var output = {
@@ -52,7 +52,7 @@ me.MapIo = (function() {
 			output.objects.push(packedObject);
 		}
 
-		fs.writeFile(path, JSON.stringify(output), function(err) {
+		fs.writeFile(path, JSON.stringify(output), function (err) {
 			if (err) {
 				throw ('Could not write to file "' + filename + '": ' + err);
 			}
@@ -61,7 +61,7 @@ me.MapIo = (function() {
 		});
 	};
 
-	var unpackProperties = function(object, props, data) {
+	var unpackProperties = function (object, props, data) {
 		var dynamic_props = [];
 		for (var name in props) {
 			if (props.hasOwnProperty(name)) {
@@ -81,20 +81,20 @@ me.MapIo = (function() {
 		}
 	};
 
-	var unpackObject = function(data, map_objects) {
+	var unpackObject = function (data, map_objects) {
 		var ret = map_objects.createInstance(data.type, data.id, data.x, data.y);
 
 		if (!ret.unpack(data)) {
 			var props = ret.properties;
 			unpackProperties(ret, props, data);
 		}
-		
+
 		return ret;
 	};
 
-	var open = function(path, map, map_objects) {
+	var open = function (path, map, map_objects) {
 		var self = this;
-		fs.readFile(path, function(err, data) {
+		fs.readFile(path, function (err, data) {
 			if (err) {
 				throw ('Could not read file "' + filename + '": ' + err);
 			}
@@ -120,17 +120,17 @@ me.MapIo = (function() {
 		});
 	};
 
-	var clazz = function(map, map_objects) {
+	var clazz = function (map, map_objects) {
 		this.map = map;
 		this.map_objects = map_objects;
 	};
 
 	clazz.prototype = {
-		save: function(path) {
+		save: function (path) {
 			save.call(this, path, this.map);
 		},
 
-		open: function(path) {
+		open: function (path) {
 			open.call(this, path, this.map, this.map_objects);
 		}
 	};

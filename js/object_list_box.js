@@ -2,44 +2,44 @@
 
 window.me = window.me || {};
 
-me.ObjectListBox = (function() {
+me.ObjectListBox = (function () {
 	var PREFIX = 'objects_list_box_';
 	var SELECTED_CLASSNAME = 'selected';
 	var ITEM_CLASSNAME = 'object_list_box_item';
 
 	var LIST_OBJECT_CLICKED = 'list_object_clicked';
 
-	var clazz = function(map) {
+	var clazz = function (map) {
 		this.map = map;
 		this.node = document.getElementById('object_list_box');
 		this.rebuild();
 	};
 
 	clazz.prototype = {
-		createItem: function(obj) {
+		createItem: function (obj) {
 			var node = document.createElement('span');
 			node.id = PREFIX + obj.id;
 			node.className = ITEM_CLASSNAME;
 			node.innerHTML = obj.getLabel();
 			this.node.appendChild(node);
-			node.addEventListener('click', function() {
+			node.addEventListener('click', function () {
 				this.emitter.emit(LIST_OBJECT_CLICKED, obj);
 			}.bind(this));
 		},
 
-		addObject: function(obj) {
+		addObject: function (obj) {
 			this.rebuild(obj, false);
 		},
 
-		updateObject: function(obj) {
+		updateObject: function (obj) {
 			this.getNode(obj.id).innerHTML = obj.getLabel();
 		},
 
-		removeObject: function(obj) {
+		removeObject: function (obj) {
 			this.rebuild(obj, true);
 		},
 
-		rebuild: function(obj, removed) {
+		rebuild: function (obj, removed) {
 			if (obj) {
 				if (removed) {
 					if (obj == this.selected_object) {
@@ -61,7 +61,7 @@ me.ObjectListBox = (function() {
 			}
 		},
 
-		selectObject: function(obj) {
+		selectObject: function (obj) {
 			if (this.selected_object) {
 				this.getNode(this.selected_object.id).classList.remove(SELECTED_CLASSNAME);
 			}
@@ -71,7 +71,7 @@ me.ObjectListBox = (function() {
 			}
 		},
 
-		getNode: function(id) {
+		getNode: function (id) {
 			return document.getElementById(PREFIX + id);
 		}
 	};
