@@ -75,6 +75,7 @@ me.Map = (function () {
 			this.objects.length = 0;
 			this.next_id = 0;
 			this.objects_map = {};
+			this.export_path = null;
 		},
 
 		getNextId: function () {
