@@ -54,7 +54,8 @@ me.MapIo = (function () {
 
 		fs.writeFile(path, JSON.stringify(output), function (err) {
 			if (err) {
-				throw ('Could not write to file "' + filename + '": ' + err);
+				alert('Could not write to file "' + path + '": ' + err);
+				return;
 			}
 
 			self.emitter.emit(MAP_FILE_SAVED, path);
@@ -96,7 +97,8 @@ me.MapIo = (function () {
 		var self = this;
 		fs.readFile(path, function (err, data) {
 			if (err) {
-				throw ('Could not read file "' + filename + '": ' + err);
+				alert('Could not read file "' + path + '": ' + err);
+				return;
 			}
 
 			var data = JSON.parse(data);
