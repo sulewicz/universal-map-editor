@@ -14,6 +14,8 @@ me.ScriptEditor = (function () {
 		var codemirror = CodeMirror(document.getElementById('script_text_area'), {
 			lineNumbers: true,
 			autofocus: true,
+			indentWithTabs: true,
+			indentUnit: 4,
 			viewportMargin: Infinity,
 			mode: {
 				name: 'lua',
