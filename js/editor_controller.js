@@ -72,12 +72,13 @@ me.EditorController = (function () {
 					return;
 				}
 				var objs = this.findObjectsAt(pos.x, pos.y);
+				// Cycling through found objects, unless forced placement is activated
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
 						if (objs[0] != this.selected_object) {
 							this.selectObject(objs[0], pos.x, pos.y);
-							return;
 						}
+						return;
 					} else {
 						var objIdx = objs.indexOf(this.selected_object);
 						var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
@@ -85,6 +86,7 @@ me.EditorController = (function () {
 						return;
 					}
 				}
+				// Empty space on map clicked or forced placement is activated
 				var selectedType = editor.tool_box.getSelectedItem();
 				if (selectedType !== null) {
 					var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
