@@ -133,6 +133,10 @@ me.MapShapes = (function () {
 				},
 
 				onMouseClick: function (pos, e) {
+					if (e.button == 1) {
+						// Not handling middle button
+						return false;
+					}
 					var i = this.findNode(pos.x, pos.y);
 					if (i >= 0) {
 						this.selected_point = i;
@@ -148,6 +152,10 @@ me.MapShapes = (function () {
 				},
 
 				onMouseDrag: function (startPos, delta, e) {
+					if (e.button == 1) {
+						// Not handling middle button
+						return false;
+					}
 					if (!startPos.hasOwnProperty('start')) {
 						if (e.ctrlKey) {
 							startPos.start = [];
@@ -161,6 +169,9 @@ me.MapShapes = (function () {
 							startPos.origin = startPos.start[0];
 						} else {
 							var i = this.findNode(startPos.x, startPos.y);
+							if (i < 0) {
+								return false;
+							}
 							var node = this.points[i];
 							this.selected_point = i;
 							startPos.target = node;
