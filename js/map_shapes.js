@@ -181,6 +181,8 @@ me.MapShapes = (function () {
 							point.y = start.y + delta.y;
 						}
 					}
+
+					return true;
 				},
 
 				onSelected: function (x, y) {

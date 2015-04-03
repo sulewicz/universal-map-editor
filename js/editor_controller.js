@@ -68,6 +68,9 @@ me.EditorController = (function () {
 			}.bind(this));
 
 			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function (pos, e) {
+				if (this.selected_object && this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
+					return;
+				}
 				var objs = this.findObjectsAt(pos.x, pos.y);
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
@@ -82,24 +85,25 @@ me.EditorController = (function () {
 						return;
 					}
 				}
-				if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
-					var selectedType = editor.tool_box.getSelectedItem();
-					if (selectedType !== null) {
-						var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
-						if (this.selected_object && this.selected_object.type == object.type) {
-							for (var prop in object.properties) {
-								if (object.properties.hasOwnProperty(prop)) {
-									object[prop] = this.selected_object[prop];
-								}
+				var selectedType = editor.tool_box.getSelectedItem();
+				if (selectedType !== null) {
+					var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
+					if (this.selected_object && this.selected_object.type == object.type) {
+						for (var prop in object.properties) {
+							if (object.properties.hasOwnProperty(prop)) {
+								object[prop] = this.selected_object[prop];
 							}
 						}
-						editor.map.addObject(object);
-						this.selectObject(object);
 					}
+					editor.map.addObject(object);
+					this.selectObject(object);
 				}
 			}.bind(this));
 
 			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function (startPos, delta, e) {
+				if (this.selected_object && this.selected_object.onMouseDrag.apply(this.selected_object, arguments)) {
+					return;
+				}
 				if (!startPos.hasOwnProperty('object')) {
 					var objs = this.findObjectsAt(startPos.x, startPos.y);
 					if (objs.indexOf(this.selected_object) >= 0) {
@@ -120,10 +124,8 @@ me.EditorController = (function () {
 					}
 				}
 				if (startPos.object) {
-					if (!this.selected_object.onMouseDrag.apply(this.selected_object, arguments)) {
-						startPos.object.x = startPos.origin.x + delta.x;
-						startPos.object.y = startPos.origin.y + delta.y;
-					}
+					startPos.object.x = startPos.origin.x + delta.x;
+					startPos.object.y = startPos.origin.y + delta.y;
 				} else {
 					editor.map_view.setViewportInMapUnits(startPos.origin.x - delta.x, startPos.origin.y - delta.y);
 				}
