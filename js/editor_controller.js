@@ -9,7 +9,7 @@ me.EditorController = (function () {
 
 	var updateTitle = function (path) {
 		document.title = TITLE + " [" + path + "]";
-	}
+	};
 
 	var clazz = function (editor) {
 		this.editor = editor;
@@ -68,13 +68,21 @@ me.EditorController = (function () {
 			}.bind(this));
 
 			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function (pos, e) {
+				if (this.selected_object && this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
+					return;
+				}
+				if (e.button == 1) {
+					// Dragging with middle button
+					return;
+				}
 				var objs = this.findObjectsAt(pos.x, pos.y);
+				// Cycling through found objects, unless forced placement is activated
 				if (objs.length > 0 && !this.forcePlacement) {
 					if (objs.length == 1) {
 						if (objs[0] != this.selected_object) {
 							this.selectObject(objs[0], pos.x, pos.y);
-							return;
 						}
+						return;
 					} else {
 						var objIdx = objs.indexOf(this.selected_object);
 						var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
@@ -82,32 +90,39 @@ me.EditorController = (function () {
 						return;
 					}
 				}
-				if (!this.selected_object || !this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
-					var selectedType = editor.tool_box.getSelectedItem();
-					if (selectedType !== null) {
-						var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
-						if (this.selected_object && this.selected_object.type == object.type) {
-							for (var prop in object.properties) {
-								if (object.properties.hasOwnProperty(prop)) {
-									object[prop] = this.selected_object[prop];
-								}
+				// Empty space on map clicked or forced placement is activated
+				var selectedType = editor.tool_box.getSelectedItem();
+				if (selectedType !== null) {
+					var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
+					if (this.selected_object && this.selected_object.type == object.type) {
+						for (var prop in object.properties) {
+							if (object.properties.hasOwnProperty(prop)) {
+								object[prop] = this.selected_object[prop];
 							}
 						}
-						editor.map.addObject(object);
-						this.selectObject(object);
 					}
+					editor.map.addObject(object);
+					this.selectObject(object);
 				}
 			}.bind(this));
 
 			emitter.on(me.MapPane.MAP_MOUSE_DRAGGED, function (startPos, delta, e) {
+				if (this.selected_object && this.selected_object.onMouseDrag.apply(this.selected_object, arguments)) {
+					return;
+				}
 				if (!startPos.hasOwnProperty('object')) {
-					var objs = this.findObjectsAt(startPos.x, startPos.y);
-					if (objs.indexOf(this.selected_object) >= 0) {
-						startPos.object = this.selected_object;
-					} else if (objs.length > 0) {
-						startPos.object = objs[0];
-					} else {
+					if (e.button == 1) {
+						// Dragging map on middle button
 						startPos.object = null;
+					} else {
+						var objs = this.findObjectsAt(startPos.x, startPos.y);
+						if (objs.indexOf(this.selected_object) >= 0) {
+							startPos.object = this.selected_object;
+						} else if (objs.length > 0) {
+							startPos.object = objs[0];
+						} else {
+							startPos.object = null;
+						}
 					}
 					if (startPos.object) {
 						this.selectObject(startPos.object, startPos.x, startPos.y)
@@ -120,9 +135,10 @@ me.EditorController = (function () {
 					}
 				}
 				if (startPos.object) {
-					if (!this.selected_object.onMouseDrag.apply(this.selected_object, arguments)) {
-						startPos.object.x = startPos.origin.x + delta.x;
-						startPos.object.y = startPos.origin.y + delta.y;
+					startPos.object.x = startPos.origin.x + delta.x;
+					startPos.object.y = startPos.origin.y + delta.y;
+					if (e.altKey) {
+						startPos.object.wrapToGrid(startPos.object);
 					}
 				} else {
 					editor.map_view.setViewportInMapUnits(startPos.origin.x - delta.x, startPos.origin.y - delta.y);

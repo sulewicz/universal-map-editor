@@ -133,21 +133,29 @@ me.MapShapes = (function () {
 				},
 
 				onMouseClick: function (pos, e) {
+					if (e.button == 1) {
+						// Not handling middle button
+						return false;
+					}
 					var i = this.findNode(pos.x, pos.y);
 					if (i >= 0) {
 						this.selected_point = i;
 					} else {
-						this.points.splice(this.selected_point + 1, 0, pos);
+						this.points.splice(this.selected_point + 1, 0, e.altKey ? this.wrapToGrid(pos) : pos);
 						this.selected_point = this.selected_point + 1;
 					}
 					return true;
 				},
 
 				onMouseMove: function (pos, e) {
-					this.mouse_position = pos;
+					this.mouse_position = e.altKey ? this.wrapToGrid(pos) : pos;
 				},
 
 				onMouseDrag: function (startPos, delta, e) {
+					if (e.button == 1) {
+						// Not handling middle button
+						return false;
+					}
 					if (!startPos.hasOwnProperty('start')) {
 						if (e.ctrlKey) {
 							startPos.start = [];
@@ -161,6 +169,9 @@ me.MapShapes = (function () {
 							startPos.origin = startPos.start[0];
 						} else {
 							var i = this.findNode(startPos.x, startPos.y);
+							if (i < 0) {
+								return false;
+							}
 							var node = this.points[i];
 							this.selected_point = i;
 							startPos.target = node;
@@ -173,7 +184,13 @@ me.MapShapes = (function () {
 					if (startPos.target) {
 						startPos.target.x = startPos.start.x + delta.x;
 						startPos.target.y = startPos.start.y + delta.y;
+						if (e.altKey) {
+							this.wrapToGrid(startPos.target);
+						}
 					} else {
+						if (e.altKey) {
+							this.wrapToGrid(delta);
+						}
 						for (var i = 0; i < this.points.length; ++i) {
 							var start = startPos.start[i];
 							var point = this.points[i];
@@ -181,6 +198,8 @@ me.MapShapes = (function () {
 							point.y = start.y + delta.y;
 						}
 					}
+
+					return true;
 				},
 
 				onSelected: function (x, y) {
