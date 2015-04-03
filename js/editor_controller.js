@@ -11,13 +11,6 @@ me.EditorController = (function () {
 		document.title = TITLE + " [" + path + "]";
 	};
 
-	var wrapToGrid = function (object) {
-		var spacingX = this.editor.map_view.getGridHorizontalSpacing();
-		var spacingY = this.editor.map_view.getGridVerticalSpacing();
-		object.x = Math.round(object.x / spacingX) * spacingX;
-		object.y = Math.round(object.y / spacingY) * spacingY;
-	};
-
 	var clazz = function (editor) {
 		this.editor = editor;
 		var emitter = new EventEmitter();
@@ -145,7 +138,7 @@ me.EditorController = (function () {
 					startPos.object.x = startPos.origin.x + delta.x;
 					startPos.object.y = startPos.origin.y + delta.y;
 					if (e.altKey) {
-						wrapToGrid.call(this, startPos.object);
+						startPos.object.wrapToGrid(startPos.object);
 					}
 				} else {
 					editor.map_view.setViewportInMapUnits(startPos.origin.x - delta.x, startPos.origin.y - delta.y);

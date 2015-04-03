@@ -86,6 +86,14 @@ me.MapObjects = (function () {
 	};
 
 	var baseTemplate = {
+		wrapToGrid: function (position) {
+			var editor = me.Editor.getInstance();
+			var spacingX = editor.map_view.getGridHorizontalSpacing();
+			var spacingY = editor.map_view.getGridVerticalSpacing();
+			position.x = Math.round(position.x / spacingX) * spacingX;
+			position.y = Math.round(position.y / spacingY) * spacingY;
+			return position;
+		},
 		updateStaticProperty: function (name, prop, value) {
 			var ret = false;
 			if (prop.type === TYPE_INT) {

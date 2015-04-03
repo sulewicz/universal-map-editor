@@ -5,7 +5,10 @@ window.me = window.me || {};
 var fs = require('fs');
 
 me.Editor = (function () {
+	var instance;
+
 	var clazz = function () {
+		instance = this;
 		this.map = new me.Map();
 		this.map_objects = new me.MapObjects();
 		this.map_view = new me.MapPane(this.map);
@@ -37,6 +40,10 @@ me.Editor = (function () {
 				this.tool_box.addItem(object.label, object.type);
 			}
 		}
+	};
+
+	clazz.getInstance = function() {
+		return instance;
 	};
 
 	return clazz;

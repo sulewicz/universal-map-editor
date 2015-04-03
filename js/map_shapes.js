@@ -141,14 +141,14 @@ me.MapShapes = (function () {
 					if (i >= 0) {
 						this.selected_point = i;
 					} else {
-						this.points.splice(this.selected_point + 1, 0, pos);
+						this.points.splice(this.selected_point + 1, 0, e.altKey ? this.wrapToGrid(pos) : pos);
 						this.selected_point = this.selected_point + 1;
 					}
 					return true;
 				},
 
 				onMouseMove: function (pos, e) {
-					this.mouse_position = pos;
+					this.mouse_position = e.altKey ? this.wrapToGrid(pos) : pos;
 				},
 
 				onMouseDrag: function (startPos, delta, e) {
@@ -184,7 +184,13 @@ me.MapShapes = (function () {
 					if (startPos.target) {
 						startPos.target.x = startPos.start.x + delta.x;
 						startPos.target.y = startPos.start.y + delta.y;
+						if (e.altKey) {
+							this.wrapToGrid(startPos.target);
+						}
 					} else {
+						if (e.altKey) {
+							this.wrapToGrid(delta);
+						}
 						for (var i = 0; i < this.points.length; ++i) {
 							var start = startPos.start[i];
 							var point = this.points[i];
