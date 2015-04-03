@@ -100,6 +100,9 @@ me.MapObjects = (function () {
 				value = String(value);
 			}
 			this[name] = value;
+			if (this.__onPropertyChanged) {
+				this.__onPropertyChanged(this, name);
+			}
 			if (this._triggers && this._triggers.hasOwnProperty(name)) {
 				var triggers = this._triggers[name];
 				for (var triggerName in triggers) {
