@@ -71,6 +71,10 @@ me.EditorController = (function () {
 				if (this.selected_object && this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
 					return;
 				}
+				if (e.button == 1) {
+					// Dragging with middle button
+					return;
+				}
 				var objs = this.findObjectsAt(pos.x, pos.y);
 				// Cycling through found objects, unless forced placement is activated
 				if (objs.length > 0 && !this.forcePlacement) {
@@ -107,13 +111,18 @@ me.EditorController = (function () {
 					return;
 				}
 				if (!startPos.hasOwnProperty('object')) {
-					var objs = this.findObjectsAt(startPos.x, startPos.y);
-					if (objs.indexOf(this.selected_object) >= 0) {
-						startPos.object = this.selected_object;
-					} else if (objs.length > 0) {
-						startPos.object = objs[0];
-					} else {
+					if (e.button == 1) {
+						// Dragging map on middle button
 						startPos.object = null;
+					} else {
+						var objs = this.findObjectsAt(startPos.x, startPos.y);
+						if (objs.indexOf(this.selected_object) >= 0) {
+							startPos.object = this.selected_object;
+						} else if (objs.length > 0) {
+							startPos.object = objs[0];
+						} else {
+							startPos.object = null;
+						}
 					}
 					if (startPos.object) {
 						this.selectObject(startPos.object, startPos.x, startPos.y)
