@@ -143,6 +143,7 @@ me.MapShapes = (function () {
 					} else {
 						this.points.splice(this.selected_point + 1, 0, e.altKey ? this.wrapToGrid(pos) : pos);
 						this.selected_point = this.selected_point + 1;
+						this.onPropertyChanged('points', this.points);
 					}
 					return true;
 				},
@@ -187,6 +188,7 @@ me.MapShapes = (function () {
 						if (e.altKey) {
 							this.wrapToGrid(startPos.target);
 						}
+						this.onPropertyChanged('points', this.points);
 					} else {
 						if (e.altKey) {
 							this.wrapToGrid(delta);
@@ -197,6 +199,7 @@ me.MapShapes = (function () {
 							point.x = start.x + delta.x;
 							point.y = start.y + delta.y;
 						}
+						this.onPropertyChanged('points', this.points);
 					}
 
 					return true;
@@ -217,6 +220,7 @@ me.MapShapes = (function () {
 					} else {
 						this.points.splice(this.selected_point, 1);
 						this.selected_point = Math.max(0, this.selected_point - 1);
+						this.onPropertyChanged('points', this.points);
 						return true;
 					}
 				},

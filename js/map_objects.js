@@ -108,6 +108,8 @@ me.MapObjects = (function () {
 				value = String(value);
 			}
 			this[name] = value;
+			this.onPropertyChanged(name, value);
+
 			if (this.__onPropertyChanged) {
 				this.__onPropertyChanged(this, name);
 			}
@@ -153,6 +155,8 @@ me.MapObjects = (function () {
 		},
 		onSelected: function () {},
 		onUnselected: function () {},
+		onPropertyChanged: function (name, value) {},
+		onCreated: function () {},
 		pack: function () {},
 		unpack: function (data) {
 			return false;

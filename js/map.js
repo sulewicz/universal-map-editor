@@ -40,6 +40,7 @@ me.Map = (function () {
 			this.objects_map[obj.id] = obj;
 			this.emitter.emit(MAP_OBJECT_ADDED, obj);
 			this.next_id = Math.max(obj.id + 1, this.next_id);
+			obj.onCreated();
 		},
 
 		removeObject: function (obj) {
