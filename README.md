@@ -38,7 +38,7 @@ When you run the app for the first time you'll most likely see an error stating 
 
 #### How to run
 
-This project uses [node-webkit](https://github.com/rogerwang/node-webkit). To run the app you will have to download the node-webkit binary and launch it with the *universal-map-editor* directory as a parameter (as it contains package.json file).
+This project uses [nwjs](https://github.com/nwjs/nw.js/). To run the app you will have to download the nwjs binary and launch it with the *universal-map-editor* directory as a parameter (as it contains package.json file).
 
 As a an example, let's say you have following directory layout:
 
@@ -54,7 +54,7 @@ To run the editor, you will have to launch node-webkit with the yourgame/editor/
 
 ```
 	# MacOS
-	open -a 'node-webkit' yourgame/editor/universal-map-editor
+	/Applications/nwjs.app/Contents/MacOS/nwjs yourgame/editor/universal-map-editor
 
 	# Linux
 	nw yourgame/editor/universal-map-editor
@@ -63,7 +63,7 @@ To run the editor, you will have to launch node-webkit with the yourgame/editor/
 	nw yourgame\editor\universal-map-editor
 ```
 
-You can check [this](https://github.com/rogerwang/node-webkit/wiki/How-to-run-apps) for more instructions.
+You can check [this](https://github.com/nwjs/nw.js/wiki/How-to-run-apps) for more instructions.
 
 #### How to use
 
