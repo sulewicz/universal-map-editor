@@ -51,6 +51,9 @@ me.MapPane = (function () {
 	var MAP_MOUSE_CLICKED = "map_mouse_clicked";
 	var MAP_MOUSE_DRAGGED = "map_mouse_dragged";
 
+	var FPS = 20;
+	var REFRESH_DELAY = 1000 / FPS;
+
 	var clazz = function (map) {
 		this.map = map;
 		var node = document.getElementById('map_canvas');
@@ -203,7 +206,7 @@ me.MapPane = (function () {
 
 			ctx.restore();
 			if (this.rendering) {
-				window.requestAnimationFrame(this.__render);
+				setTimeout(this.__render, REFRESH_DELAY);
 			}
 		},
 
