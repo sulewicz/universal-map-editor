@@ -160,6 +160,9 @@ me.MapObjects = (function () {
 		pack: function () {},
 		unpack: function (data) {
 			return false;
+		},
+		invalidate: function() {
+			me.Editor.getInstance().map_view.invalidate();
 		}
 	}
 
