@@ -18,6 +18,7 @@ me.MapToolsPane = (function () {
 			display_grid_checkbox.checked = map_pane.isGridVisibile();
 			display_grid_checkbox.addEventListener('change', function (e) {
 				map_pane.setGridVisible(this.checked);
+				map_pane.invalidate();
 			});
 
 			var horizontal_spacing = document.getElementById('map_grid_horizontal_spacing');
@@ -28,6 +29,7 @@ me.MapToolsPane = (function () {
 					this.value = value = 1;
 				}
 				map_pane.setGridHorizontalSpacing(value);
+				map_pane.invalidate();
 			});
 
 			var vertical_spacing = document.getElementById('map_grid_vertical_spacing');
@@ -38,6 +40,7 @@ me.MapToolsPane = (function () {
 					this.value = value = 1;
 				}
 				map_pane.setGridVerticalSpacing(value);
+				map_pane.invalidate();
 			});
 		};
 		return clazz;

@@ -26,6 +26,7 @@ me.ZoomToolkit = (function () {
 			}
 			zoomFactorLabel.innerText = zoom + '%';
 			toolkit.scale = zoom;
+			mapPane.invalidate();
 		}
 
 		zoomOutBtn.addEventListener('click', function () {
@@ -51,6 +52,9 @@ me.MapPane = (function () {
 	var MAP_MOUSE_CLICKED = "map_mouse_clicked";
 	var MAP_MOUSE_DRAGGED = "map_mouse_dragged";
 
+	var FPS = 20;
+	var REFRESH_DELAY = 1000 / FPS;
+
 	var clazz = function (map) {
 		this.map = map;
 		var node = document.getElementById('map_canvas');
@@ -64,6 +68,7 @@ me.MapPane = (function () {
 		this.display_width = node.width;
 		this.display_height = node.height;
 		this.rendering = false;
+		this.redraw = true;
 		this.node = node;
 
 		this.zoomToolkit = new me.ZoomToolkit(this);
@@ -133,77 +138,80 @@ me.MapPane = (function () {
 		},
 
 		render: function (ctx) {
-			var w = this.display_width,
-				h = this.display_height;
-			ctx.save();
-			// Clearing canvas
-			ctx.lineWidth = 1;
-			ctx.fillStyle = "#aaaaaa";
-			ctx.strokeStyle = "#000000";
+			if (this.redraw) {
+				var w = this.display_width,
+					h = this.display_height;
+				ctx.save();
+				// Clearing canvas
+				ctx.lineWidth = 1;
+				ctx.fillStyle = "#aaaaaa";
+				ctx.strokeStyle = "#000000";
 
-			var scale = this.getScale();
-			var viewport = this.getViewportInPixels();
-			var offset = this.getViewportOffsetInPixels();
-			viewport.x = viewport.x + offset.x;
-			viewport.y = viewport.y + offset.y;
+				var scale = this.getScale();
+				var viewport = this.getViewportInPixels();
+				var offset = this.getViewportOffsetInPixels();
+				viewport.x = viewport.x + offset.x;
+				viewport.y = viewport.y + offset.y;
 
-			// Viewport position
-			ctx.translate(-viewport.x, -viewport.y);
-			ctx.fillRect(viewport.x, viewport.y, w, h);
+				// Viewport position
+				ctx.translate(-viewport.x, -viewport.y);
+				ctx.fillRect(viewport.x, viewport.y, w, h);
 
-			// Drawing horizontal guideline
-			ctx.beginPath();
-			ctx.moveTo(viewport.x, 0);
-			ctx.lineTo(viewport.x + w, 0);
-			ctx.stroke();
+				// Drawing horizontal guideline
+				ctx.beginPath();
+				ctx.moveTo(viewport.x, 0);
+				ctx.lineTo(viewport.x + w, 0);
+				ctx.stroke();
 
-			// Drawing vertical guideline
-			ctx.beginPath();
-			ctx.moveTo(0, viewport.y);
-			ctx.lineTo(0, viewport.y + h);
-			ctx.stroke();
+				// Drawing vertical guideline
+				ctx.beginPath();
+				ctx.moveTo(0, viewport.y);
+				ctx.lineTo(0, viewport.y + h);
+				ctx.stroke();
 
-			ctx.scale(scale, scale);
+				ctx.scale(scale, scale);
 
-			// Drawing grid
-			if (this.display_grid) {
-				ctx.lineWidth = 1.0 / scale;
-				ctx.strokeStyle = "#686868";
+				// Drawing grid
+				if (this.display_grid) {
+					ctx.lineWidth = 1.0 / scale;
+					ctx.strokeStyle = "#686868";
 
-				var spacing = this.horizontal_spacing;
-				var start = Math.round((viewport.x / scale) / spacing) * spacing;
-				var end = (viewport.x + w) / scale;
-				for (var gx = start; gx <= end; gx += spacing) {
-					if (Math.round(gx) != 0) {
-						ctx.beginPath();
-						ctx.moveTo(gx, viewport.y / scale);
-						ctx.lineTo(gx, (viewport.y + h) / scale);
-						ctx.stroke();
+					var spacing = this.horizontal_spacing;
+					var start = Math.round((viewport.x / scale) / spacing) * spacing;
+					var end = (viewport.x + w) / scale;
+					for (var gx = start; gx <= end; gx += spacing) {
+						if (Math.round(gx) != 0) {
+							ctx.beginPath();
+							ctx.moveTo(gx, viewport.y / scale);
+							ctx.lineTo(gx, (viewport.y + h) / scale);
+							ctx.stroke();
+						}
+					}
+
+					spacing = this.vertical_spacing;
+					start = Math.round((viewport.y / scale) / spacing) * spacing;
+					end = (viewport.y + h) / scale;
+					for (var gy = start; gy <= end; gy += spacing) {
+						if (Math.round(gy) != 0) {
+							ctx.beginPath();
+							ctx.moveTo(viewport.x / scale, gy);
+							ctx.lineTo((viewport.x + w) / scale, gy);
+							ctx.stroke();
+						}
 					}
 				}
 
-				spacing = this.vertical_spacing;
-				start = Math.round((viewport.y / scale) / spacing) * spacing;
-				end = (viewport.y + h) / scale;
-				for (var gy = start; gy <= end; gy += spacing) {
-					if (Math.round(gy) != 0) {
-						ctx.beginPath();
-						ctx.moveTo(viewport.x / scale, gy);
-						ctx.lineTo((viewport.x + w) / scale, gy);
-						ctx.stroke();
-					}
+				var objects = this.map.objects;
+				for (var idx = 0; idx < objects.length; ++idx) {
+					var object = objects[idx];
+					object.render(ctx, this.selected_object == object, scale);
 				}
-			}
 
-			var objects = this.map.objects;
-			for (var idx = 0; idx < objects.length; ++idx) {
-				var object = objects[idx];
-				object.render(ctx, this.selected_object == object, scale);
+				ctx.restore();
+				this.redraw = false;
 			}
-
-			ctx.restore();
 			if (this.rendering) {
-				window.requestAnimationFrame(this.__render);
+				setTimeout(this.__render, REFRESH_DELAY);
 			}
 		},
 
@@ -301,6 +309,11 @@ me.MapPane = (function () {
 			node.width = node.parentNode.offsetWidth;
 			this.display_width = node.width;
 			this.display_height = node.height;
+			this.invalidate();
+		},
+
+		invalidate: function () {
+			this.redraw = true;
 		}
 	};
 
