@@ -3,6 +3,15 @@
 var path = require('path');
 var bridge = require('./js/node_bridge.js')
 
+var gui = require('nw.gui');
+var menuBar = new gui.Menu({
+	type: 'menubar'
+});
+menuBar.createMacBuiltin('Universal Editor', {
+	hideEdit: false,
+});
+gui.Window.get().menu = menuBar;
+
 window.onload = function () {
 	var editorNode = document.getElementById('editor');
 	var errorNode = document.getElementById('error');
