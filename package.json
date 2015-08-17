@@ -2,6 +2,7 @@
   "name": "Map Editor",
   "main": "index.html",
   "version": "0.1.0",
+  "single-instance": false,
   "window": {
     "title": "Map Editor",
     "toolbar": false,
