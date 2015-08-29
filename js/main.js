@@ -7,10 +7,12 @@ var gui = require('nw.gui');
 var menuBar = new gui.Menu({
 	type: 'menubar'
 });
-menuBar.createMacBuiltin('Universal Editor', {
-	hideEdit: false,
-});
-gui.Window.get().menu = menuBar;
+if (menuBar.createMacBuiltin) {
+	menuBar.createMacBuiltin('Universal Editor', {
+		hideEdit: false,
+	});
+	gui.Window.get().menu = menuBar;
+}
 
 window.onload = function () {
 	var editorNode = document.getElementById('editor');
