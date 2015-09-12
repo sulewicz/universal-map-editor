@@ -133,15 +133,16 @@ me.EditorController = (function () {
 						} else {
 							startPos.origin = editor.map_view.getViewportInMapUnits();
 						}
-					}
-					if (startPos.object) {
-						startPos.object.x = startPos.origin.x + delta.x;
-						startPos.object.y = startPos.origin.y + delta.y;
-						if (e.altKey) {
-							startPos.object.wrapToGrid(startPos.object);
-						}
 					} else {
-						editor.map_view.setViewportInMapUnits(startPos.origin.x - delta.x, startPos.origin.y - delta.y);
+						if (startPos.object) {
+							startPos.object.x = startPos.origin.x + delta.x;
+							startPos.object.y = startPos.origin.y + delta.y;
+							if (e.altKey) {
+								startPos.object.wrapToGrid(startPos.object);
+							}
+						} else {
+							editor.map_view.setViewportInMapUnits(startPos.origin.x - delta.x, startPos.origin.y - delta.y);
+						}
 					}
 					editor.map_view.invalidate();
 				}
