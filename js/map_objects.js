@@ -163,6 +163,13 @@ me.MapObjects = (function () {
 		},
 		invalidate: function() {
 			me.Editor.getInstance().map_view.invalidate();
+		},
+		fillFrom: function(object, position) {
+			for (var prop in this.properties) {
+				if (this.properties.hasOwnProperty(prop)) {
+					this[prop] = object[prop];
+				}
+			}
 		}
 	}
 

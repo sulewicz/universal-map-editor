@@ -275,6 +275,21 @@ me.MapShapes = (function () {
 						}
 					}
 				},
+				
+				fillFrom: function(object, position) {
+					for (var prop in this.properties) {
+						if (this.properties.hasOwnProperty(prop)) {
+							this[prop] = object[prop];
+						}
+					}
+					this.points = [];
+					var center = calculateCenter(object.points)
+					var delta = { x: position.x - center.x, y: position.y - center.y };
+					for (var i = 0; i < object.points.length; ++i) {
+						var point = object.points[i];
+						this.points.push({ x: point.x + delta.x, y: point.y + delta.y });
+					}
+				},
 
 				compile: function (output) {
 					output.polylines = output.polylines || [];

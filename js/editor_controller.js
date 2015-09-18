@@ -69,7 +69,7 @@ me.EditorController = (function () {
 			}.bind(this));
 
 			emitter.on(me.MapPane.MAP_MOUSE_CLICKED, function (pos, e) {
-				if (this.selected_object && this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
+				if (this.selected_object && !this.forcePlacement && this.selected_object.onMouseClick.apply(this.selected_object, arguments)) {
 					editor.map_view.invalidate();
 				} else if (e.button == 1) {
 					// Dragging with middle button
@@ -95,11 +95,7 @@ me.EditorController = (function () {
 					if (selectedType !== null) {
 						var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
 						if (this.selected_object && this.selected_object.type == object.type) {
-							for (var prop in object.properties) {
-								if (object.properties.hasOwnProperty(prop)) {
-									object[prop] = this.selected_object[prop];
-								}
-							}
+							object.fillFrom(this.selected_object, pos);
 						}
 						editor.map.addObject(object);
 						this.selectObject(object);
