@@ -48,19 +48,34 @@ me.MapExporter = (function () {
 				output.objects.push(packedObject);
 			}
 		}
+		
+		var content = JSON.stringify(output);
 
-		fs.writeFile(path, JSON.stringify(output), function (err) {
-			if (err) {
+		fs.writeFile(path, content, function (err) {
+			var successCallback = function() {
+				self.emitter.emit(MAP_FILE_EXPORTED, path);
+			};
+			
+			var errorCallback = function (err) {
 				alert('Could not write to file "' + path + '": ' + err);
+			};
+			
+			if (err) {
+				errorCallback(err);
 				return;
 			}
-
-			self.emitter.emit(MAP_FILE_EXPORTED, path);
+			
+			if (self.postExport) {
+				self.postExport(path, successCallback, errorCallback);
+			} else {
+				successCallback();
+			}
 		});
 	};
 
-	var clazz = function (map) {
+	var clazz = function (map, postExport) {
 		this.map = map;
+		this.postExport = postExport;
 	};
 
 	clazz.prototype = {
