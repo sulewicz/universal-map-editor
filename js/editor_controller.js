@@ -153,9 +153,16 @@ me.EditorController = (function () {
 				editor.map_view.invalidate();
 			}.bind(this));
 
-			emitter.on(me.PropertiesBox.PROPERTIES_OBJECT_MODIFIED, function (obj, prop, value) {
-				editor.object_list_box.updateObject(obj);
+			emitter.on(me.PropertiesBox.PROPERTIES_OBJECT_MODIFIED, function (object, propName, value) {
+				editor.object_list_box.updateObject(object);
 				editor.map_view.invalidate();
+			}.bind(this));
+			emitter.on(me.PropertiesBox.PROPERTIES_FIELD_FOCUSED, function (object, name, propSpec) {
+				if (propSpec.hint) {
+					editor.status_bar.update(name + ": " + propSpec.hint);
+				} else {
+					editor.status_bar.update("");
+				}
 			}.bind(this));
 
 			emitter.on(me.Map.MAP_OBJECT_REMOVED, function (obj) {

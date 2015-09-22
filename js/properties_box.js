@@ -4,6 +4,7 @@ window.me = window.me || {};
 
 me.PropertiesBox = (function () {
 	var PROPERTIES_OBJECT_MODIFIED = "properties_object_modified";
+	var PROPERTIES_FIELD_FOCUSED = "properties_field_focused";
 
 	var fieldsFactory = {};
 	fieldsFactory[me.MapObjects.TYPE_INT] = function (obj, name, prop) {
@@ -19,6 +20,7 @@ me.PropertiesBox = (function () {
 		}, true);
 		this.node.appendChild(node);
 		this.nodes[name] = node;
+		return node;
 	};
 
 	fieldsFactory[me.MapObjects.TYPE_FLOAT] = function (obj, name, prop) {
@@ -34,6 +36,7 @@ me.PropertiesBox = (function () {
 		}, true);
 		this.node.appendChild(node);
 		this.nodes[name] = node;
+		return node;
 	};
 
 	fieldsFactory[me.MapObjects.TYPE_ENUM] = function (obj, name, prop) {
@@ -54,6 +57,7 @@ me.PropertiesBox = (function () {
 		}, true);
 		this.node.appendChild(node);
 		this.nodes[name] = node;
+		return node;
 	};
 
 	fieldsFactory[me.MapObjects.TYPE_BOOL] = function (obj, name, prop) {
@@ -69,6 +73,7 @@ me.PropertiesBox = (function () {
 		}, true);
 		this.node.appendChild(node);
 		this.nodes[name] = node;
+		return node;
 	};
 
 	fieldsFactory[me.MapObjects.TYPE_DYNAMIC] = function (obj, name, prop) {
@@ -91,21 +96,29 @@ me.PropertiesBox = (function () {
 		}, true);
 		this.node.appendChild(node);
 		this.nodes[name] = node;
+		return node;
 	};
 
 	var initProperties = function (props) {
+		var emitter = this.emitter;
 		props = props || {};
 		for (var name in props) {
 			if (props.hasOwnProperty(name)) {
-				var prop = props[name];
-				fieldsFactory[prop.type].call(this, this.selected_object, name, prop);
+				var selectedObject = this.selected_object;
+				var propSpec = props[name];
+				var node = fieldsFactory[propSpec.type].call(this, selectedObject, name, propSpec);
+				node.addEventListener('mouseenter', (function (object, name, propSpec) {
+					return function () {
+						emitter.emit(PROPERTIES_FIELD_FOCUSED, object, name, propSpec);
+					};
+				})(selectedObject, name, propSpec));
 			}
 		}
 	}
 
-	var objectModified = function (object, prop) {
-		this.nodes[prop].children[1].value = object[prop];
-		this.emitter.emit(PROPERTIES_OBJECT_MODIFIED, object, prop, object[prop]);
+	var objectModified = function (object, propName) {
+		this.nodes[propName].children[1].value = object[propName];
+		this.emitter.emit(PROPERTIES_OBJECT_MODIFIED, object, propName, object[propName]);
 	};
 
 	var clazz = function () {
@@ -135,6 +148,7 @@ me.PropertiesBox = (function () {
 	};
 
 	clazz.PROPERTIES_OBJECT_MODIFIED = PROPERTIES_OBJECT_MODIFIED;
+	clazz.PROPERTIES_FIELD_FOCUSED = PROPERTIES_FIELD_FOCUSED;
 
 	return clazz;
 })();
