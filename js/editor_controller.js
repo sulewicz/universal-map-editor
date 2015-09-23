@@ -93,6 +93,9 @@ me.EditorController = (function () {
 					// Empty space on map clicked or forced placement is activated
 					var selectedType = editor.tool_box.getSelectedItem();
 					if (selectedType !== null) {
+						if (e.altKey) {
+							pos = me.utils.wrapToGrid(pos);
+						}
 						var object = editor.map_objects.createInstance(selectedType, editor.map.getNextId(), pos.x, pos.y);
 						if (this.selected_object && this.selected_object.type == object.type) {
 							object.fillFrom(this.selected_object, pos);
