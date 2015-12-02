@@ -180,6 +180,7 @@ me.EditorController = (function () {
 				if (this.selected_object && this.selected_object.type != item) {
 					this.selectObject(null);
 				}
+				editor.object_list_box.filterList(item);
 			}.bind(this));
 
 			emitter.on(me.MapIo.MAP_FILE_LOADED, function (path) {

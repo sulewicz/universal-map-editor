@@ -8,10 +8,13 @@ me.ObjectListBox = (function () {
 	var ITEM_CLASSNAME = 'object_list_box_item';
 
 	var LIST_OBJECT_CLICKED = 'list_object_clicked';
+	
+	var TYPE_ATTRIBUTE = 'objectType';
 
 	var clazz = function (map) {
 		this.map = map;
 		this.node = document.getElementById('object_list_box');
+		this.filter_type = null;
 		this.rebuild();
 	};
 
@@ -20,6 +23,7 @@ me.ObjectListBox = (function () {
 			var node = document.createElement('span');
 			node.id = PREFIX + obj.id;
 			node.className = ITEM_CLASSNAME;
+			node.setAttribute(TYPE_ATTRIBUTE, obj.type);
 			node.innerHTML = obj.getLabel();
 			this.node.appendChild(node);
 			node.addEventListener('click', function () {
@@ -59,6 +63,7 @@ me.ObjectListBox = (function () {
 					this.createItem(obj);
 				}
 			}
+			this.filterList(this.filter_type);
 		},
 
 		selectObject: function (obj) {
@@ -68,6 +73,17 @@ me.ObjectListBox = (function () {
 			this.selected_object = obj;
 			if (obj) {
 				this.getNode(this.selected_object.id).classList.add(SELECTED_CLASSNAME);
+			}
+		},
+		
+		filterList: function (type) {
+			if (type !== this.filter_type) {
+				this.filter_type = type;
+				var items = this.node.children;
+				for (var i = 0; i < items.length; ++i) {
+					var item = items[i];
+					item.style.display = (!type || item.getAttribute(TYPE_ATTRIBUTE) === type) ? 'block' : 'none';
+				}
 			}
 		},
 

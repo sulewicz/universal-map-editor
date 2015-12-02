@@ -28,6 +28,10 @@ me.ToolBox = (function () {
 
 		setSelectedItem: function (item) {
 			var node;
+			if (item == this.selected_item) {
+				item = null;
+			}
+			
 			if (this.selected_item != null) {
 				node = document.getElementById(PREFIX + this.selected_item);
 				node.classList.remove(SELECTED_CLASSNAME);
@@ -36,8 +40,8 @@ me.ToolBox = (function () {
 			if (item) {
 				node = document.getElementById(PREFIX + item);
 				node.classList.add(SELECTED_CLASSNAME);
-				this.emitter.emit(TOOLBOX_TOOL_SELECTED, item);
 			}
+			this.emitter.emit(TOOLBOX_TOOL_SELECTED, item);
 		},
 
 		getSelectedItem: function () {
