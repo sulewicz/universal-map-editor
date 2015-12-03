@@ -81,9 +81,24 @@ me.MapToolsPane = (function () {
 		};
 		return clazz;
 	})();
+	
+	var FilteringPane = (function () {
+		var clazz = function (map_pane, object_list_box) {
+			this.node = document.getElementById('map_filtering_tool_pane');
+			var filter_objects_checkbox = document.getElementById('map_filter_objects_checkbox');
+			filter_objects_checkbox.checked = object_list_box.isFilteringByType() || map_pane.isFilteringByType();
+			filter_objects_checkbox.addEventListener('change', function (e) {
+				object_list_box.setFilteringByType(this.checked);
+				map_pane.setFilteringByType(this.checked);
+				map_pane.invalidate();
+			});
+		};
+		return clazz;
+	})();
 
-	var clazz = function (map_pane) {
+	var clazz = function (map_pane, object_list_box) {
 		this.map_pane = map_pane;
+		this.object_list_box = object_list_box;
 
 		var self = this;
 
@@ -91,6 +106,7 @@ me.MapToolsPane = (function () {
 		self.map_tools_pane = document.getElementById('map_tools_pane');
 		self.map_grid_tool_pane = new GridPane(map_pane, this);
 		self.map_scaling_tool_pane = new ScalingPane(map_pane, this);
+		self.map_filtering_tool_pane = new FilteringPane(map_pane, object_list_box);
 
 		self.grid_btn = addButton('map_grid_tool_btn', function (e) {
 			self.togglePane(self.map_grid_tool_pane);
@@ -98,6 +114,10 @@ me.MapToolsPane = (function () {
 
 		self.scaling_btn = addButton('map_scaling_tool_btn', function (e) {
 			self.togglePane(self.map_scaling_tool_pane);
+		});
+		
+		self.filtering_btn = addButton('map_filtering_tool_btn', function (e) {
+			self.togglePane(self.map_filtering_tool_pane);
 		});
 	};
 

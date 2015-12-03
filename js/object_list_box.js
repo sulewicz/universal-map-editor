@@ -15,6 +15,7 @@ me.ObjectListBox = (function () {
 		this.map = map;
 		this.node = document.getElementById('object_list_box');
 		this.filter_type = null;
+		this.filtering_by_type = false;
 		this.rebuild();
 	};
 
@@ -77,14 +78,24 @@ me.ObjectListBox = (function () {
 		},
 		
 		filterList: function (type) {
-			if (type !== this.filter_type) {
-				this.filter_type = type;
-				var items = this.node.children;
-				for (var i = 0; i < items.length; ++i) {
-					var item = items[i];
-					item.style.display = (!type || item.getAttribute(TYPE_ATTRIBUTE) === type) ? 'block' : 'none';
-				}
+			this.filter_type = type;
+			if (!this.filtering_by_type) {
+				type = null;
 			}
+			var items = this.node.children;
+			for (var i = 0; i < items.length; ++i) {
+				var item = items[i];
+				item.style.display = (!type || item.getAttribute(TYPE_ATTRIBUTE) === type) ? 'block' : 'none';
+			}
+		},
+		
+		setFilteringByType: function(filtering_by_type) {
+			this.filtering_by_type = filtering_by_type;
+			this.filterList(this.filter_type);
+		},
+		
+		isFilteringByType: function() {
+			return this.filtering_by_type;
 		},
 
 		getNode: function (id) {

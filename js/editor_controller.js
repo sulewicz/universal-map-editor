@@ -27,6 +27,7 @@ me.EditorController = (function () {
 		this.emitter = emitter;
 		this.forcePlacement = false;
 		this.selected_object = null;
+		this.filter_type = null;
 		this.init();
 	};
 
@@ -75,18 +76,18 @@ me.EditorController = (function () {
 					// Dragging with middle button
 					editor.map_view.invalidate();
 				} else {
-					var objs = this.findObjectsAt(pos.x, pos.y);
+					var objs = this.findObjectsAt(pos.x, pos.y, this.filter_type);
 					// Cycling through found objects, unless forced placement is activated
 					if (objs.length > 0 && !this.forcePlacement) {
+						var objectToSelect = null;
 						if (objs.length == 1) {
-							if (objs[0] != this.selected_object) {
-								this.selectObject(objs[0], pos.x, pos.y);
-							}
-							return;
+							objectToSelect = objs[0];
 						} else {
 							var objIdx = objs.indexOf(this.selected_object);
-							var cycledObject = objs[(objIdx + objs.length - 1) % objs.length];
-							this.selectObject(cycledObject, pos.x, pos.y);
+							objectToSelect = objs[(objIdx + objs.length - 1) % objs.length];
+						}
+						if (objectToSelect) {
+							this.selectObject(objectToSelect, pos.x, pos.y);
 							return;
 						}
 					}
@@ -114,7 +115,7 @@ me.EditorController = (function () {
 							// Dragging map on middle button
 							startPos.object = null;
 						} else {
-							var objs = this.findObjectsAt(startPos.x, startPos.y);
+							var objs = this.findObjectsAt(startPos.x, startPos.y, this.filter_type);
 							if (objs.indexOf(this.selected_object) >= 0) {
 								startPos.object = this.selected_object;
 							} else if (objs.length > 0) {
@@ -180,7 +181,9 @@ me.EditorController = (function () {
 				if (this.selected_object && this.selected_object.type != item) {
 					this.selectObject(null);
 				}
+				this.filter_type = item;
 				editor.object_list_box.filterList(item);
+				editor.map_view.filterMap(item);
 			}.bind(this));
 
 			emitter.on(me.MapIo.MAP_FILE_LOADED, function (path) {
@@ -237,12 +240,12 @@ me.EditorController = (function () {
 			return this.selected_object;
 		},
 
-		findObjectsAt: function (x, y) {
+		findObjectsAt: function (x, y, type) {
 			var objects = this.editor.map.objects;
 			var ret = [];
 			for (var idx = objects.length - 1; idx >= 0; --idx) {
 				var obj = objects[idx];
-				if (obj.contains(x, y)) {
+				if (obj.contains(x, y) && (!type || obj.type === type)) {
 					ret.push(obj);
 				}
 			}

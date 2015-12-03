@@ -20,7 +20,7 @@ me.Editor = (function () {
 		this.map_exporter = new me.MapExporter(this.map, me.Metadata.postExport);
 		this.menu_bar = new me.MenuBar(this.map_io, this.map_exporter);
 		this.script_editor = new me.ScriptEditor(this.map);
-		this.map_tools_pane = new me.MapToolsPane(this.map_view);
+		this.map_tools_pane = new me.MapToolsPane(this.map_view, this.object_list_box);
 
 		this.init();
 	};

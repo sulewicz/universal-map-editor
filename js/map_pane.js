@@ -70,6 +70,8 @@ me.MapPane = (function () {
 		this.rendering = false;
 		this.redraw = true;
 		this.node = node;
+		this.filter_type = null;
+		this.filtering_by_type = false;
 
 		this.zoomToolkit = new me.ZoomToolkit(this);
 
@@ -202,9 +204,18 @@ me.MapPane = (function () {
 				}
 
 				var objects = this.map.objects;
-				for (var idx = 0; idx < objects.length; ++idx) {
-					var object = objects[idx];
-					object.render(ctx, this.selected_object == object, scale);
+				if (this.filtering_by_type && this.filter_type) {
+					for (var idx = 0; idx < objects.length; ++idx) {
+						var object = objects[idx];
+						if (object.type == this.filter_type) {
+							object.render(ctx, this.selected_object == object, scale);
+						}
+					}
+				} else {
+					for (var idx = 0; idx < objects.length; ++idx) {
+						var object = objects[idx];
+						object.render(ctx, this.selected_object == object, scale);
+					}
 				}
 
 				ctx.restore();
@@ -314,7 +325,21 @@ me.MapPane = (function () {
 
 		invalidate: function () {
 			this.redraw = true;
-		}
+		},
+		
+		filterMap: function(type) {
+			this.filter_type = type;
+			this.invalidate();
+		},
+		
+		setFilteringByType: function(filtering_by_type) {
+			this.filtering_by_type = filtering_by_type;
+			this.invalidate();
+		},
+		
+		isFilteringByType: function() {
+			return this.filtering_by_type;
+		},
 	};
 
 	clazz.MAP_MOUSE_MOVED = MAP_MOUSE_MOVED;

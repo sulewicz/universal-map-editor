@@ -39,6 +39,11 @@
     width: 100%;
     padding: 5px;
 }
+#map_filtering_tool_pane {
+    background-color: #4b4b4b;
+    width: 100%;
+    padding: 5px;
+}
 #map_tools_bar {
     height: 20px;
     order: 3;
