@@ -203,8 +203,12 @@ me.EditorController = (function () {
 				editor.status_bar.update("[" + (new Date().toLocaleTimeString()) + "] Exported: " + path);
 			}.bind(this));
 
-			emitter.on(me.MenuBar.TOGGLE_SCRIPT_EDITOR, function () {
-				editor.script_editor.toggle();
+			emitter.on(me.MenuBar.SHOW_MAP_VIEW, function () {
+				editor.script_editor.hide();
+			}.bind(this));
+
+			emitter.on(me.MenuBar.SHOW_EDITOR_VIEW, function () {
+				editor.script_editor.show();
 			}.bind(this));
 
 			emitter.on(me.MapToolsPane.MAP_OBJECTS_MODIFIED, function () {

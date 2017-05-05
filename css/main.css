@@ -67,7 +67,7 @@ select {
 }
 .editor_content {
   position: absolute;
-  top: 21px;
+  top: 0;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -94,15 +94,6 @@ select {
   bottom: 0;
   left: 230px;
   right: 230px;
-}
-#menu_bar {
-  position: fixed;
-  position: absolute;
-  border-bottom: 1px solid #1e1e1e;
-  height: 20px;
-  top: 0;
-  left: 0;
-  right: 0;
 }
 #status_bar {
   position: fixed;
