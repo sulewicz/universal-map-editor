@@ -1,22 +1,22 @@
 #tool_box {
-    width: 100%;
-    height: 50%;
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-    border-bottom: 1px solid #1e1e1e;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-bottom: 1px solid #1e1e1e;
 }
 .tool_box_item {
-    border-bottom: 1px solid #1e1e1e;
-    margin: 5px 10px 5px 10px;
-    padding: 5px;
-    font-size: 14px;
-    display: block;
-    overflow: hidden;
-    cursor: pointer;
+  border-bottom: 1px solid #1e1e1e;
+  margin: 5px 10px 5px 10px;
+  padding: 5px;
+  font-size: 14px;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
 }
 .tool_box_item.selected {
-    font-weight: bold;
-    color: white;
-    border-bottom: 1px solid white;
+  font-weight: bold;
+  color: white;
+  border-bottom: 1px solid white;
 }

@@ -2,107 +2,107 @@
 <html>
 
 <head>
-    <title>Generic Map Editor</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="./css/main.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/editor.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/tool_box.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/properties_box.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/object_list_box.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/map.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="./css/codemirror.css" type="text/css" charset="utf-8">
-    <script type="text/javascript" src="./js/utils.js"></script>
-    <script type="text/javascript" src="./js/map_shapes.js"></script>
-    <script type="text/javascript" src="../game_metadata.js"></script>
-    <script type="text/javascript" src="./js/codemirror-compressed.js"></script>
-    <script type="text/javascript" src="./js/map_objects.js"></script>
-    <script type="text/javascript" src="./js/map.js"></script>
-    <script type="text/javascript" src="./js/status_bar.js"></script>
-    <script type="text/javascript" src="./js/object_list_box.js"></script>
-    <script type="text/javascript" src="./js/properties_box.js"></script>
-    <script type="text/javascript" src="./js/tool_box.js"></script>
-    <script type="text/javascript" src="./js/map_pane.js"></script>
-    <script type="text/javascript" src="./js/map_tools_pane.js"></script>
-    <script type="text/javascript" src="./js/map_exporter.js"></script>
-    <script type="text/javascript" src="./js/map_io.js"></script>
-    <script type="text/javascript" src="./js/menu_bar.js"></script>
-    <script type="text/javascript" src="./js/editor.js"></script>
-    <script type="text/javascript" src="./js/editor_controller.js"></script>
-    <script type="text/javascript" src="./js/script_editor.js"></script>
-    <script type="text/javascript" src="./js/renderer.js"></script>
+  <title>Generic Map Editor</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="./css/main.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/editor.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/tool_box.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/properties_box.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/object_list_box.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/map.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./css/codemirror.css" type="text/css" charset="utf-8">
+  <script type="text/javascript" src="./js/utils.js"></script>
+  <script type="text/javascript" src="./js/map_shapes.js"></script>
+  <script type="text/javascript" src="../game_metadata.js"></script>
+  <script type="text/javascript" src="./js/codemirror-compressed.js"></script>
+  <script type="text/javascript" src="./js/map_objects.js"></script>
+  <script type="text/javascript" src="./js/map.js"></script>
+  <script type="text/javascript" src="./js/status_bar.js"></script>
+  <script type="text/javascript" src="./js/object_list_box.js"></script>
+  <script type="text/javascript" src="./js/properties_box.js"></script>
+  <script type="text/javascript" src="./js/tool_box.js"></script>
+  <script type="text/javascript" src="./js/map_pane.js"></script>
+  <script type="text/javascript" src="./js/map_tools_pane.js"></script>
+  <script type="text/javascript" src="./js/map_exporter.js"></script>
+  <script type="text/javascript" src="./js/map_io.js"></script>
+  <script type="text/javascript" src="./js/menu_bar.js"></script>
+  <script type="text/javascript" src="./js/editor.js"></script>
+  <script type="text/javascript" src="./js/editor_controller.js"></script>
+  <script type="text/javascript" src="./js/script_editor.js"></script>
+  <script type="text/javascript" src="./js/renderer.js"></script>
 </head>
 
 <body>
-    <span id="error">
-    </span>
-    <input style="display:none;" id="open_file" type="file" />
-    <input style="display:none;" id="save_file" type="file" nwsaveas />
-    <input style="display:none;" id="export_file" type="file" nwsaveas />
-    <div id="editor">
-        <div id="menu_bar">
-            <span id="map_script_toggle_btn" style="float: right;" class="button">Map/Script</span>
-            <span id="open_file_btn" class="button">Open</span>
-            <span id="save_file_btn" class="button">Save</span>
-            <span id="save_file_as_btn" class="button">Save As</span>
-            <span id="export_file_btn" class="button" style="display: none;">Export</span>
-            <span id="export_file_as_btn" class="button" style="display: none;">Export As</span>
-        </div>
-        <div class="editor_content">
-            <div class="left_pane">
-                <div id="tool_box" class="list"></div>
-                <div id="properties_box" class="list"></div>
-            </div>
-            <div class="center_pane">
-                <div id="map_pane">
-                    <div id="map_view">
-                        <canvas id="map_canvas"></canvas>
-                        <div id="zoom_toolkit">
-                            <span id="zoom_out_btn" class="button">-</span>
-                            <span id="zoom_factor">100%</span>
-                            <span id="zoom_in_btn" class="button">+</span>
-                        </div>
-                    </div>
-                    <div id="map_tools_pane" style="display: none;">
-                        <div id="map_grid_tool_pane" style="display: none;">
-                            <span class="map_tools_pane_label">Display grid:</span>
-                            <input id="map_display_grid_checkbox" type="checkbox" />
-                            <br />
-                            <span class="map_tools_pane_label">Horizontal spacing:</span>
-                            <input id="map_grid_horizontal_spacing" type="number" />
-                            <br />
-                            <span class="map_tools_pane_label">Vertical spacing:</span>
-                            <input id="map_grid_vertical_spacing" type="number" />
-                        </div>
-                        <div id="map_scaling_tool_pane" style="display: none;">
-                            <span class="map_tools_pane_label">Scaling factor [%]:</span>
-                            <input id="map_scaling_factor" type="number" value="100" /></br>
-                            <span class="map_tools_pane_label">Scale:</span>
-                            <span id="map_scale_positions_btn" class="button">Positions</span>|
-                            <span id="map_scale_all_btn" class="button">Positions and size</span>|
-                            <span id="map_scale_selected_object_btn" class="button">Selected object size</span>
-                        </div>
-						<div id="map_filtering_tool_pane" style="display: none;">
-                            <span class="map_tools_pane_label">Filter objects by type:</span>
-                            <input id="map_filter_objects_checkbox" type="checkbox" />
-                            <br />
-                        </div>
-                    </div>
-                    <div id="map_tools_bar">
-                        <span id="map_grid_tool_btn" class="button">Grid</span>
-                    	<span id="map_scaling_tool_btn" class="button">Scaling</span>
-						<span id="map_filtering_tool_btn" class="button">Filtering</span>
-                    </div>
-                </div>
-                <div id="script_editor_pane">
-                    <div id="script_text_area"></div>
-                </div>
-            </div>
-            <div class="right_pane">
-                <div id="object_list_box" class="list"></div>
-            </div>
-        </div>
-        <div id="status_bar"></div>
+  <span id="error">
+  </span>
+  <input style="display:none;" id="open_file" type="file" />
+  <input style="display:none;" id="save_file" type="file" nwsaveas />
+  <input style="display:none;" id="export_file" type="file" nwsaveas />
+  <div id="editor">
+    <div id="menu_bar">
+      <span id="map_script_toggle_btn" style="float: right;" class="button">Map/Script</span>
+      <span id="open_file_btn" class="button">Open</span>
+      <span id="save_file_btn" class="button">Save</span>
+      <span id="save_file_as_btn" class="button">Save As</span>
+      <span id="export_file_btn" class="button" style="display: none;">Export</span>
+      <span id="export_file_as_btn" class="button" style="display: none;">Export As</span>
     </div>
+    <div class="editor_content">
+      <div class="left_pane">
+        <div id="tool_box" class="list"></div>
+        <div id="properties_box" class="list"></div>
+      </div>
+      <div class="center_pane">
+        <div id="map_pane">
+          <div id="map_view">
+            <canvas id="map_canvas"></canvas>
+            <div id="zoom_toolkit">
+              <span id="zoom_out_btn" class="button">-</span>
+              <span id="zoom_factor">100%</span>
+              <span id="zoom_in_btn" class="button">+</span>
+            </div>
+          </div>
+          <div id="map_tools_pane" style="display: none;">
+            <div id="map_grid_tool_pane" style="display: none;">
+              <span class="map_tools_pane_label">Display grid:</span>
+              <input id="map_display_grid_checkbox" type="checkbox" />
+              <br />
+              <span class="map_tools_pane_label">Horizontal spacing:</span>
+              <input id="map_grid_horizontal_spacing" type="number" />
+              <br />
+              <span class="map_tools_pane_label">Vertical spacing:</span>
+              <input id="map_grid_vertical_spacing" type="number" />
+            </div>
+            <div id="map_scaling_tool_pane" style="display: none;">
+              <span class="map_tools_pane_label">Scaling factor [%]:</span>
+              <input id="map_scaling_factor" type="number" value="100" /></br>
+              <span class="map_tools_pane_label">Scale:</span>
+              <span id="map_scale_positions_btn" class="button">Positions</span>|
+              <span id="map_scale_all_btn" class="button">Positions and size</span>|
+              <span id="map_scale_selected_object_btn" class="button">Selected object size</span>
+            </div>
+            <div id="map_filtering_tool_pane" style="display: none;">
+              <span class="map_tools_pane_label">Filter objects by type:</span>
+              <input id="map_filter_objects_checkbox" type="checkbox" />
+              <br />
+            </div>
+          </div>
+          <div id="map_tools_bar">
+            <span id="map_grid_tool_btn" class="button">Grid</span>
+            <span id="map_scaling_tool_btn" class="button">Scaling</span>
+            <span id="map_filtering_tool_btn" class="button">Filtering</span>
+          </div>
+        </div>
+        <div id="script_editor_pane">
+          <div id="script_text_area"></div>
+        </div>
+      </div>
+      <div class="right_pane">
+        <div id="object_list_box" class="list"></div>
+      </div>
+    </div>
+    <div id="status_bar"></div>
+  </div>
 </body>
 
 </html>
