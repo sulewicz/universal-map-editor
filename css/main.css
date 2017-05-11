@@ -50,7 +50,7 @@ select {
   color: #1e1e1e;
 }
 .button:hover {
-  text-decoration: underline;
+  text-shadow: 0 0 1px #1e1e1e;
 }
 #error {
   display: none;
