@@ -44,7 +44,7 @@ me.MenuBar = (function () {
 
 		function showSaveDialog () {
 			remote.dialog.showSaveDialog({
-					filters: [ { name: 'JSON', extensions: ['json'] } ]
+					filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
 				}, function(fileName) {
 					if (fileName) {
 						self.save(fileName);
@@ -54,7 +54,7 @@ me.MenuBar = (function () {
 
 		function showExportDialog () {
 			remote.dialog.showSaveDialog({
-					filters: [ { name: 'Exported Level', extensions: ['lvl'] } ]
+					filters: [ { name: 'Exported Level', extensions: ['lvl'] }, { name: 'All files', extensions: ['*'] } ]
 				}, function(fileName) {
 					if (fileName) {
 						self.map_io.map.export_path = fileName;
@@ -66,7 +66,7 @@ me.MenuBar = (function () {
 
 		function showOpenDialog () {
 			remote.dialog.showOpenDialog({
-					filters: [ { name: 'JSON', extensions: ['json'] } ]
+					filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
 				}, function(fileNames) {
 					if (fileNames) {
 						self.open(fileNames[0]);

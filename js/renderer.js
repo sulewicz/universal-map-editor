@@ -1,7 +1,5 @@
 "use strict";
 
-const path = require('path');
-
 window.onload = function () {
 	var editorNode = document.getElementById('editor');
 	var errorNode = document.getElementById('error');
