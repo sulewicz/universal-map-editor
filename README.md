@@ -5,7 +5,7 @@
 I started developing this project during development of Cocos2DX-based game.
 Unfortunately I haven't found any simple and easily extensible 2D non-tile based map editor, so I created this one.
 
-#### How to start 
+#### How to start
 
 The idea is to have a metadata file that describes the objects available in the game, based on which the editor can run. The editor uses JSON as the map format. It also includes Lua editor for scripts.
 
@@ -38,41 +38,17 @@ When you run the app for the first time you'll most likely see an error stating 
 
 #### How to run
 
-This project uses [nwjs](https://github.com/nwjs/nw.js/). To run the app you will have to download the nwjs binary and launch it with the *universal-map-editor* directory as a parameter (as it contains package.json file).
-
-As a an example, let's say you have following directory layout:
-
-```
-yourgame/
-	editor/
-		game_metadata.js # Copied from universal-map-editor/sample/
-		universal-map-editor/
-			package.json
-			...
-```
-To run the editor, you will have to launch node-webkit with the yourgame/editor/universal-map-editor/ as the parameter.
-
-```
-	# MacOS
-	/Applications/nwjs.app/Contents/MacOS/nwjs yourgame/editor/universal-map-editor
-
-	# Linux
-	nw yourgame/editor/universal-map-editor
-
-	# Windows
-	nw yourgame\editor\universal-map-editor
-```
-
-You can check [this](https://github.com/nwjs/nw.js/wiki/How-to-run-apps) for more instructions.
+This project uses [electron](https://electron.atom.io/).
+To run it simply execute `npm install` and then `npm start`
 
 #### How to use
 
-<div align="center"><img src="./img/screen1.png" alt="Screen 1"></div>
-<div align="center"><img src="./img/screen2.png" alt="Screen 2"></div>
+<div align="center" style="padding: 5px"><img src="./img/screen1.png" alt="Screen 1"></div>
+<div align="center" style="padding: 5px"><img src="./img/screen2.png" alt="Screen 2"></div>
 
 Editor is not really difficult to use.
 On the top left you can see a palette of available objects.
-On the right you can see a list of already placed objects, above you can find a button that allows you to switch between map and script editor.
+On the right you can see a list of already placed objects.
 On the bottom left you can see the properties of currently focused object.
 
 The *Export* button by default does not yield different results than the *Save* button, unless you have specified *compile* method for an object (for example Polyline has one).
