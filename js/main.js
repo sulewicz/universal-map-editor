@@ -19,10 +19,10 @@ function createMenu () {
       label: 'File',
       id: 'file',
       submenu: [
-         { label: 'Open', id: 'open_file', click: clickCallback },
-         { label: 'Save', id: 'save_file', click: clickCallback  },
+         { label: 'Open', id: 'open_file', click: clickCallback, accelerator: "CmdOrCtrl+O" },
+         { label: 'Save', id: 'save_file', click: clickCallback, accelerator: "CmdOrCtrl+S" },
          { label: 'Save As', id: 'save_file_as', click: clickCallback  },
-         { label: 'Export', id: 'export_file', enabled: false, click: clickCallback },
+         { label: 'Export', id: 'export_file', enabled: false, click: clickCallback, accelerator: "CmdOrCtrl+E" },
          { label: 'Export As', id: 'export_file_as', enabled: false, click: clickCallback },
          { role: 'quit' }
       ]
@@ -31,8 +31,8 @@ function createMenu () {
       label: 'View',
       id: 'view',
       submenu: [
-         { label: 'Map', id: 'map_view', click: clickCallback, type: 'radio', checked: true },
-         { label: 'Script editor', id: 'editor_view', click: clickCallback, type: 'radio', checked: false  }
+         { label: 'Map', id: 'map_view', click: clickCallback, type: 'radio', checked: true, accelerator: "CmdOrCtrl+1" },
+         { label: 'Script editor', id: 'editor_view', click: clickCallback, type: 'radio', checked: false, accelerator: "CmdOrCtrl+2"  }
       ]
     }
   ];
