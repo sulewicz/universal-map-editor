@@ -46,7 +46,9 @@ me.MenuBar = (function () {
 			remote.dialog.showSaveDialog({
 					filters: [ { name: 'JSON', extensions: ['json'] } ]
 				}, function(fileName) {
-					self.save(fileName);
+					if (fileName) {
+						self.save(fileName);
+					}
 			});
 		}
 
@@ -54,9 +56,11 @@ me.MenuBar = (function () {
 			remote.dialog.showSaveDialog({
 					filters: [ { name: 'Exported Level', extensions: ['lvl'] } ]
 				}, function(fileName) {
-					self.map_io.map.export_path = fileName;
-					self.save(self.map_path);
-					self.export(fileName);
+					if (fileName) {
+						self.map_io.map.export_path = fileName;
+						self.save(self.map_path);
+						self.export(fileName);
+					}
 			});
 		}
 
@@ -64,7 +68,9 @@ me.MenuBar = (function () {
 			remote.dialog.showOpenDialog({
 					filters: [ { name: 'JSON', extensions: ['json'] } ]
 				}, function(fileNames) {
-					self.open(fileNames[0]);
+					if (fileNames) {
+						self.open(fileNames[0]);
+					}
 			});
 		}
 
