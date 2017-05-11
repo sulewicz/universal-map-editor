@@ -17,6 +17,5 @@
 }
 .tool_box_item.selected {
   font-weight: bold;
-  color: white;
-  border-bottom: 1px solid white;
+  border-bottom: 2px solid #1e1e1e;
 }

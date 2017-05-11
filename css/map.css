@@ -8,7 +8,6 @@
   flex-direction: column;
 }
 #map_view {
-  border-top: 1px solid #1e1e1e;
   position: relative;
   order: 1;
   flex-grow: 1;
@@ -21,7 +20,7 @@
   order: 2;
 }
 .map_tools_pane_label {
-  color: #cccccc;
+  color: #1e1e1e;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -30,17 +29,17 @@
   display: inline-block;
 }
 #map_grid_tool_pane {
-  background-color: #4b4b4b;
+  background-color: #fafafa;
   width: 100%;
   padding: 5px;
 }
 #map_scaling_tool_pane {
-  background-color: #4b4b4b;
+  background-color: #fafafa;
   width: 100%;
   padding: 5px;
 }
 #map_filtering_tool_pane {
-  background-color: #4b4b4b;
+  background-color: #fafafa;
   width: 100%;
   padding: 5px;
 }
@@ -60,7 +59,7 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  color: #ececec;
+  color: #1e1e1e;
   width: 108px;
   height: 32px;
 }

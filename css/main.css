@@ -2,8 +2,8 @@
   -webkit-user-select: none;
 }
 html, body {
-  background: #4b4b4b;
-  color: #cccccc;
+  background: #fafafa;
+  color: #1e1e1e;
   margin: 0;
   padding: 0;
   font-family: 'Tahoma';
@@ -13,7 +13,7 @@ html, body {
 }
 input {
   border: 1px solid #1e1e1e;
-  color: #cccccc;
+  color: #1e1e1e;
   font-size: 14px;
   outline: none;
   text-indent: 5px;
@@ -23,7 +23,7 @@ input {
 }
 select {
   border: 1px solid #1e1e1e;
-  color: #cccccc;
+  color: #1e1e1e;
   background: none;
   outline: none;
   box-shadow: none;
@@ -34,7 +34,7 @@ select {
   -webkit-appearance: none;
 }
 .label {
-  color: #cccccc;
+  color: #1e1e1e;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -47,9 +47,10 @@ select {
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
+  color: #1e1e1e;
 }
 .button:hover {
-  color: white;
+  text-decoration: underline;
 }
 #error {
   display: none;
@@ -101,7 +102,7 @@ select {
   padding-left: 3px;
   padding-right: 3px;
   border-top: 1px solid #1e1e1e;
-  background: #4b4b4b;
+  background: #fafafa;
   height: 20px;
   bottom: 0;
   left: 0;
