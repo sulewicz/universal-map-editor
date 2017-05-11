@@ -10,7 +10,8 @@
 #map_view {
   position: relative;
   order: 1;
-  flex-grow: 1;
+  flex: 1 1 0;
+  display: flex;
 }
 #map_tools_pane {
   border-top: 1px solid #1e1e1e;
@@ -18,6 +19,18 @@
   position: relative;
   overflow: hidden;
   order: 2;
+  flex: 0 0 auto;
+}
+#map_tools_bar {
+  height: 20px;
+  order: 3;
+  flex: 0 0 0;
+  border-top: 1px solid #1e1e1e;
+}
+#map_canvas {
+  overflow: hidden;
+  flex: 1 1 0;
+  cursor: crosshair;
 }
 .map_tools_pane_label {
   color: #1e1e1e;
@@ -42,17 +55,6 @@
   background-color: #fafafa;
   width: 100%;
   padding: 5px;
-}
-#map_tools_bar {
-  height: 20px;
-  order: 3;
-  border-top: 1px solid #1e1e1e;
-}
-#map_canvas {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: crosshair;
 }
 #zoom_toolkit {
   cursor: default;
