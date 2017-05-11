@@ -58,13 +58,13 @@ me.MapPane = (function () {
 	var clazz = function (map) {
 		this.map = map;
 		var node = document.getElementById('map_canvas');
-		node.height = node.parentNode.offsetHeight;
-		node.width = node.parentNode.offsetWidth;
 		this.display_grid = true;
 		this.horizontal_spacing = 30;
 		this.vertical_spacing = 30;
 		this.viewport_x = 0;
 		this.viewport_y = 0;
+		node.width = node.offsetWidth;
+		node.height = node.offsetHeight;
 		this.display_width = node.width;
 		this.display_height = node.height;
 		this.rendering = false;
@@ -316,8 +316,8 @@ me.MapPane = (function () {
 
 		updateMetrics: function () {
 			var node = this.node;
-			node.height = node.parentNode.offsetHeight;
-			node.width = node.parentNode.offsetWidth;
+			node.width = node.offsetWidth;
+			node.height = node.offsetHeight;
 			this.display_width = node.width;
 			this.display_height = node.height;
 			this.invalidate();
@@ -326,17 +326,17 @@ me.MapPane = (function () {
 		invalidate: function () {
 			this.redraw = true;
 		},
-		
+
 		filterMap: function(type) {
 			this.filter_type = type;
 			this.invalidate();
 		},
-		
+
 		setFilteringByType: function(filtering_by_type) {
 			this.filtering_by_type = filtering_by_type;
 			this.invalidate();
 		},
-		
+
 		isFilteringByType: function() {
 			return this.filtering_by_type;
 		},

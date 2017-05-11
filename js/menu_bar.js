@@ -2,87 +2,122 @@
 
 window.me = window.me || {};
 
-me.MenuBar = (function () {
-	var TOGGLE_SCRIPT_EDITOR = "toggle_script_editor";
+const electron = require('electron');
+const remote = electron.remote;
 
-	var updateExportButtonsVisibility = function () {
+me.MenuBar = (function () {
+	var SHOW_MAP_VIEW = "show_map_view";
+	var SHOW_EDITOR_VIEW = "show_editor_view";
+
+	function updateMenuItem (menuId, itemId, property, value) {
+		electron.ipcRenderer.send('menu', 'update_property', menuId, itemId, property, value);
+	}
+
+	function updateExportButtonsVisibility () {
 		if (this.map_path) {
-			this.export_file_btn.style.display = 'inline-block'
-			this.export_file_as_btn.style.display = 'inline-block'
+			updateMenuItem('file', 'export_file', 'enabled', true);
+			updateMenuItem('file', 'export_file_as', 'enabled', true);
 		} else {
-			this.export_file_btn.style.display = 'none'
-			this.export_file_as_btn.style.display = 'none'
+			updateMenuItem('file', 'export_file', 'enabled', false);
+			updateMenuItem('file', 'export_file_as', 'enabled', false);
 		}
 	}
 
 	var clazz = function (map_io, map_exporter) {
 		var self = this;
+		var callbacks = {};
+
 		self.map_io = map_io;
 		self.map_exporter = map_exporter;
 
-		self.save_file = document.getElementById('save_file');
-		self.save_file.addEventListener('change', function () {
-			if (this.value) {
-				self.save(this.value);
+		electron.ipcRenderer.on('menu', (event, type, id) => {
+			if (type === 'item_clicked') {
+				if (callbacks.hasOwnProperty(id)) {
+					callbacks[id](id);
+				}
 			}
 		});
 
-		self.open_file = document.getElementById('open_file');
-		self.open_file.addEventListener('change', function () {
-			if (this.value) {
-				self.open(this.value);
-			}
-		});
+		function addClickListener (id, callback) {
+			callbacks[id] = callback;
+		}
 
-		self.export_file = document.getElementById('export_file');
-		self.export_file.addEventListener('change', function () {
-			if (this.value) {
-				self.map_io.map.export_path = this.value;
-				self.save(self.map_path);
-				self.export(this.value);
-			}
-		});
+		function showSaveDialog () {
+			remote.dialog.showSaveDialog({
+					filters: [ { name: 'JSON', extensions: ['json'] } ]
+				}, function(fileName) {
+					if (fileName) {
+						self.save(fileName);
+					}
+			});
+		}
 
-		var addButton = function (id, callback) {
-			var button = document.getElementById(id);
-			button.addEventListener('click', callback);
-			return button;
-		};
+		function showExportDialog () {
+			remote.dialog.showSaveDialog({
+					filters: [ { name: 'Exported Level', extensions: ['lvl'] } ]
+				}, function(fileName) {
+					if (fileName) {
+						self.map_io.map.export_path = fileName;
+						self.save(self.map_path);
+						self.export(fileName);
+					}
+			});
+		}
 
-		self.save_file_btn = addButton('save_file_btn', function (e) {
+		function showOpenDialog () {
+			remote.dialog.showOpenDialog({
+					filters: [ { name: 'JSON', extensions: ['json'] } ]
+				}, function(fileNames) {
+					if (fileNames) {
+						self.open(fileNames[0]);
+					}
+			});
+		}
+
+		self.save_file_btn = addClickListener('save_file', function () {
 			if (self.map_path) {
 				self.save(self.map_path);
 			} else {
-				me.utils.triggerEvent(self.save_file, 'click');
+				showSaveDialog();
 			}
 		});
 
-		self.save_file_as_btn = addButton('save_file_as_btn', function (e) {
-			self.save_file.value = null;
-			me.utils.triggerEvent(self.save_file, 'click');
+		self.save_file_as_btn = addClickListener('save_file_as', function () {
+			showSaveDialog();
 		});
 
-		self.open_file_btn = addButton('open_file_btn', function (e) {
-			self.open_file.value = null;
-			me.utils.triggerEvent(self.open_file, 'click');
+		self.open_file_btn = addClickListener('open_file', function () {
+			showOpenDialog();
 		});
 
-		self.export_file_btn = addButton('export_file_btn', function (e) {
+		self.export_file_btn = addClickListener('export_file', function () {
 			if (self.export_path || (self.export_path = self.map_io.map.export_path)) {
 				self.save(self.map_path);
 				self.export(self.export_path);
 			} else {
-				me.utils.triggerEvent(self.export_file, 'click');
+				showExportDialog();
 			}
 		});
 
-		self.export_file_as_btn = addButton('export_file_as_btn', function (e) {
-			self.export_file.value = null;
-			me.utils.triggerEvent(self.export_file, 'click');
+		self.export_file_as_btn = addClickListener('export_file_as', function () {
+			showExportDialog();
 		});
 
-		self.toogle_script_editor_btn = addButton('map_script_toggle_btn', function (e) {
-			self.emitter.emit(TOGGLE_SCRIPT_EDITOR);
+		function switchMapScriptCallback(id) {
+			if (toggledItem !== id) {
+				self.emitter.emit(SHOW_MAP_VIEW);
+				updateMenuItem('view', toggledItem, 'checked', false);
+				updateMenuItem('view', id, 'checked', true);
+				toggledItem = id;
+			}
+		}
+
+		self.toogle_script_editor_btn = addClickListener('map_view', function () {
+			self.emitter.emit(SHOW_MAP_VIEW);
+		});
+
+		self.toogle_script_editor_btn = addClickListener('editor_view', function () {
+			self.emitter.emit(SHOW_EDITOR_VIEW);
 		});
 	};
 
@@ -117,7 +152,8 @@ me.MenuBar = (function () {
 		}
 	};
 
-	clazz.TOGGLE_SCRIPT_EDITOR = TOGGLE_SCRIPT_EDITOR;
+	clazz.SHOW_MAP_VIEW = SHOW_MAP_VIEW;
+	clazz.SHOW_EDITOR_VIEW = SHOW_EDITOR_VIEW;
 
 	return clazz;
 })();

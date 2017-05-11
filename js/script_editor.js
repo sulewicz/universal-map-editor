@@ -25,8 +25,17 @@ me.ScriptEditor = (function () {
 
 		this.codemirror = codemirror;
 
-		this.toggle = function () {
-			visible = !visible;
+		this.hide = function () {
+			visible = false;
+			this.updateVisibility();
+		}
+
+		this.show = function () {
+			visible = true;
+			this.updateVisibility();
+		}
+
+		this.updateVisibility = function () {
 			this.node.style.display = visible ? 'block' : 'none';
 			codemirror.refresh();
 			if (visible) {

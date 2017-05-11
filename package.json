@@ -1,16 +1,21 @@
 {
-  "name": "Map Editor",
-  "main": "index.html",
+  "name": "universal-map-editor",
   "version": "0.1.0",
-  "single-instance": false,
-  "window": {
-    "title": "Map Editor",
-    "toolbar": false,
-    "frame": true,
-    "width": 1024,
-    "height": 768,
-    "min_width": 1024,
-    "min_height": 768,
-    "resizable": true
+  "description": "Universal Map Editor for games development.",
+  "main": "js/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/sulewicz/universal-map-editor",
+  "keywords": [
+    "map",
+    "level",
+    "game",
+    "editor"
+  ],
+  "author": "Szymon Ulewicz",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "~1.6.2"
   }
 }

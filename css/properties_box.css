@@ -1,23 +1,23 @@
 #properties_box {
-    width: 100%;
-    height: 50%;
-    overflow-x: hidden;
-    overflow-y: auto;
+  width: 100%;
+  height: 50%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 #properties_box .property {
-    position: relative;
-    border-bottom: 1px solid #1e1e1e;
-    font-size: 14px;
-    padding: 5px 10px 5px 5px;
+  position: relative;
+  border-bottom: 1px solid #1e1e1e;
+  font-size: 14px;
+  padding: 5px 10px 5px 5px;
 }
 #properties_box .property > .property_name {
-    display: block;
-    margin: 2px;
-    overflow: hidden;
+  display: block;
+  margin: 2px;
+  overflow: hidden;
 }
 #properties_box .property > .property_value {
-    display: block;
-    width: 100%;
-    margin: 2px;
-    overflow: hidden;
+  display: block;
+  width: 100%;
+  margin: 2px;
+  overflow: hidden;
 }
