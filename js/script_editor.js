@@ -1,102 +1,91 @@
-"use strict";
+'use strict'
 
-window.me = window.me || {};
+window.me = window.me || {}
 
-me.ScriptEditor = (function () {
-	var SCRIPT_TOKEN_FOCUSED = "script_token_focused";
-	var FOCUS_DELAY = 500;
-	var RE = /[\w$]/;
-	var clazz = function (map) {
-		var self = this;
-		var visible = false;
-		this.map = map;
-		this.node = document.getElementById('script_editor_pane');
-		var codemirror = CodeMirror(document.getElementById('script_text_area'), {
-			lineNumbers: true,
-			autofocus: true,
-			indentWithTabs: true,
-			indentUnit: 4,
-			viewportMargin: Infinity,
-			mode: {
-				name: 'lua',
-				specials: me.Metadata.script_tokens || []
-			}
-		});
+{
+	const SCRIPT_TOKEN_FOCUSED = 'script_token_focused'
+	const FOCUS_DELAY = 500
+	const RE = /[\w$]/
 
-		this.codemirror = codemirror;
-
-		this.hide = function () {
-			visible = false;
-			this.updateVisibility();
+	const clazz = class {
+		constructor (map) {
+			this._visible = false
+			this.map = map
+			this.node = document.getElementById('script_editor_pane')
+			const codemirror = CodeMirror(document.getElementById('script_text_area'), {
+				lineNumbers: true,
+				autofocus: true,
+				indentWithTabs: true,
+				indentUnit: 4,
+				viewportMargin: Infinity,
+				mode: {
+					name: 'lua',
+					specials: me.Metadata.script_tokens || []
+				}
+			})
+			this.codemirror = codemirror
+			codemirror.on('change', function () {
+				map.script = codemirror.getValue()
+			})
+			codemirror.on('cursorActivity', (cm) => {
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					this.updateFocus(cm)
+				}, FOCUS_DELAY)
+			})
 		}
-
-		this.show = function () {
-			visible = true;
-			this.updateVisibility();
+		update () {
+			this.codemirror.setValue(this.map.script || '')
 		}
-
-		this.updateVisibility = function () {
-			this.node.style.display = visible ? 'block' : 'none';
-			codemirror.refresh();
-			if (visible) {
-				codemirror.focus();
-			}
-		}
-
-		this.isVisible = function () {
-			return visible;
-		}
-
-		codemirror.on('change', function () {
-			map.script = codemirror.getValue();
-		});
-
-		codemirror.on('cursorActivity', function (cm) {
-			clearTimeout(this.timeout);
-			self.timeout = setTimeout(function () {
-				self.updateFocus(cm);
-			}, FOCUS_DELAY);
-		});
-
-	};
-
-	clazz.prototype = {
-		update: function () {
-			this.codemirror.setValue(this.map.script || '');
-		},
-
-		updateFocus: function (cm) {
-			var token;
+		updateFocus (cm) {
+			var token
 			if (!cm.somethingSelected()) {
 				var cur = cm.getCursor(),
 					line = cm.getLine(cur.line),
 					start = cur.ch,
-					end = start;
+					end = start
 				while (start && RE.test(line.charAt(start - 1))) {
-					--start;
+					--start
 				}
 				while (end < line.length && RE.test(line.charAt(end))) {
-					++end;
+					++end
 				}
 				if (start < end) {
-					token = line.slice(start, end);
+					token = line.slice(start, end)
 				}
 			} else {
-				var from = cm.getCursor("from"),
-					to = cm.getCursor("to");
-				if (from.line != to.line) return;
-				var selection = cm.getRange(from, to).replace(/^\s+|\s+$/g, "");
+				var from = cm.getCursor('from'),
+					to = cm.getCursor('to')
+				if (from.line != to.line) return
+				var selection = cm.getRange(from, to).replace(/^\s+|\s+$/g, '')
 				if (selection.length >= 0) {
-					token = selection;
+					token = selection
 				}
 			}
 			if (token && token != this.last_token) {
-				this.last_token = token;
-				this.emitter.emit(SCRIPT_TOKEN_FOCUSED, token);
+				this.last_token = token
+				this.emitter.emit(SCRIPT_TOKEN_FOCUSED, token)
 			}
 		}
-	};
-
-	clazz.SCRIPT_TOKEN_FOCUSED = SCRIPT_TOKEN_FOCUSED;
-	return clazz;
-})();
+		hide () {
+			this._visible = false
+			this.updateVisibility()
+		}
+		show () {
+			this._visible = true
+			this.updateVisibility()
+		}
+		updateVisibility () {
+			this.node.style.display = this._visible ? 'block' : 'none'
+			this.codemirror.refresh()
+			if (this._visible) {
+				this.codemirror.focus()
+			}
+		}
+		get visible () {
+			return this._visible
+		}
+	}
+	clazz.SCRIPT_TOKEN_FOCUSED = SCRIPT_TOKEN_FOCUSED
+	me.ScriptEditor = clazz
+}

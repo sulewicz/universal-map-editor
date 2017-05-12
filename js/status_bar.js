@@ -1,17 +1,15 @@
-"use strict";
+'use strict'
 
-window.me = window.me || {};
+window.me = window.me || {}
 
-me.StatusBar = (function () {
-	var clazz = function () {
-		this.node = document.getElementById('status_bar');
-	};
-
-	clazz.prototype = {
-		update: function (text) {
-			this.node.innerHTML = text;
+{
+	const clazz = class {
+		constructor () {
+			this.node = document.getElementById('status_bar')
 		}
-	};
-
-	return clazz;
-})();
+		update (text) {
+			this.node.innerHTML = text
+		}
+	}
+	me.StatusBar = clazz
+}
