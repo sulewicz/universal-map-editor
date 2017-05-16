@@ -45,9 +45,9 @@ window.me = window.me || {}
 }
 
 {
-	const MAP_MOUSE_MOVED = 'map_mouse_moved'
-	const MAP_MOUSE_CLICKED = 'map_mouse_clicked'
-	const MAP_MOUSE_DRAGGED = 'map_mouse_dragged'
+	const MAP_MOUSE_MOVED = 'mapMouseMoved'
+	const MAP_MOUSE_CLICKED = 'mapMouseClicked'
+	const MAP_MOUSE_DRAGGED = 'mapMouseDragged'
 
 	const FPS = 20
 	const REFRESH_DELAY = 1000 / FPS
@@ -56,20 +56,20 @@ window.me = window.me || {}
 		constructor (map) {
 			this.map = map
 			var node = document.getElementById('map_canvas')
-			this.display_grid = true
-			this.horizontal_spacing = 30
-			this.vertical_spacing = 30
+			this.displayGrid = true
+			this.horizontalSpacing = 30
+			this.verticalSpacing = 30
 			this.viewport_x = 0
 			this.viewport_y = 0
 			node.width = node.offsetWidth
 			node.height = node.offsetHeight
-			this.display_width = node.width
-			this.display_height = node.height
+			this.displayWidth = node.width
+			this.displayHeight = node.height
 			this.rendering = false
 			this.redraw = true
 			this.node = node
-			this.filter_type = null
-			this.filtering_by_type = false
+			this.filterType = null
+			this.filteringByType = false
 
 			this.zoomToolkit = new me.ZoomToolkit(this)
 
@@ -135,8 +135,8 @@ window.me = window.me || {}
 		}
 		render (ctx) {
 			if (this.redraw) {
-				var w = this.display_width,
-					h = this.display_height
+				var w = this.displayWidth,
+					h = this.displayHeight
 				ctx.save()
 				// Clearing canvas
 				ctx.lineWidth = 1
@@ -168,11 +168,11 @@ window.me = window.me || {}
 				ctx.scale(scale, scale)
 
 				// Drawing grid
-				if (this.display_grid) {
+				if (this.displayGrid) {
 					ctx.lineWidth = 1.0 / scale
 					ctx.strokeStyle = '#686868'
 
-					var spacing = this.horizontal_spacing
+					var spacing = this.horizontalSpacing
 					var start = Math.round((viewport.x / scale) / spacing) * spacing
 					var end = (viewport.x + w) / scale
 					for (var gx = start; gx <= end; gx += spacing) {
@@ -184,7 +184,7 @@ window.me = window.me || {}
 						}
 					}
 
-					spacing = this.vertical_spacing
+					spacing = this.verticalSpacing
 					start = Math.round((viewport.y / scale) / spacing) * spacing
 					end = (viewport.y + h) / scale
 					for (var gy = start; gy <= end; gy += spacing) {
@@ -198,10 +198,10 @@ window.me = window.me || {}
 				}
 
 				var objects = this.map.objects
-				if (this.filtering_by_type && this.filter_type) {
+				if (this.filteringByType && this.filterType) {
 					for (var idx = 0; idx < objects.length; ++idx) {
 						var object = objects[idx]
-						if (object.type == this.filter_type) {
+						if (object.type == this.filterType) {
 							object.render(ctx, this._selectedObject == object, scale)
 						}
 					}
@@ -246,8 +246,8 @@ window.me = window.me || {}
 		}
 		getViewportOffsetInPixels () {
 			return {
-				x: -this.display_width / 2,
-				y: -this.display_height / 2
+				x: -this.displayWidth / 2,
+				y: -this.displayHeight / 2
 			}
 		}
 		isInViewportInMapUnits (x, y) {
@@ -274,44 +274,44 @@ window.me = window.me || {}
 			return this._selectedObject
 		}
 		setGridVisible (visible) {
-			this.display_grid = visible
+			this.displayGrid = visible
 		}
 		isGridVisibile () {
-			return this.display_grid
+			return this.displayGrid
 		}
 		setGridHorizontalSpacing (spacing) {
-			this.horizontal_spacing = spacing
+			this.horizontalSpacing = spacing
 		}
 		getGridHorizontalSpacing () {
-			return this.horizontal_spacing
+			return this.horizontalSpacing
 		}
 		setGridVerticalSpacing (spacing) {
-			this.vertical_spacing = spacing
+			this.verticalSpacing = spacing
 		}
 		getGridVerticalSpacing () {
-			return this.vertical_spacing
+			return this.verticalSpacing
 		}
 		updateMetrics () {
 			var node = this.node
 			node.width = node.offsetWidth
 			node.height = node.offsetHeight
-			this.display_width = node.width
-			this.display_height = node.height
+			this.displayWidth = node.width
+			this.displayHeight = node.height
 			this.invalidate()
 		}
 		invalidate () {
 			this.redraw = true
 		}
 		filterMap (type) {
-			this.filter_type = type
+			this.filterType = type
 			this.invalidate()
 		}
-		setFilteringByType (filtering_by_type) {
-			this.filtering_by_type = filtering_by_type
+		setFilteringByType (filteringByType) {
+			this.filteringByType = filteringByType
 			this.invalidate()
 		}
 		isFilteringByType () {
-			return this.filtering_by_type
+			return this.filteringByType
 		}
 	}
 

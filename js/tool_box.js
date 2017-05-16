@@ -6,7 +6,7 @@ window.me = window.me || {}
 	const PREFIX = 'tool_box_'
 	const SELECTED_CLASSNAME = 'selected'
 	const ITEM_CLASSNAME = 'tool_box_item'
-	const TOOLBOX_TOOL_SELECTED = 'toolbox_tool_selected'
+	const TOOLBOX_TOOL_SELECTED = 'toolboxToolSelected'
 
 	const clazz = class {
 		constructor () {

@@ -3,7 +3,7 @@
 window.me = window.me || {}
 
 {
-	const MAP_OBJECTS_MODIFIED = 'map_objects_modified'
+	const MAP_OBJECTS_MODIFIED = 'mapObjectsModified'
 
 	const addButton = function (id, callback) {
 		var button = document.getElementById(id)
@@ -12,44 +12,44 @@ window.me = window.me || {}
 	}
 
 	const GridPane = class {
-		constructor (map_pane) {
+		constructor (mapPane) {
 			this.node = document.getElementById('map_grid_tool_pane')
-			var display_grid_checkbox = document.getElementById('map_display_grid_checkbox')
-			display_grid_checkbox.checked = map_pane.isGridVisibile()
-			display_grid_checkbox.addEventListener('change', function (e) {
-				map_pane.setGridVisible(this.checked)
-				map_pane.invalidate()
+			var displayGridCheckbox = document.getElementById('map_display_grid_checkbox')
+			displayGridCheckbox.checked = mapPane.isGridVisibile()
+			displayGridCheckbox.addEventListener('change', function (e) {
+				mapPane.setGridVisible(this.checked)
+				mapPane.invalidate()
 			})
-			var horizontal_spacing = document.getElementById('map_grid_horizontal_spacing')
-			horizontal_spacing.value = map_pane.getGridHorizontalSpacing()
-			horizontal_spacing.addEventListener('change', function (e) {
+			var horizontalSpacing = document.getElementById('map_grid_horizontal_spacing')
+			horizontalSpacing.value = mapPane.getGridHorizontalSpacing()
+			horizontalSpacing.addEventListener('change', function (e) {
 				var value = this.value | 0
 				if (value < 1) {
 					this.value = value = 1
 				}
-				map_pane.setGridHorizontalSpacing(value)
-				map_pane.invalidate()
+				mapPane.setGridHorizontalSpacing(value)
+				mapPane.invalidate()
 			})
 
-			var vertical_spacing = document.getElementById('map_grid_vertical_spacing')
-			vertical_spacing.value = map_pane.getGridVerticalSpacing()
-			vertical_spacing.addEventListener('change', function (e) {
+			var verticalSpacing = document.getElementById('map_grid_vertical_spacing')
+			verticalSpacing.value = mapPane.getGridVerticalSpacing()
+			verticalSpacing.addEventListener('change', function (e) {
 				var value = this.value | 0
 				if (value < 1) {
 					this.value = value = 1
 				}
-				map_pane.setGridVerticalSpacing(value)
-				map_pane.invalidate()
+				mapPane.setGridVerticalSpacing(value)
+				mapPane.invalidate()
 			})
 		}
 	}
 
 	const ScalingPane = class {
-		constructor (map_pane, tools_pane) {
+		constructor (mapPane, toolsPane) {
 			this.node = document.getElementById('map_scaling_tool_pane')
 
-			var scaling_factor = document.getElementById('map_scaling_factor')
-			scaling_factor.addEventListener('change', function (e) {
+			var scalingFactor = document.getElementById('map_scaling_factor')
+			scalingFactor.addEventListener('change', function (e) {
 				var value = this.value | 0
 				if (value < 1) {
 					this.value = value = 1
@@ -57,21 +57,21 @@ window.me = window.me || {}
 			})
 
 			var emitEvent = function () {
-				tools_pane.emitter.emit(MAP_OBJECTS_MODIFIED)
+				toolsPane.emitter.emit(MAP_OBJECTS_MODIFIED)
 			}
 
-			var map_scale_positions_btn = addButton('map_scale_positions_btn', function (e) {
-				map_pane.map.scalePositions(scaling_factor.value | 0)
+			var mapScalePositionsBtn = addButton('map_scale_positions_btn', function (e) {
+				mapPane.map.scalePositions(scalingFactor.value | 0)
 				emitEvent()
 			})
-			var map_scale_all_btn = addButton('map_scale_all_btn', function (e) {
-				map_pane.map.scaleAll(scaling_factor.value | 0)
+			var mapScaleAllBtn = addButton('map_scale_all_btn', function (e) {
+				mapPane.map.scaleAll(scalingFactor.value | 0)
 				emitEvent()
 			})
-			var map_scale_selected_object_btn = addButton('map_scale_selected_object_btn', function (e) {
-				var object = map_pane.selectedObject
+			var mapScaleSelectedObjectBtn = addButton('map_scale_selected_object_btn', function (e) {
+				var object = mapPane.selectedObject
 				if (object) {
-					object.scaleSize(scaling_factor.value | 0)
+					object.scaleSize(scalingFactor.value | 0)
 				}
 				emitEvent()
 			})
@@ -80,56 +80,56 @@ window.me = window.me || {}
 	}
 
 	const FilteringPane = class {
-		constructor (map_pane, object_list_box) {
+		constructor (mapPane, objectListBox) {
 			this.node = document.getElementById('map_filtering_tool_pane')
-			var filter_objects_checkbox = document.getElementById('map_filter_objects_checkbox')
-			filter_objects_checkbox.checked = object_list_box.isFilteringByType() || map_pane.isFilteringByType()
-			filter_objects_checkbox.addEventListener('change', function (e) {
-				object_list_box.setFilteringByType(this.checked)
-				map_pane.setFilteringByType(this.checked)
-				map_pane.invalidate()
+			var filterObjectsCheckbox = document.getElementById('map_filter_objects_checkbox')
+			filterObjectsCheckbox.checked = objectListBox.isFilteringByType() || mapPane.isFilteringByType()
+			filterObjectsCheckbox.addEventListener('change', function (e) {
+				objectListBox.setFilteringByType(this.checked)
+				mapPane.setFilteringByType(this.checked)
+				mapPane.invalidate()
 			})
 		}
 	}
 
 	const clazz = class {
-		constructor (map_pane, object_list_box) {
-			this.map_pane = map_pane
-			this.object_list_box = object_list_box
+		constructor (mapPane, objectListBox) {
+			this.mapPane = mapPane
+			this.objectListBox = objectListBox
 
-			this.visibile_pane = null
-			this.map_tools_pane = document.getElementById('map_tools_pane')
-			this.map_grid_tool_pane = new GridPane(map_pane, this)
-			this.map_scaling_tool_pane = new ScalingPane(map_pane, this)
-			this.map_filtering_tool_pane = new FilteringPane(map_pane, object_list_box)
+			this.visibilePane = null
+			this.mapToolsPane = document.getElementById('map_tools_pane')
+			this.mapGridToolPane = new GridPane(mapPane, this)
+			this.mapScalingToolPane = new ScalingPane(mapPane, this)
+			this.mapFilteringToolPane = new FilteringPane(mapPane, objectListBox)
 
-			this.grid_btn = addButton('map_grid_tool_btn', (e) => {
-				this.togglePane(this.map_grid_tool_pane)
+			this.gridBtn = addButton('map_grid_tool_btn', (e) => {
+				this.togglePane(this.mapGridToolPane)
 			})
 
-			this.scaling_btn = addButton('map_scaling_tool_btn', (e) => {
-				this.togglePane(this.map_scaling_tool_pane)
+			this.scalingBtn = addButton('map_scaling_tool_btn', (e) => {
+				this.togglePane(this.mapScalingToolPane)
 			})
 
-			this.filtering_btn = addButton('map_filtering_tool_btn', (e) => {
-				this.togglePane(this.map_filtering_tool_pane)
+			this.filteringBtn = addButton('map_filtering_tool_btn', (e) => {
+				this.togglePane(this.mapFilteringToolPane)
 			})
 		}
 		togglePane (pane) {
-			var show = pane && pane != this.visibile_pane
-			if (this.visibile_pane) {
-				this.visibile_pane.node.style.display = 'none'
-				this.visibile_pane = null
+			var show = pane && pane != this.visibilePane
+			if (this.visibilePane) {
+				this.visibilePane.node.style.display = 'none'
+				this.visibilePane = null
 			}
 
 			if (show) {
-				this.map_tools_pane.style.display = 'block'
-				this.visibile_pane = pane
-				this.visibile_pane.node.style.display = 'block'
-				this.map_pane.updateMetrics()
+				this.mapToolsPane.style.display = 'block'
+				this.visibilePane = pane
+				this.visibilePane.node.style.display = 'block'
+				this.mapPane.updateMetrics()
 			} else {
-				this.map_tools_pane.style.display = 'none'
-				this.map_pane.updateMetrics()
+				this.mapToolsPane.style.display = 'none'
+				this.mapPane.updateMetrics()
 			}
 		}
 	}

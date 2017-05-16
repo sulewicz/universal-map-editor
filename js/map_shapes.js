@@ -29,9 +29,9 @@ window.me = window.me || {}
 					}
 				}, properties || {}),
 				init (x, y) {
-					this.mouse_position = null
+					this.mousePosition = null
 					this.points = [{ x, y }]
-					this.selected_point = 0
+					this.selectedPoint = 0
 				},
 				findNode (x, y) {
 					var nodeSize = this.getNodeSize()
@@ -72,10 +72,10 @@ window.me = window.me || {}
 						}
 						ctx.stroke()
 
-						if (this.mouse_position) {
-							var currentPoint = this.points[this.selected_point]
-							var mousePoint = this.mouse_position
-							var nextPoint = this.points[this.selected_point + 1]
+						if (this.mousePosition) {
+							var currentPoint = this.points[this.selectedPoint]
+							var mousePoint = this.mousePosition
+							var nextPoint = this.points[this.selectedPoint + 1]
 							if (!nextPoint && this.close && this.points.length >= 2) {
 								nextPoint = this.points[0]
 							}
@@ -112,7 +112,7 @@ window.me = window.me || {}
 						ctx.lineWidth = strokeWidth
 						for (var i = 0; i < this.points.length; ++i) {
 							point = this.points[i]
-							ctx.strokeStyle = (i === this.selected_point) ? selectedNodeStrokeColor : nodeStrokeColor
+							ctx.strokeStyle = (i === this.selectedPoint) ? selectedNodeStrokeColor : nodeStrokeColor
 							ctx.fillRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2)
 							ctx.strokeRect(point.x - nodeSize, point.y - nodeSize, nodeSize * 2, nodeSize * 2)
 						}
@@ -129,17 +129,17 @@ window.me = window.me || {}
 					}
 					var i = this.findNode(pos.x, pos.y)
 					if (i >= 0) {
-						this.selected_point = i
+						this.selectedPoint = i
 					} else {
-						this.points.splice(this.selected_point + 1, 0, e.altKey ? this.wrapToGrid(pos) : pos)
-						this.selected_point = this.selected_point + 1
+						this.points.splice(this.selectedPoint + 1, 0, e.altKey ? this.wrapToGrid(pos) : pos)
+						this.selectedPoint = this.selectedPoint + 1
 						this.onPropertyChanged('points', this.points)
 						this.invalidate()
 					}
 					return true
 				},
 				onMouseMove (pos, e) {
-					this.mouse_position = e.altKey ? this.wrapToGrid(pos) : pos
+					this.mousePosition = e.altKey ? this.wrapToGrid(pos) : pos
 				},
 				onMouseDrag (startPos, delta, e) {
 					if (e.button == 1) {
@@ -163,7 +163,7 @@ window.me = window.me || {}
 								return false
 							}
 							var node = this.points[i]
-							this.selected_point = i
+							this.selectedPoint = i
 							startPos.target = node
 							startPos.origin = startPos.start = {
 								x: node.x,
@@ -197,17 +197,17 @@ window.me = window.me || {}
 				},
 				onSelected (x, y) {
 					var i = this.findNode(x, y)
-					this.selected_point = i >= 0 ? i : this.points.length - 1
+					this.selectedPoint = i >= 0 ? i : this.points.length - 1
 				},
 				onUnselected () {
-					this.mouse_position = null
+					this.mousePosition = null
 				},
 				onDelete () {
 					if (this.points.length == 1) {
 						return false
 					} else {
-						this.points.splice(this.selected_point, 1)
-						this.selected_point = Math.max(0, this.selected_point - 1)
+						this.points.splice(this.selectedPoint, 1)
+						this.selectedPoint = Math.max(0, this.selectedPoint - 1)
 						this.onPropertyChanged('points', this.points)
 						this.invalidate()
 						return true

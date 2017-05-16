@@ -3,8 +3,8 @@
 window.me = window.me || {}
 
 {
-	const PROPERTIES_OBJECT_MODIFIED = 'properties_object_modified'
-	const PROPERTIES_FIELD_FOCUSED = 'properties_field_focused'
+	const PROPERTIES_OBJECT_MODIFIED = 'propertiesObjectModified'
+	const PROPERTIES_FIELD_FOCUSED = 'propertiesFieldFocused'
 
 	const fieldsFactory = {}
 	fieldsFactory[me.MapObjects.TYPE_INT] = function (obj, name, prop) {

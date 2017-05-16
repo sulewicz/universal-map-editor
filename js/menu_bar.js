@@ -5,32 +5,32 @@ window.me = window.me || {}
 {
 	const electron = require('electron')
 	const remote = electron.remote
-	const SHOW_MAP_VIEW = 'show_map_view'
-	const SHOW_EDITOR_VIEW = 'show_editor_view'
+	const SHOW_MAP_VIEW = 'showMapView'
+	const SHOW_EDITOR_VIEW = 'showEditorView'
 
 	const updateMenuItem = function (menuId, itemId, property, value) {
-		electron.ipcRenderer.send('menu', 'update_property', menuId, itemId, property, value)
+		electron.ipcRenderer.send('menu', 'updateProperty', menuId, itemId, property, value)
 	}
 
 	const updateExportButtonsVisibility = function () {
-		if (this.map_path) {
-			updateMenuItem('file', 'export_file', 'enabled', true)
-			updateMenuItem('file', 'export_file_as', 'enabled', true)
+		if (this.mapPath) {
+			updateMenuItem('file', 'exportFile', 'enabled', true)
+			updateMenuItem('file', 'exportFileAs', 'enabled', true)
 		} else {
-			updateMenuItem('file', 'export_file', 'enabled', false)
-			updateMenuItem('file', 'export_file_as', 'enabled', false)
+			updateMenuItem('file', 'exportFile', 'enabled', false)
+			updateMenuItem('file', 'exportFileAs', 'enabled', false)
 		}
 	}
 
 	const clazz = class {
-		constructor (map_io, map_exporter) {
+		constructor (mapIo, mapExporter) {
 			var callbacks = {}
 
-			this.map_io = map_io
-			this.map_exporter = map_exporter
+			this.mapIo = mapIo
+			this.mapExporter = mapExporter
 
 			electron.ipcRenderer.on('menu', (event, type, id) => {
-				if (type === 'item_clicked') {
+				if (type === 'itemClicked') {
 					if (callbacks.hasOwnProperty(id)) {
 						callbacks[id](id)
 					}
@@ -56,8 +56,8 @@ window.me = window.me || {}
 						filters: [ { name: 'Exported Level', extensions: ['lvl'] }, { name: 'All files', extensions: ['*'] } ]
 					}, (fileName) => {
 						if (fileName) {
-							this.map_io.map.export_path = fileName
-							this.save(this.map_path)
+							this.mapIo.map.exportPath = fileName
+							this.save(this.mapPath)
 							this.export(fileName)
 						}
 				})
@@ -73,47 +73,47 @@ window.me = window.me || {}
 				})
 			}
 
-			addClickListener('save_file', () => {
-				if (this.map_path) {
-					this.save(this.map_path)
+			addClickListener('saveFile', () => {
+				if (this.mapPath) {
+					this.save(this.mapPath)
 				} else {
 					showSaveDialog()
 				}
 			})
 
-			addClickListener('save_file_as', () => {
+			addClickListener('saveFileAs', () => {
 				showSaveDialog()
 			})
 
-			addClickListener('open_file', () => {
+			addClickListener('openFile', () => {
 				showOpenDialog()
 			})
 
-			addClickListener('export_file', () => {
-				if (this.export_path || (this.export_path = this.map_io.map.export_path)) {
-					this.save(this.map_path)
-					this.export(this.export_path)
+			addClickListener('exportFile', () => {
+				if (this.exportPath || (this.exportPath = this.mapIo.map.exportPath)) {
+					this.save(this.mapPath)
+					this.export(this.exportPath)
 				} else {
 					showExportDialog()
 				}
 			})
 
-			addClickListener('export_file_as', () => {
+			addClickListener('exportFileAs', () => {
 				showExportDialog()
 			})
 
-			addClickListener('map_view', () => {
+			addClickListener('mapView', () => {
 				this.emitter.emit(SHOW_MAP_VIEW)
 			})
 
-			addClickListener('editor_view', () => {
+			addClickListener('editorView', () => {
 				this.emitter.emit(SHOW_EDITOR_VIEW)
 			})
 		}
 		save (path) {
 			try {
-				this.map_io.save(path)
-				this.map_path = path
+				this.mapIo.save(path)
+				this.mapPath = path
 				updateExportButtonsVisibility.call(this)
 			} catch (e) {
 				alert('Error while saving map: ' + e)
@@ -121,8 +121,8 @@ window.me = window.me || {}
 		}
 		open (path) {
 			try {
-				this.map_io.open(path)
-				this.map_path = path
+				this.mapIo.open(path)
+				this.mapPath = path
 				updateExportButtonsVisibility.call(this)
 			} catch (e) {
 				alert('Error while loading map: ' + e)
@@ -130,8 +130,8 @@ window.me = window.me || {}
 		}
 		export (path) {
 			try {
-				this.map_exporter.exportMap(path)
-				this.export_path = path
+				this.mapExporter.exportMap(path)
+				this.exportPath = path
 			} catch (e) {
 				alert('Error while exporting map: ' + e)
 			}

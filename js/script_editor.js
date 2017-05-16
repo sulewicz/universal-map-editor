@@ -3,7 +3,7 @@
 window.me = window.me || {}
 
 {
-	const SCRIPT_TOKEN_FOCUSED = 'script_token_focused'
+	const SCRIPT_TOKEN_FOCUSED = 'scriptTokenFocused'
 	const FOCUS_DELAY = 500
 	const RE = /[\w$]/
 
@@ -20,7 +20,7 @@ window.me = window.me || {}
 				viewportMargin: Infinity,
 				mode: {
 					name: 'lua',
-					specials: me.Metadata.script_tokens || []
+					specials: me.Metadata.scriptTokens || []
 				}
 			})
 			this.codemirror = codemirror
@@ -62,8 +62,8 @@ window.me = window.me || {}
 					token = selection
 				}
 			}
-			if (token && token != this.last_token) {
-				this.last_token = token
+			if (token && token != this.lastToken) {
+				this.lastToken = token
 				this.emitter.emit(SCRIPT_TOKEN_FOCUSED, token)
 			}
 		}

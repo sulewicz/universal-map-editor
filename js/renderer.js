@@ -8,7 +8,7 @@ window.onload = function () {
 		const editor = new me.Editor()
 		const controller = new me.EditorController(editor)
 	} else {
-		errorNode.innerHTML = 'No <b>game_metadata.js</b> file found in ' + path.resolve(__dirname, '../../') + '.<br>You can copy one from ' + path.resolve(__dirname, '../sample/') + '.'
+		errorNode.innerHTML = 'No <b>gameMetadata.js</b> file found in ' + path.resolve(__dirname, '../../') + '.<br>You can copy one from ' + path.resolve(__dirname, '../sample/') + '.'
 		errorNode.style.display = 'block'
 	}
 }

@@ -153,7 +153,7 @@ window.me = window.me || {}
 			return false
 		},
 		invalidate: function() {
-			me.Editor.getInstance().map_view.invalidate()
+			me.Editor.getInstance().mapView.invalidate()
 		},
 		fillFrom: function(object, position) {
 			for (var prop in this.properties) {

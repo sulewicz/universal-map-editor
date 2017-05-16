@@ -12,18 +12,18 @@ let mainWindow
 
 function createMenu () {
   function clickCallback (menuItem) {
-    mainWindow.webContents.send('menu', 'item_clicked', menuItem.id)
+    mainWindow.webContents.send('menu', 'itemClicked', menuItem.id)
   }
   const template = [
     {
       label: 'File',
       id: 'file',
       submenu: [
-         { label: 'Open', id: 'open_file', click: clickCallback, accelerator: 'CmdOrCtrl+O' },
-         { label: 'Save', id: 'save_file', click: clickCallback, accelerator: 'CmdOrCtrl+S' },
-         { label: 'Save As', id: 'save_file_as', click: clickCallback  },
-         { label: 'Export', id: 'export_file', enabled: false, click: clickCallback, accelerator: 'CmdOrCtrl+E' },
-         { label: 'Export As', id: 'export_file_as', enabled: false, click: clickCallback },
+         { label: 'Open', id: 'openFile', click: clickCallback, accelerator: 'CmdOrCtrl+O' },
+         { label: 'Save', id: 'saveFile', click: clickCallback, accelerator: 'CmdOrCtrl+S' },
+         { label: 'Save As', id: 'saveFileAs', click: clickCallback  },
+         { label: 'Export', id: 'exportFile', enabled: false, click: clickCallback, accelerator: 'CmdOrCtrl+E' },
+         { label: 'Export As', id: 'exportFileAs', enabled: false, click: clickCallback },
          { role: 'quit' }
       ]
     },
@@ -31,8 +31,8 @@ function createMenu () {
       label: 'View',
       id: 'view',
       submenu: [
-         { label: 'Map', id: 'map_view', click: clickCallback, type: 'radio', checked: true, accelerator: 'CmdOrCtrl+1' },
-         { label: 'Script editor', id: 'editor_view', click: clickCallback, type: 'radio', checked: false, accelerator: 'CmdOrCtrl+2'  }
+         { label: 'Map', id: 'mapView', click: clickCallback, type: 'radio', checked: true, accelerator: 'CmdOrCtrl+1' },
+         { label: 'Script editor', id: 'editorView', click: clickCallback, type: 'radio', checked: false, accelerator: 'CmdOrCtrl+2'  }
       ]
     }
   ]
@@ -40,7 +40,7 @@ function createMenu () {
   Menu.setApplicationMenu(menu)
 
   electron.ipcMain.on('menu', (event, type, menuId, itemId, property, value) => {
-    if (type === 'update_property') {
+    if (type === 'updateProperty') {
       var submenu = menu.items.find(x => x.id === menuId)
       if (submenu) {
         var items = submenu.submenu.items

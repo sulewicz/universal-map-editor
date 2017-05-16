@@ -3,8 +3,8 @@
 window.me = window.me || {}
 
 {
-	const MAP_FILE_LOADED = 'map_file_loaded'
-	const MAP_FILE_SAVED = 'map_file_saved'
+	const MAP_FILE_LOADED = 'mapFileLoaded'
+	const MAP_FILE_SAVED = 'mapFileSaved'
 
 	const pathModule = require('path')
 
@@ -34,7 +34,7 @@ window.me = window.me || {}
 	}
 
 	const unpackProperties = function (object, props, data) {
-		var dynamic_props = []
+		var dynamicProps = []
 		for (var name in props) {
 			if (props.hasOwnProperty(name)) {
 				var prop = props[name]
@@ -43,18 +43,18 @@ window.me = window.me || {}
 						object.updateStaticProperty(name, prop, data[name])
 					}
 				} else {
-					dynamic_props.push(name)
+					dynamicProps.push(name)
 				}
 			}
 		}
 
-		for (var i = 0; i < dynamic_props.length; ++i) {
-			unpackProperties(object, object[dynamic_props[i]], data)
+		for (var i = 0; i < dynamicProps.length; ++i) {
+			unpackProperties(object, object[dynamicProps[i]], data)
 		}
 	}
 
-	const unpackObject = function (data, map_objects) {
-		var ret = map_objects.createInstance(data.type, data.id, data.x, data.y)
+	const unpackObject = function (data, mapObjects) {
+		var ret = mapObjects.createInstance(data.type, data.id, data.x, data.y)
 
 		if (!ret.unpack(data)) {
 			var props = ret.properties
@@ -65,9 +65,9 @@ window.me = window.me || {}
 	}
 
 	const clazz = class {
-		constructor (map, map_objects) {
+		constructor (map, mapObjects) {
 			this.map = map
-			this.map_objects = map_objects
+			this.mapObjects = mapObjects
 		}
 		save (path) {
 			var map = this.map
@@ -76,8 +76,8 @@ window.me = window.me || {}
 				objects: []
 			}
 
-			if (map.export_path) {
-				output.export_path = pathModule.relative(pathModule.dirname(path), map.export_path)
+			if (map.exportPath) {
+				output.exportPath = pathModule.relative(pathModule.dirname(path), map.exportPath)
 			}
 
 			if (map.script) {
@@ -100,7 +100,7 @@ window.me = window.me || {}
 		}
 		open (path) {
 			var map = this.map
-			var map_objects = this.map_objects
+			var mapObjects = this.mapObjects
 			fs.readFile(path, (err, data) => {
 				if (err) {
 					alert('Could not read file "' + path + '": ' + err)
@@ -112,12 +112,12 @@ window.me = window.me || {}
 
 				var objects = data.objects
 				for (var i = 0; i < objects.length; ++i) {
-					var unpackedObject = unpackObject(objects[i], map_objects)
+					var unpackedObject = unpackObject(objects[i], mapObjects)
 					map.addObject(unpackedObject)
 				}
 
-				if (data.export_path) {
-					map.export_path = pathModule.resolve(pathModule.dirname(path), data.export_path)
+				if (data.exportPath) {
+					map.exportPath = pathModule.resolve(pathModule.dirname(path), data.exportPath)
 				}
 
 				if (data.script) {

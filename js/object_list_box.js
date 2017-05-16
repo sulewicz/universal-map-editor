@@ -7,17 +7,17 @@ window.me = window.me || {}
 	const SELECTED_CLASSNAME = 'selected'
 	const ITEM_CLASSNAME = 'object_list_box_item'
 
-	const LIST_OBJECT_CLICKED = 'list_object_clicked'
+	const LIST_OBJECT_CLICKED = 'listObjectClicked'
 
-	const TYPE_ATTRIBUTE = 'objectType'
+	const TYPE_ATTRIBUTE = 'object_type'
 
 	const clazz = class {
 		constructor (map) {
 			this.map = map
 			this.node = document.getElementById('object_list_box')
 			this._selectedObject = null
-			this.filter_type = null
-			this.filtering_by_type = false
+			this.filterType = null
+			this.filteringByType = false
 			this.rebuild()
 		}
 		createItem (obj) {
@@ -60,7 +60,7 @@ window.me = window.me || {}
 					this.createItem(obj)
 				}
 			}
-			this.filterList(this.filter_type)
+			this.filterList(this.filterType)
 		}
 		set selectedObject (obj) {
 			if (this._selectedObject) {
@@ -75,8 +75,8 @@ window.me = window.me || {}
 			return this._selectedObject
 		}
 		filterList (type) {
-			this.filter_type = type
-			if (!this.filtering_by_type) {
+			this.filterType = type
+			if (!this.filteringByType) {
 				type = null
 			}
 			var items = this.node.children
@@ -85,12 +85,12 @@ window.me = window.me || {}
 				item.style.display = (!type || item.getAttribute(TYPE_ATTRIBUTE) === type) ? 'block' : 'none'
 			}
 		}
-		setFilteringByType(filtering_by_type) {
-			this.filtering_by_type = filtering_by_type
-			this.filterList(this.filter_type)
+		setFilteringByType(filteringByType) {
+			this.filteringByType = filteringByType
+			this.filterList(this.filterType)
 		}
 		isFilteringByType() {
-			return this.filtering_by_type
+			return this.filteringByType
 		}
 		getNode (id) {
 			return document.getElementById(PREFIX + id)

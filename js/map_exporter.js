@@ -3,7 +3,7 @@
 window.me = window.me || {}
 
 {
-	const MAP_FILE_EXPORTED = 'map_file_exported'
+	const MAP_FILE_EXPORTED = 'mapFileExported'
 
 	const packObject = function (object, props) {
 		var ret = {}
