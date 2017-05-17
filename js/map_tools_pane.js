@@ -83,10 +83,10 @@ window.me = window.me || {}
 		constructor (mapPane, objectListBox) {
 			this.node = document.getElementById('map_filtering_tool_pane')
 			var filterObjectsCheckbox = document.getElementById('map_filter_objects_checkbox')
-			filterObjectsCheckbox.checked = objectListBox.isFilteringByType() || mapPane.isFilteringByType()
+			filterObjectsCheckbox.checked = objectListBox.filteringEnabled || mapPane.filteringEnabled
 			filterObjectsCheckbox.addEventListener('change', function (e) {
-				objectListBox.setFilteringByType(this.checked)
-				mapPane.setFilteringByType(this.checked)
+				objectListBox.filteringEnabled = this.checked
+				mapPane.filteringEnabled = this.checked
 				mapPane.invalidate()
 			})
 		}

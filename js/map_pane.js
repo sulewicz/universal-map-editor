@@ -16,20 +16,20 @@ window.me = window.me || {}
 			var zoomInBtn = document.getElementById('zoom_in_btn')
 
 			zoomOutBtn.addEventListener('click', () => {
-				this.setZoom(this.scale - CLICK_STEP)
+				this.zoom = this.scale - CLICK_STEP
 			})
 
 			zoomInBtn.addEventListener('click', () => {
-				this.setZoom(this.scale + CLICK_STEP)
+				this.zoom = this.scale + CLICK_STEP
 			})
 
 			mapPane.node.addEventListener('mousewheel', (e) => {
-				this.setZoom(this.scale + (e.wheelDelta >= 0 ? SCROLL_STEP : -SCROLL_STEP))
+				this.zoom = this.scale + (e.wheelDelta >= 0 ? SCROLL_STEP : -SCROLL_STEP)
 			})
 
-			this.setZoom(100)
+			this.zoom = 100
 		}
-		setZoom (zoom) {
+		set zoom (zoom) {
 			if (zoom < MIN_ZOOM) {
 				zoom = MIN_ZOOM
 			} else if (zoom > MAX_ZOOM) {
@@ -69,7 +69,7 @@ window.me = window.me || {}
 			this.redraw = true
 			this.node = node
 			this.filterType = null
-			this.filteringByType = false
+			this._filteringEnabled = false
 
 			this.zoomToolkit = new me.ZoomToolkit(this)
 
@@ -198,7 +198,7 @@ window.me = window.me || {}
 				}
 
 				var objects = this.map.objects
-				if (this.filteringByType && this.filterType) {
+				if (this._filteringEnabled && this.filterType) {
 					for (var idx = 0; idx < objects.length; ++idx) {
 						var object = objects[idx]
 						if (object.type == this.filterType) {
@@ -306,12 +306,12 @@ window.me = window.me || {}
 			this.filterType = type
 			this.invalidate()
 		}
-		setFilteringByType (filteringByType) {
-			this.filteringByType = filteringByType
+		set filteringEnabled (filteringEnabled) {
+			this._filteringEnabled = filteringEnabled
 			this.invalidate()
 		}
-		isFilteringByType () {
-			return this.filteringByType
+		get filteringEnabled () {
+			return this._filteringEnabled
 		}
 	}
 

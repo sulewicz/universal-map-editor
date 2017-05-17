@@ -17,7 +17,7 @@ window.me = window.me || {}
 			this.node = document.getElementById('object_list_box')
 			this._selectedObject = null
 			this.filterType = null
-			this.filteringByType = false
+			this._filteringEnabled = false
 			this.rebuild()
 		}
 		createItem (obj) {
@@ -76,7 +76,7 @@ window.me = window.me || {}
 		}
 		filterList (type) {
 			this.filterType = type
-			if (!this.filteringByType) {
+			if (!this._filteringEnabled) {
 				type = null
 			}
 			var items = this.node.children
@@ -85,12 +85,12 @@ window.me = window.me || {}
 				item.style.display = (!type || item.getAttribute(TYPE_ATTRIBUTE) === type) ? 'block' : 'none'
 			}
 		}
-		setFilteringByType(filteringByType) {
-			this.filteringByType = filteringByType
+		set filteringEnabled (filteringEnabled) {
+			this._filteringEnabled = filteringEnabled
 			this.filterList(this.filterType)
 		}
-		isFilteringByType() {
-			return this.filteringByType
+		get filteringEnabled () {
+			return this._filteringEnabled
 		}
 		getNode (id) {
 			return document.getElementById(PREFIX + id)
