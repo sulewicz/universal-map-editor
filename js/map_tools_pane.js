@@ -1,147 +1,140 @@
-"use strict";
+'use strict'
 
-window.me = window.me || {};
+window.me = window.me || {}
 
-me.MapToolsPane = (function () {
-	var MAP_OBJECTS_MODIFIED = "map_objects_modified";
+{
+	const MAP_OBJECTS_MODIFIED = 'mapObjectsModified'
 
-	var addButton = function (id, callback) {
-		var button = document.getElementById(id);
-		button.addEventListener('click', callback);
-		return button;
-	};
+	const addButton = function (id, callback) {
+		var button = document.getElementById(id)
+		button.addEventListener('click', callback)
+		return button
+	}
 
-	var GridPane = (function () {
-		var clazz = function (map_pane) {
-			this.node = document.getElementById('map_grid_tool_pane');
-			var display_grid_checkbox = document.getElementById('map_display_grid_checkbox');
-			display_grid_checkbox.checked = map_pane.isGridVisibile();
-			display_grid_checkbox.addEventListener('change', function (e) {
-				map_pane.setGridVisible(this.checked);
-				map_pane.invalidate();
-			});
-
-			var horizontal_spacing = document.getElementById('map_grid_horizontal_spacing');
-			horizontal_spacing.value = map_pane.getGridHorizontalSpacing();
-			horizontal_spacing.addEventListener('change', function (e) {
-				var value = this.value | 0;
+	const GridPane = class {
+		constructor (mapPane) {
+			this.node = document.getElementById('map_grid_tool_pane')
+			var displayGridCheckbox = document.getElementById('map_display_grid_checkbox')
+			displayGridCheckbox.checked = mapPane.isGridVisibile()
+			displayGridCheckbox.addEventListener('change', function (e) {
+				mapPane.setGridVisible(this.checked)
+				mapPane.invalidate()
+			})
+			var horizontalSpacing = document.getElementById('map_grid_horizontal_spacing')
+			horizontalSpacing.value = mapPane.getGridHorizontalSpacing()
+			horizontalSpacing.addEventListener('change', function (e) {
+				var value = this.value | 0
 				if (value < 1) {
-					this.value = value = 1;
+					this.value = value = 1
 				}
-				map_pane.setGridHorizontalSpacing(value);
-				map_pane.invalidate();
-			});
+				mapPane.setGridHorizontalSpacing(value)
+				mapPane.invalidate()
+			})
 
-			var vertical_spacing = document.getElementById('map_grid_vertical_spacing');
-			vertical_spacing.value = map_pane.getGridVerticalSpacing();
-			vertical_spacing.addEventListener('change', function (e) {
-				var value = this.value | 0;
+			var verticalSpacing = document.getElementById('map_grid_vertical_spacing')
+			verticalSpacing.value = mapPane.getGridVerticalSpacing()
+			verticalSpacing.addEventListener('change', function (e) {
+				var value = this.value | 0
 				if (value < 1) {
-					this.value = value = 1;
+					this.value = value = 1
 				}
-				map_pane.setGridVerticalSpacing(value);
-				map_pane.invalidate();
-			});
-		};
-		return clazz;
-	})();
+				mapPane.setGridVerticalSpacing(value)
+				mapPane.invalidate()
+			})
+		}
+	}
 
-	var ScalingPane = (function () {
-		var clazz = function (map_pane, tools_pane) {
-			this.node = document.getElementById('map_scaling_tool_pane');
+	const ScalingPane = class {
+		constructor (mapPane, toolsPane) {
+			this.node = document.getElementById('map_scaling_tool_pane')
 
-			var scaling_factor = document.getElementById('map_scaling_factor');
-			scaling_factor.addEventListener('change', function (e) {
-				var value = this.value | 0;
+			var scalingFactor = document.getElementById('map_scaling_factor')
+			scalingFactor.addEventListener('change', function (e) {
+				var value = this.value | 0
 				if (value < 1) {
-					this.value = value = 1;
+					this.value = value = 1
 				}
-			});
+			})
 
 			var emitEvent = function () {
-				tools_pane.emitter.emit(MAP_OBJECTS_MODIFIED);
+				toolsPane.emitter.emit(MAP_OBJECTS_MODIFIED)
 			}
 
-			var map_scale_positions_btn = addButton('map_scale_positions_btn', function (e) {
-				map_pane.map.scalePositions(scaling_factor.value | 0);
-				emitEvent();
-			});
-			var map_scale_all_btn = addButton('map_scale_all_btn', function (e) {
-				map_pane.map.scaleAll(scaling_factor.value | 0);
-				emitEvent();
-			});
-			var map_scale_selected_object_btn = addButton('map_scale_selected_object_btn', function (e) {
-				var object = map_pane.getSelectedObject();
+			var mapScalePositionsBtn = addButton('map_scale_positions_btn', function (e) {
+				mapPane.map.scalePositions(scalingFactor.value | 0)
+				emitEvent()
+			})
+			var mapScaleAllBtn = addButton('map_scale_all_btn', function (e) {
+				mapPane.map.scaleAll(scalingFactor.value | 0)
+				emitEvent()
+			})
+			var mapScaleSelectedObjectBtn = addButton('map_scale_selected_object_btn', function (e) {
+				var object = mapPane.selectedObject
 				if (object) {
-					object.scaleSize(scaling_factor.value | 0);
+					object.scaleSize(scalingFactor.value | 0)
 				}
-				emitEvent();
-			});
+				emitEvent()
+			})
 
-		};
-		return clazz;
-	})();
-	
-	var FilteringPane = (function () {
-		var clazz = function (map_pane, object_list_box) {
-			this.node = document.getElementById('map_filtering_tool_pane');
-			var filter_objects_checkbox = document.getElementById('map_filter_objects_checkbox');
-			filter_objects_checkbox.checked = object_list_box.isFilteringByType() || map_pane.isFilteringByType();
-			filter_objects_checkbox.addEventListener('change', function (e) {
-				object_list_box.setFilteringByType(this.checked);
-				map_pane.setFilteringByType(this.checked);
-				map_pane.invalidate();
-			});
-		};
-		return clazz;
-	})();
+		}
+	}
 
-	var clazz = function (map_pane, object_list_box) {
-		this.map_pane = map_pane;
-		this.object_list_box = object_list_box;
+	const FilteringPane = class {
+		constructor (mapPane, objectListBox) {
+			this.node = document.getElementById('map_filtering_tool_pane')
+			var filterObjectsCheckbox = document.getElementById('map_filter_objects_checkbox')
+			filterObjectsCheckbox.checked = objectListBox.filteringEnabled || mapPane.filteringEnabled
+			filterObjectsCheckbox.addEventListener('change', function (e) {
+				objectListBox.filteringEnabled = this.checked
+				mapPane.filteringEnabled = this.checked
+				mapPane.invalidate()
+			})
+		}
+	}
 
-		var self = this;
+	const clazz = class {
+		constructor (mapPane, objectListBox) {
+			this.mapPane = mapPane
+			this.objectListBox = objectListBox
 
-		self.visibile_pane = null;
-		self.map_tools_pane = document.getElementById('map_tools_pane');
-		self.map_grid_tool_pane = new GridPane(map_pane, this);
-		self.map_scaling_tool_pane = new ScalingPane(map_pane, this);
-		self.map_filtering_tool_pane = new FilteringPane(map_pane, object_list_box);
+			this.visibilePane = null
+			this.mapToolsPane = document.getElementById('map_tools_pane')
+			this.mapGridToolPane = new GridPane(mapPane, this)
+			this.mapScalingToolPane = new ScalingPane(mapPane, this)
+			this.mapFilteringToolPane = new FilteringPane(mapPane, objectListBox)
 
-		self.grid_btn = addButton('map_grid_tool_btn', function (e) {
-			self.togglePane(self.map_grid_tool_pane);
-		});
+			this.gridBtn = addButton('map_grid_tool_btn', (e) => {
+				this.togglePane(this.mapGridToolPane)
+			})
 
-		self.scaling_btn = addButton('map_scaling_tool_btn', function (e) {
-			self.togglePane(self.map_scaling_tool_pane);
-		});
-		
-		self.filtering_btn = addButton('map_filtering_tool_btn', function (e) {
-			self.togglePane(self.map_filtering_tool_pane);
-		});
-	};
+			this.scalingBtn = addButton('map_scaling_tool_btn', (e) => {
+				this.togglePane(this.mapScalingToolPane)
+			})
 
-	clazz.prototype = {
-		togglePane: function (pane) {
-			var show = pane && pane != this.visibile_pane;
-			if (this.visibile_pane) {
-				this.visibile_pane.node.style.display = 'none';
-				this.visibile_pane = null;
+			this.filteringBtn = addButton('map_filtering_tool_btn', (e) => {
+				this.togglePane(this.mapFilteringToolPane)
+			})
+		}
+		togglePane (pane) {
+			var show = pane && pane != this.visibilePane
+			if (this.visibilePane) {
+				this.visibilePane.node.style.display = 'none'
+				this.visibilePane = null
 			}
 
 			if (show) {
-				this.map_tools_pane.style.display = 'block';
-				this.visibile_pane = pane;
-				this.visibile_pane.node.style.display = 'block';
-				this.map_pane.updateMetrics();
+				this.mapToolsPane.style.display = 'block'
+				this.visibilePane = pane
+				this.visibilePane.node.style.display = 'block'
+				this.mapPane.updateMetrics()
 			} else {
-				this.map_tools_pane.style.display = 'none';
-				this.map_pane.updateMetrics();
+				this.mapToolsPane.style.display = 'none'
+				this.mapPane.updateMetrics()
 			}
 		}
-	};
+	}
 
-	clazz.MAP_OBJECTS_MODIFIED = MAP_OBJECTS_MODIFIED;
+	clazz.MAP_OBJECTS_MODIFIED = MAP_OBJECTS_MODIFIED
 
-	return clazz;
-})();
+	me.MapToolsPane = clazz
+}

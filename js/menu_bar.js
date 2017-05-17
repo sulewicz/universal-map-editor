@@ -1,159 +1,145 @@
-"use strict";
+'use strict'
 
-window.me = window.me || {};
+window.me = window.me || {}
 
-const electron = require('electron');
-const remote = electron.remote;
+{
+	const electron = require('electron')
+	const remote = electron.remote
+	const SHOW_MAP_VIEW = 'showMapView'
+	const SHOW_EDITOR_VIEW = 'showEditorView'
 
-me.MenuBar = (function () {
-	var SHOW_MAP_VIEW = "show_map_view";
-	var SHOW_EDITOR_VIEW = "show_editor_view";
-
-	function updateMenuItem (menuId, itemId, property, value) {
-		electron.ipcRenderer.send('menu', 'update_property', menuId, itemId, property, value);
+	const updateMenuItem = function (menuId, itemId, property, value) {
+		electron.ipcRenderer.send('menu', 'updateProperty', menuId, itemId, property, value)
 	}
 
-	function updateExportButtonsVisibility () {
-		if (this.map_path) {
-			updateMenuItem('file', 'export_file', 'enabled', true);
-			updateMenuItem('file', 'export_file_as', 'enabled', true);
+	const updateExportButtonsVisibility = function () {
+		if (this.mapPath) {
+			updateMenuItem('file', 'exportFile', 'enabled', true)
+			updateMenuItem('file', 'exportFileAs', 'enabled', true)
 		} else {
-			updateMenuItem('file', 'export_file', 'enabled', false);
-			updateMenuItem('file', 'export_file_as', 'enabled', false);
+			updateMenuItem('file', 'exportFile', 'enabled', false)
+			updateMenuItem('file', 'exportFileAs', 'enabled', false)
 		}
 	}
 
-	var clazz = function (map_io, map_exporter) {
-		var self = this;
-		var callbacks = {};
+	const clazz = class {
+		constructor (mapIo, mapExporter) {
+			var callbacks = {}
 
-		self.map_io = map_io;
-		self.map_exporter = map_exporter;
+			this.mapIo = mapIo
+			this.mapExporter = mapExporter
 
-		electron.ipcRenderer.on('menu', (event, type, id) => {
-			if (type === 'item_clicked') {
-				if (callbacks.hasOwnProperty(id)) {
-					callbacks[id](id);
+			electron.ipcRenderer.on('menu', (event, type, id) => {
+				if (type === 'itemClicked') {
+					if (callbacks.hasOwnProperty(id)) {
+						callbacks[id](id)
+					}
 				}
+			})
+
+			const addClickListener = (id, callback) => {
+				callbacks[id] = callback
 			}
-		});
 
-		function addClickListener (id, callback) {
-			callbacks[id] = callback;
-		}
-
-		function showSaveDialog () {
-			remote.dialog.showSaveDialog({
-					filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
-				}, function(fileName) {
-					if (fileName) {
-						self.save(fileName);
-					}
-			});
-		}
-
-		function showExportDialog () {
-			remote.dialog.showSaveDialog({
-					filters: [ { name: 'Exported Level', extensions: ['lvl'] }, { name: 'All files', extensions: ['*'] } ]
-				}, function(fileName) {
-					if (fileName) {
-						self.map_io.map.export_path = fileName;
-						self.save(self.map_path);
-						self.export(fileName);
-					}
-			});
-		}
-
-		function showOpenDialog () {
-			remote.dialog.showOpenDialog({
-					filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
-				}, function(fileNames) {
-					if (fileNames) {
-						self.open(fileNames[0]);
-					}
-			});
-		}
-
-		self.save_file_btn = addClickListener('save_file', function () {
-			if (self.map_path) {
-				self.save(self.map_path);
-			} else {
-				showSaveDialog();
+			const showSaveDialog = () => {
+				remote.dialog.showSaveDialog({
+						filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
+					}, (fileName) => {
+						if (fileName) {
+							this.save(fileName)
+						}
+				})
 			}
-		});
 
-		self.save_file_as_btn = addClickListener('save_file_as', function () {
-			showSaveDialog();
-		});
-
-		self.open_file_btn = addClickListener('open_file', function () {
-			showOpenDialog();
-		});
-
-		self.export_file_btn = addClickListener('export_file', function () {
-			if (self.export_path || (self.export_path = self.map_io.map.export_path)) {
-				self.save(self.map_path);
-				self.export(self.export_path);
-			} else {
-				showExportDialog();
+			const showExportDialog = () => {
+				remote.dialog.showSaveDialog({
+						filters: [ { name: 'Exported Level', extensions: ['lvl'] }, { name: 'All files', extensions: ['*'] } ]
+					}, (fileName) => {
+						if (fileName) {
+							this.mapIo.map.exportPath = fileName
+							this.save(this.mapPath)
+							this.export(fileName)
+						}
+				})
 			}
-		});
 
-		self.export_file_as_btn = addClickListener('export_file_as', function () {
-			showExportDialog();
-		});
-
-		function switchMapScriptCallback(id) {
-			if (toggledItem !== id) {
-				self.emitter.emit(SHOW_MAP_VIEW);
-				updateMenuItem('view', toggledItem, 'checked', false);
-				updateMenuItem('view', id, 'checked', true);
-				toggledItem = id;
+			const showOpenDialog = () => {
+				remote.dialog.showOpenDialog({
+						filters: [ { name: 'JSON', extensions: ['json'] }, { name: 'All files', extensions: ['*'] } ]
+					}, (fileNames) => {
+						if (fileNames) {
+							this.open(fileNames[0])
+						}
+				})
 			}
+
+			addClickListener('saveFile', () => {
+				if (this.mapPath) {
+					this.save(this.mapPath)
+				} else {
+					showSaveDialog()
+				}
+			})
+
+			addClickListener('saveFileAs', () => {
+				showSaveDialog()
+			})
+
+			addClickListener('openFile', () => {
+				showOpenDialog()
+			})
+
+			addClickListener('exportFile', () => {
+				if (this.exportPath || (this.exportPath = this.mapIo.map.exportPath)) {
+					this.save(this.mapPath)
+					this.export(this.exportPath)
+				} else {
+					showExportDialog()
+				}
+			})
+
+			addClickListener('exportFileAs', () => {
+				showExportDialog()
+			})
+
+			addClickListener('mapView', () => {
+				this.emitter.emit(SHOW_MAP_VIEW)
+			})
+
+			addClickListener('editorView', () => {
+				this.emitter.emit(SHOW_EDITOR_VIEW)
+			})
 		}
-
-		self.toogle_script_editor_btn = addClickListener('map_view', function () {
-			self.emitter.emit(SHOW_MAP_VIEW);
-		});
-
-		self.toogle_script_editor_btn = addClickListener('editor_view', function () {
-			self.emitter.emit(SHOW_EDITOR_VIEW);
-		});
-	};
-
-	clazz.prototype = {
-		save: function (path) {
+		save (path) {
 			try {
-				this.map_io.save(path);
-				this.map_path = path;
-				updateExportButtonsVisibility.call(this);
+				this.mapIo.save(path)
+				this.mapPath = path
+				updateExportButtonsVisibility.call(this)
 			} catch (e) {
-				alert('Error while saving map: ' + e);
-			}
-		},
-
-		open: function (path) {
-			try {
-				this.map_io.open(path);
-				this.map_path = path;
-				updateExportButtonsVisibility.call(this);
-			} catch (e) {
-				alert('Error while loading map: ' + e);
-			}
-		},
-
-		export: function (path) {
-			try {
-				this.map_exporter.exportMap(path);
-				this.export_path = path;
-			} catch (e) {
-				alert('Error while exporting map: ' + e);
+				alert('Error while saving map: ' + e)
 			}
 		}
-	};
+		open (path) {
+			try {
+				this.mapIo.open(path)
+				this.mapPath = path
+				updateExportButtonsVisibility.call(this)
+			} catch (e) {
+				alert('Error while loading map: ' + e)
+			}
+		}
+		export (path) {
+			try {
+				this.mapExporter.exportMap(path)
+				this.exportPath = path
+			} catch (e) {
+				alert('Error while exporting map: ' + e)
+			}
+		}
+	}
 
-	clazz.SHOW_MAP_VIEW = SHOW_MAP_VIEW;
-	clazz.SHOW_EDITOR_VIEW = SHOW_EDITOR_VIEW;
+	clazz.SHOW_MAP_VIEW = SHOW_MAP_VIEW
+	clazz.SHOW_EDITOR_VIEW = SHOW_EDITOR_VIEW
 
-	return clazz;
-})();
+	me.MenuBar = clazz
+}

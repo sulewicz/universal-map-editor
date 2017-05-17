@@ -1,50 +1,47 @@
-"use strict";
+'use strict'
 
-window.me = window.me || {};
+window.me = window.me || {}
 
-var fs = require('fs');
+var fs = require('fs')
 
-me.Editor = (function () {
-	var instance;
+{
+	let instance
 
-	var clazz = function () {
-		instance = this;
-		this.map = new me.Map();
-		this.map_objects = new me.MapObjects();
-		this.map_view = new me.MapPane(this.map);
-		this.tool_box = new me.ToolBox();
-		this.object_list_box = new me.ObjectListBox(this.map);
-		this.properties_box = new me.PropertiesBox();
-		this.status_bar = new me.StatusBar();
-		this.map_io = new me.MapIo(this.map, this.map_objects);
-		this.map_exporter = new me.MapExporter(this.map, me.Metadata.postExport);
-		this.menu_bar = new me.MenuBar(this.map_io, this.map_exporter);
-		this.script_editor = new me.ScriptEditor(this.map);
-		this.map_tools_pane = new me.MapToolsPane(this.map_view, this.object_list_box);
+	const clazz = class {
+		constructor () {
+			instance = this
+			this.map = new me.Map()
+			this.mapObjects = new me.MapObjects()
+			this.mapView = new me.MapPane(this.map)
+			this.toolBox = new me.ToolBox()
+			this.objectListBox = new me.ObjectListBox(this.map)
+			this.propertiesBox = new me.PropertiesBox()
+			this.statusBar = new me.StatusBar()
+			this.mapIo = new me.MapIo(this.map, this.mapObjects)
+			this.mapExporter = new me.MapExporter(this.map, me.Metadata.postExport)
+			this.menuBar = new me.MenuBar(this.mapIo, this.mapExporter)
+			this.scriptEditor = new me.ScriptEditor(this.map)
+			this.mapToolsPane = new me.MapToolsPane(this.mapView, this.objectListBox)
 
-		this.init();
-	};
-
-	clazz.prototype = {
-		init: function () {
-			this.map_objects.createClasses(me.Metadata.objects);
-			this.initToolbox();
-
-			this.map_view.startRendering();
-		},
-
-		initToolbox: function () {
-			var objects = this.map_objects.getAvailableTypes();
+			this.init()
+		}
+		init () {
+			this.mapObjects.createClasses(me.Metadata.objects)
+			this.initToolbox()
+			this.mapView.startRendering()
+		}
+		initToolbox () {
+			var objects = this.mapObjects.getAvailableTypes()
 			for (var i = 0; i < objects.length; ++i) {
-				var object = objects[i];
-				this.tool_box.addItem(object.label, object.type);
+				var object = objects[i]
+				this.toolBox.addItem(object.label, object.type)
 			}
 		}
-	};
+	}
 
 	clazz.getInstance = function() {
-		return instance;
-	};
+		return instance
+	}
 
-	return clazz;
-})();
+	me.Editor = clazz
+}
