@@ -3,15 +3,16 @@
 window.me = window.me || {}
 
 {
-  const SCRIPT_TOKEN_FOCUSED = 'scriptTokenFocused'
   const FOCUS_DELAY = 500
   const RE = /[\w$]/
 
+  const TOKEN_FOCUSED = 'scriptEditorTokenFocused'
+  const INIT_EDITOR = 'scriptEditorInitialize'
+  const CONTENT_CHANGED = 'scriptEditorContentChanged'
+
   const clazz = class {
-    constructor (map) {
-      this._visible = false
-      this.map = map
-      this.node = document.getElementById('script_editor_pane')
+    constructor (messageBus, scriptTokens) {
+      this.messageBus = messageBus
       const codemirror = CodeMirror(document.getElementById('script_text_area'), {
         lineNumbers: true,
         autofocus: true,
@@ -20,12 +21,12 @@ window.me = window.me || {}
         viewportMargin: Infinity,
         mode: {
           name: 'lua',
-          specials: me.Metadata.scriptTokens || []
+          specials: scriptTokens || []
         }
       })
       this.codemirror = codemirror
       codemirror.on('change', function () {
-        map.script = codemirror.getValue()
+        messageBus.send(CONTENT_CHANGED, codemirror.getValue())
       })
       codemirror.on('cursorActivity', (cm) => {
         clearTimeout(this.timeout)
@@ -33,9 +34,13 @@ window.me = window.me || {}
           this.updateFocus(cm)
         }, FOCUS_DELAY)
       })
-    }
-    update () {
-      this.codemirror.setValue(this.map.script || '')
+      codemirror.refresh()
+      codemirror.focus()
+      messageBus.on(CONTENT_CHANGED, (content) => {
+        codemirror.setValue(content || '')
+        codemirror.refresh()
+        codemirror.focus()
+      })
     }
     updateFocus (cm) {
       var token
@@ -64,28 +69,12 @@ window.me = window.me || {}
       }
       if (token && token != this.lastToken) {
         this.lastToken = token
-        this.emitter.emit(SCRIPT_TOKEN_FOCUSED, token)
+        this.messageBus.send(TOKEN_FOCUSED, token)
       }
-    }
-    hide () {
-      this._visible = false
-      this.updateVisibility()
-    }
-    show () {
-      this._visible = true
-      this.updateVisibility()
-    }
-    updateVisibility () {
-      this.node.style.display = this._visible ? 'block' : 'none'
-      this.codemirror.refresh()
-      if (this._visible) {
-        this.codemirror.focus()
-      }
-    }
-    get visible () {
-      return this._visible
     }
   }
-  clazz.SCRIPT_TOKEN_FOCUSED = SCRIPT_TOKEN_FOCUSED
+  clazz.TOKEN_FOCUSED = TOKEN_FOCUSED
+  clazz.INIT_EDITOR = INIT_EDITOR
+  clazz.CONTENT_CHANGED = CONTENT_CHANGED
   me.ScriptEditor = clazz
 }

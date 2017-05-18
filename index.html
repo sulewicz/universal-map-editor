@@ -12,9 +12,10 @@
   <link rel="stylesheet" href="./css/map.css" type="text/css" charset="utf-8">
   <link rel="stylesheet" href="./css/codemirror.css" type="text/css" charset="utf-8">
   <script type="text/javascript" src="./js/utils.js"></script>
+  <script type="text/javascript" src="./js/message_bus.js"></script>
+  <script type="text/javascript" src="./js/script_editor.js"></script>
   <script type="text/javascript" src="./js/map_shapes.js"></script>
   <script type="text/javascript" src="../game_metadata.js"></script>
-  <script type="text/javascript" src="./js/external/codemirror-compressed.js"></script>
   <script type="text/javascript" src="./js/map_objects.js"></script>
   <script type="text/javascript" src="./js/map.js"></script>
   <script type="text/javascript" src="./js/status_bar.js"></script>
@@ -28,8 +29,7 @@
   <script type="text/javascript" src="./js/menu_bar.js"></script>
   <script type="text/javascript" src="./js/editor.js"></script>
   <script type="text/javascript" src="./js/editor_controller.js"></script>
-  <script type="text/javascript" src="./js/script_editor.js"></script>
-  <script type="text/javascript" src="./js/renderer.js"></script>
+  <script type="text/javascript" src="./js/main_renderer.js"></script>
 </head>
 
 <body>
@@ -81,9 +81,6 @@
             <span id="map_scaling_tool_btn" class="button">Scaling</span>
             <span id="map_filtering_tool_btn" class="button">Filtering</span>
           </div>
-        </div>
-        <div id="script_editor_pane">
-          <div id="script_text_area"></div>
         </div>
       </div>
       <div class="right_pane">

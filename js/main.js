@@ -7,10 +7,20 @@ const Menu = electron.Menu
 
 const path = require('path')
 const url = require('url')
+const { MessageBus } = require('./message_bus')
+const DEBUG = false
 
 let mainWindow
+let scriptEditorWindow
 
-function createMenu () {
+function initialize () {
+  Menu.setApplicationMenu(null)
+  createMainWindow()
+  createScriptEditorWindow()
+  new MessageBus([mainWindow, scriptEditorWindow])
+}
+
+function createMainMenu () {
   function clickCallback (menuItem) {
     mainWindow.webContents.send('menu', 'itemClicked', menuItem.id)
   }
@@ -31,13 +41,12 @@ function createMenu () {
       label: 'View',
       id: 'view',
       submenu: [
-         { label: 'Map', id: 'mapView', click: clickCallback, type: 'radio', checked: true, accelerator: 'CmdOrCtrl+1' },
-         { label: 'Script editor', id: 'editorView', click: clickCallback, type: 'radio', checked: false, accelerator: 'CmdOrCtrl+2'  }
+         { label: 'Show script editor', id: 'editorView', click: () => { scriptEditorWindow.show() }, accelerator: 'CmdOrCtrl+E'  }
       ]
     }
   ]
   const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  mainWindow.setMenu(menu)
 
   electron.ipcMain.on('menu', (event, type, menuId, itemId, property, value) => {
     if (type === 'updateProperty') {
@@ -53,14 +62,43 @@ function createMenu () {
   })
 }
 
-function createWindow () {
-  mainWindow = new BrowserWindow({width: 1024, height: 768})
-  createMenu()
+function createScriptEditorWindow() {
+  scriptEditorWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    show: false
+  })
+  scriptEditorWindow.loadURL(url.format({
+    pathname: path.join(__dirname, '../script_editor.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  // Open the DevTools.
+  if (DEBUG) {
+    scriptEditorWindow.webContents.openDevTools()
+  }
+
+  scriptEditorWindow.on('close', (e) => {
+    scriptEditorWindow.hide()
+    e.preventDefault()
+  })
+
+  scriptEditorWindow.on('closed', () => {
+    scriptEditorWindow = null
+  })
+}
+
+function createMainWindow () {
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    show: false
+  })
+  createMainMenu()
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, '../index.html'),
     protocol: 'file:',
-    slashes: true,
-    show: false
+    slashes: true
   }))
 
   mainWindow.once('ready-to-show', () => {
@@ -68,14 +106,21 @@ function createWindow () {
   })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  if (DEBUG) {
+    mainWindow.webContents.openDevTools()
+  }
 
   mainWindow.on('closed', function () {
+    if (scriptEditorWindow) {
+      scriptEditorWindow.close()
+      scriptEditorWindow = null
+    }
     mainWindow = null
+    app.quit()
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', initialize)
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
@@ -85,6 +130,9 @@ app.on('window-all-closed', function () {
 
 app.on('activate', function () {
   if (mainWindow === null) {
-    createWindow()
+    createMainWindow()
+  }
+  if (scriptEditorWindow === null) {
+    createScriptEditorWindow()
   }
 })

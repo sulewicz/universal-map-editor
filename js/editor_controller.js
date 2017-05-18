@@ -2,7 +2,8 @@
 
 window.me = window.me || {}
 
-var EventEmitter = require('events').EventEmitter
+const { EventEmitter } = require('events')
+
 {
   const TITLE = 'Generic Map Editor'
 
@@ -11,7 +12,7 @@ var EventEmitter = require('events').EventEmitter
   }
 
   const clazz = class {
-    constructor (editor) {
+    constructor (editor, messageBus) {
       this.editor = editor
       const emitter = new EventEmitter()
       editor.map.emitter = emitter
@@ -22,8 +23,8 @@ var EventEmitter = require('events').EventEmitter
       editor.mapIo.emitter = emitter
       editor.mapExporter.emitter = emitter
       editor.menuBar.emitter = emitter
-      editor.scriptEditor.emitter = emitter
       editor.mapToolsPane.emitter = emitter
+      this.messageBus = messageBus
       this.emitter = emitter
       this.forcePlacement = false
       this._selectedObject = null
@@ -33,29 +34,26 @@ var EventEmitter = require('events').EventEmitter
     init () {
       var editor = this.editor
       var emitter = this.emitter
+      var messageBus = this.messageBus
 
       document.body.addEventListener('keydown', (e) => {
-        if (!editor.scriptEditor.visible) {
-          if (e.which == 16) {
-            this.forcePlacement = true
-            e.preventDefault()
-          }
+        if (e.which == 16) {
+          this.forcePlacement = true
+          e.preventDefault()
         }
       }, true)
 
       document.body.addEventListener('keyup', (e) => {
-        if (!editor.scriptEditor.visible) {
-          if (e.which == 46) {
-            if (this._selectedObject) {
-              if (!this._selectedObject.onDelete()) {
-                editor.map.removeObject(this._selectedObject)
-                e.preventDefault()
-              }
+        if (e.which == 46) {
+          if (this._selectedObject) {
+            if (!this._selectedObject.onDelete()) {
+              editor.map.removeObject(this._selectedObject)
+              e.preventDefault()
             }
-          } else if (e.which == 16) {
-            this.forcePlacement = false
-            e.preventDefault()
           }
+        } else if (e.which == 16) {
+          this.forcePlacement = false
+          e.preventDefault()
         }
       }, true)
 
@@ -187,8 +185,12 @@ var EventEmitter = require('events').EventEmitter
       emitter.on(me.MapIo.MAP_FILE_LOADED, (path) => {
         updateTitle(path)
         editor.statusBar.update('[' + (new Date().toLocaleTimeString()) + '] Loaded: ' + path)
-        editor.scriptEditor.update()
         editor.mapView.invalidate()
+        messageBus.send(me.ScriptEditor.CONTENT_CHANGED, editor.map.script)
+      })
+
+      messageBus.on(me.ScriptEditor.CONTENT_CHANGED, (content) => {
+        editor.map.script = content
       })
 
       emitter.on(me.MapIo.MAP_FILE_SAVED, (path) => {
@@ -201,21 +203,13 @@ var EventEmitter = require('events').EventEmitter
         editor.statusBar.update('[' + (new Date().toLocaleTimeString()) + '] Exported: ' + path)
       })
 
-      emitter.on(me.MenuBar.SHOW_MAP_VIEW, () => {
-        editor.scriptEditor.hide()
-      })
-
-      emitter.on(me.MenuBar.SHOW_EDITOR_VIEW, () => {
-        editor.scriptEditor.show()
-      })
-
       emitter.on(me.MapToolsPane.MAP_OBJECTS_MODIFIED, () => {
         editor.propertiesBox.build()
         editor.mapView.invalidate()
       })
 
       if (me.Metadata.findObjectForToken) {
-        emitter.on(me.ScriptEditor.SCRIPT_TOKEN_FOCUSED, (token) => {
+        messageBus.on(me.ScriptEditor.TOKEN_FOCUSED, (token) => {
           var object = me.Metadata.findObjectForToken(token, editor.map.objects)
           if (object) {
             this.selectObject(object)

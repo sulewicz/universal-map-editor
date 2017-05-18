@@ -5,8 +5,6 @@ window.me = window.me || {}
 {
   const electron = require('electron')
   const remote = electron.remote
-  const SHOW_MAP_VIEW = 'showMapView'
-  const SHOW_EDITOR_VIEW = 'showEditorView'
 
   const updateMenuItem = function (menuId, itemId, property, value) {
     electron.ipcRenderer.send('menu', 'updateProperty', menuId, itemId, property, value)
@@ -101,14 +99,6 @@ window.me = window.me || {}
       addClickListener('exportFileAs', () => {
         showExportDialog()
       })
-
-      addClickListener('mapView', () => {
-        this.emitter.emit(SHOW_MAP_VIEW)
-      })
-
-      addClickListener('editorView', () => {
-        this.emitter.emit(SHOW_EDITOR_VIEW)
-      })
     }
     save (path) {
       try {
@@ -137,9 +127,6 @@ window.me = window.me || {}
       }
     }
   }
-
-  clazz.SHOW_MAP_VIEW = SHOW_MAP_VIEW
-  clazz.SHOW_EDITOR_VIEW = SHOW_EDITOR_VIEW
 
   me.MenuBar = clazz
 }

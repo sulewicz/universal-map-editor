@@ -18,7 +18,6 @@ window.me = window.me || {}
       this.mapIo = new me.MapIo(this.map, this.mapObjects)
       this.mapExporter = new me.MapExporter(this.map, me.Metadata.postExport)
       this.menuBar = new me.MenuBar(this.mapIo, this.mapExporter)
-      this.scriptEditor = new me.ScriptEditor(this.map)
       this.mapToolsPane = new me.MapToolsPane(this.mapView, this.objectListBox)
 
       this.init()
