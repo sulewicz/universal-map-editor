@@ -44,7 +44,6 @@ To run it simply execute `npm install` and then `npm start`
 #### How to use
 
 <div align="center" style="padding: 5px"><img src="./img/screen1.png" alt="Screen 1"></div>
-<div align="center" style="padding: 5px"><img src="./img/screen2.png" alt="Screen 2"></div>
 
 Editor is quite easy to use.
 On the top left you can see a palette of available objects.
