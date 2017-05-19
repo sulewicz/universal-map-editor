@@ -43,12 +43,12 @@ me.Metadata = (function () {
         type: 'shape_polyline',
         label: 'Polyline',
         zOrder: -100,
-                getLineWidth: function() {
-                    return this.thickness
-                }
+        getLineWidth: function() {
+          return this.thickness
+        }
       }, { // Additional properties of the polyline
-                'thickness': { type: 'float', min: 0.1, default: 1 }
-            }),
+        'thickness': { type: 'float', min: 0.1, default: 1 }
+      }),
       // Enemy spawn point.
       {
         type: 'SPAWN_POINT',
@@ -118,18 +118,18 @@ me.Metadata = (function () {
       },
       // Simple round obstacle.
       {
-        type: "OBSTACLE",
-        label: "Obstacle",
+        type: 'OBSTACLE',
+        label: 'Obstacle',
         properties: me.utils.mixin({}, commonProperties, {
-          "radius": { type: "float", min: 1, default: 5 }
+          'radius': { type: 'float', min: 1, default: 5 }
         }),
         render: function(ctx, selected) {
           ctx.beginPath()
           ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
-          ctx.fillStyle = "rgba(85, 85, 85, 0.5)"
+          ctx.fillStyle = 'rgba(85, 85, 85, 0.5)'
           ctx.fill()
-          ctx.strokeStyle = selected ? "#ffffff" : ctx.fillStyle
-              ctx.lineWidth = 2
+          ctx.strokeStyle = selected ? '#ffffff' : ctx.fillStyle
+          ctx.lineWidth = 2
           ctx.stroke()
         },
         contains: function(x, y) {
@@ -137,9 +137,9 @@ me.Metadata = (function () {
         },
         // This allows to specify how the object should be scaled
         // Additionally scalePosition is also available
-                scaleSize: function(factor) {
-                    this.updateStaticProperty("radius", this.properties["radius"], factor * this.radius / 100)
-                }
+        scaleSize: function(factor) {
+          this.updateStaticProperty('radius', this.properties['radius'], factor * this.radius / 100)
+        }
       },
     ]
   }

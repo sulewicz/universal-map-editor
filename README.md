@@ -46,7 +46,7 @@ To run it simply execute `npm install` and then `npm start`
 <div align="center" style="padding: 5px"><img src="./img/screen1.png" alt="Screen 1"></div>
 <div align="center" style="padding: 5px"><img src="./img/screen2.png" alt="Screen 2"></div>
 
-Editor is not really difficult to use.
+Editor is quite easy to use.
 On the top left you can see a palette of available objects.
 On the right you can see a list of already placed objects.
 On the bottom left you can see the properties of currently focused object.
